@@ -1,18 +1,28 @@
 ﻿using System.Windows.Input;
+using SarGoldACC.Core.Models.Auth;
+using SarGoldACC.Core.Services.Auth;
 using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
 public class LoginViewModel : ViewModelBase
 {
-    private string _username;
-    private string _errorMessage;
+    private string _username = "";
+    private string _password = "";
+    private string _errorMessage = "";
     private readonly Action<ViewModelBase> _navigateTo;
+    private readonly AuthenticationService _authService;
 
     public string Username
     {
         get => _username;
         set { _username = value; OnPropertyChanged(nameof(Username)); }
+    }
+
+    public string Password
+    {
+        get => _password;
+        set { _password = value; OnPropertyChanged(nameof(Password)); }
     }
 
     public string ErrorMessage
@@ -23,18 +33,20 @@ public class LoginViewModel : ViewModelBase
 
     public ICommand LoginCommand { get; }
 
-    public LoginViewModel(Action<ViewModelBase> navigateTo)
+    public LoginViewModel(Action<ViewModelBase> navigateTo, AuthenticationService authService)
     {
         _navigateTo = navigateTo;
-        LoginCommand = new RelayCommand(Login);
+        _authService = authService;
+        LoginCommand = new AsyncRelayCommand(LoginAsync);
     }
 
-    private void Login()
+    private async Task LoginAsync()
     {
-        // برای تست فقط یوزر admin و رمز 1234 رو قبول می‌کنیم
-        if (Username == "admin")
+        var user = await _authService.AuthenticateUserAsync(Username, Password);
+        if (user != null)
         {
-            _navigateTo(new HomeViewModel()); // رفتن به Home
+            await App.AuthorizationService.LoadUserPermissionsAsync(user.Id);
+            _navigateTo(new HomeViewModel());
         }
         else
         {

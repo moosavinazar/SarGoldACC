@@ -1,2 +1,2 @@
-﻿Id,Username,Password,Name,PhoneNumber,GroupId,BranchId
-1,admin,Admin@123,SarAdmin,09143634859,1,1
+﻿Id,Username,Password,Name,PhoneNumber,BranchId
+1,admin,Admin@123,SarAdmin,09143634859,1

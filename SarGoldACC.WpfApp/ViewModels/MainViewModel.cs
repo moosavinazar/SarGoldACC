@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel;
+using SarGoldACC.Core.Services.Auth;
 using SarGoldACC.WpfApp.Stores;
 
 namespace SarGoldACC.WpfApp.ViewModels;
@@ -12,7 +13,8 @@ public class MainViewModel : ViewModelBase
     public MainViewModel()
     {
         _navigationStore = new NavigationStore();
-        _navigationStore.CurrentViewModel = new LoginViewModel(NavigateTo);
+        var authService = new AuthenticationService(App.DbContextFactory);
+        _navigationStore.CurrentViewModel = new LoginViewModel(NavigateTo, authService);
 
         _navigationStore.PropertyChanged += OnCurrentViewModelChanged;
     }

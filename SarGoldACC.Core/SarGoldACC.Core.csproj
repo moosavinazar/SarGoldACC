@@ -13,7 +13,6 @@
       <Folder Include="Exceptions\" />
       <Folder Include="Interfaces\" />
       <Folder Include="Repositories\" />
-      <Folder Include="Services\Auth\" />
       <Folder Include="Utils\" />
     </ItemGroup>
 
@@ -34,6 +33,9 @@
     <ItemGroup>
         <None Update="Data/SeedData/*.csv">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </None>
+        <None Update="Data\SeedData\UserGroup.csv">
+          <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </None>
     </ItemGroup>
 

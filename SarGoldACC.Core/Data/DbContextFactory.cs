@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SarGoldACC.Core.Data;
 
-namespace SarGoldACC.Core.Data
-{
+namespace SarGoldACC.Core.Data;
+
     public interface IDbContextFactory
     {
         AppDbContext CreateDbContext();
@@ -26,4 +27,3 @@ namespace SarGoldACC.Core.Data
             return new AppDbContext(optionsBuilder.Options);
         }
     }
-}

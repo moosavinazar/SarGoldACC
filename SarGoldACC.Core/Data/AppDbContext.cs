@@ -11,6 +11,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Group> Groups { get; set; }
     public DbSet<Permission> Permissions { get; set; }
     public DbSet<GroupPermission> GroupPermissions { get; set; }
+    public DbSet<UserGroup> UserGroups { get; set; }
     public DbSet<Branch> Branches { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -19,16 +20,25 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
 
         modelBuilder.Entity<GroupPermission>()
             .HasKey(gp => new { gp.GroupId, gp.PermissionId });
-
         modelBuilder.Entity<GroupPermission>()
             .HasOne(gp => gp.Group)
             .WithMany(g => g.GroupPermissions)
             .HasForeignKey(gp => gp.GroupId);
-
         modelBuilder.Entity<GroupPermission>()
             .HasOne(gp => gp.Permission)
             .WithMany(p => p.GroupPermissions)
             .HasForeignKey(gp => gp.PermissionId);
+        
+        modelBuilder.Entity<UserGroup>()
+            .HasKey(ug => new { ug.UserId, ug.GroupId });
+        modelBuilder.Entity<UserGroup>()
+            .HasOne(ug => ug.User)
+            .WithMany(g => g.UserGroups)
+            .HasForeignKey(ug => ug.UserId);
+        modelBuilder.Entity<UserGroup>()
+            .HasOne(ug => ug.Group)
+            .WithMany(ug => ug.UserGroups)
+            .HasForeignKey(ug => ug.GroupId);
         
         // خواندن داده‌ها از فایل‌های CSV
         // Branch
@@ -86,8 +96,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     Password = u.Password,
                     Name = u.Name,
                     PhoneNumber = u.PhoneNumber,
-                    GroupId = u.GroupId,
                     BranchId = u.BranchId
+                }).ToArray()
+        );
+        
+        // UserGroup
+        var userGroup = CsvDataReader.ReadUserGroup();
+        modelBuilder.Entity<UserGroup>().HasData(
+            userGroup.Select(ug => 
+                new UserGroup
+                {
+                    UserId = ug.UserId,
+                    GroupId = ug.GroupId
                 }).ToArray()
         );
     }

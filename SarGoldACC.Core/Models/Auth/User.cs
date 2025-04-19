@@ -8,8 +8,7 @@ public class User
     public required string Name { get; set; }
     public required string PhoneNumber { get; set; }
     
-    public long GroupId { get; set; }
-    public Group Group { get; set; }
+    public ICollection<UserGroup>? UserGroups { get; set; }
 
     public long BranchId { get; set; }
     public Branch Branch { get; set; }

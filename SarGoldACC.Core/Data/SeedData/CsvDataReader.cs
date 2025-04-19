@@ -43,4 +43,11 @@ public class CsvDataReader
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
         return csv.GetRecords<UserDto>().ToList();
     }
+    
+    public static List<UserGroupDto> ReadUserGroup()
+    {
+        using var reader = new StreamReader(Path.Combine(BasePath, "UserGroup.csv"));
+        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
+        return csv.GetRecords<UserGroupDto>().ToList();
+    }
 }

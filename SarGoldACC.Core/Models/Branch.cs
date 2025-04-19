@@ -1,4 +1,4 @@
-﻿using SarGoldACC.Core.Auth.Models;
+﻿using SarGoldACC.Core.Models.Auth;
 
 namespace SarGoldACC.Core.Models;
 

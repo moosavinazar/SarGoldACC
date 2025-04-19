@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SarGoldACC.Core.Auth.Models;
 using SarGoldACC.Core.Data.SeedData;
 using SarGoldACC.Core.Models;
+using SarGoldACC.Core.Models.Auth;
 
 namespace SarGoldACC.Core.Data;
 

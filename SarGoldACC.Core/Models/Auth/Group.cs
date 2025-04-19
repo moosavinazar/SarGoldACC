@@ -1,4 +1,4 @@
-﻿namespace SarGoldACC.Core.Auth.Models;
+﻿namespace SarGoldACC.Core.Models.Auth;
 
 public class Group
 {

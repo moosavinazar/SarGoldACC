@@ -1,4 +1,4 @@
-﻿namespace SarGoldACC.Core.Auth.DTOs;
+﻿namespace SarGoldACC.Core.DTOs.Auth;
 
 public class GroupPermissionDto
 {

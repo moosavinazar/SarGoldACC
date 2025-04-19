@@ -1,7 +1,7 @@
 ﻿using CsvHelper;
 using System.Globalization;
-using SarGoldACC.Core.Auth.DTOs;
 using SarGoldACC.Core.DTOs;
+using SarGoldACC.Core.DTOs.Auth;
 
 namespace SarGoldACC.Core.Data.SeedData;
 

@@ -7,47 +7,31 @@ namespace SarGoldACC.Core.Data.SeedData;
 
 public class CsvDataReader
 {
-    private static readonly string BasePath = Path.Combine(Directory.GetParent(Directory.GetCurrentDirectory())?.FullName ?? string.Empty, "SarGoldACC.Core/Data/SeedData");
+    private static readonly string BasePath = Path.Combine(AppContext.BaseDirectory, "Data", "SeedData");
 
-    public static List<BranchDto> ReadBranches()
+    public static List<BranchDto> ReadBranches() =>
+        ReadCsv<BranchDto>("Branches.csv");
+
+    public static List<GroupDto> ReadGroups() =>
+        ReadCsv<GroupDto>("Groups.csv");
+
+    public static List<PermissionDto> ReadPermissions() =>
+        ReadCsv<PermissionDto>("Permissions.csv");
+
+    public static List<GroupPermissionDto> ReadGroupPermissions() =>
+        ReadCsv<GroupPermissionDto>("GroupPermissions.csv");
+
+    public static List<UserDto> ReadUsers() =>
+        ReadCsv<UserDto>("Users.csv");
+
+    public static List<UserGroupDto> ReadUserGroup() =>
+        ReadCsv<UserGroupDto>("UserGroup.csv");
+
+    private static List<T> ReadCsv<T>(string fileName)
     {
-        using var reader = new StreamReader(Path.Combine(BasePath, "Branches.csv"));
+        var filePath = Path.Combine(BasePath, fileName);
+        using var reader = new StreamReader(filePath);
         using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        return csv.GetRecords<BranchDto>().ToList();
-    }
-    
-    public static List<GroupDto> ReadGroups()
-    {
-        using var reader = new StreamReader(Path.Combine(BasePath, "Groups.csv"));
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        return csv.GetRecords<GroupDto>().ToList();
-    }
-    
-    public static List<PermissionDto> ReadPermissions()
-    {
-        using var reader = new StreamReader(Path.Combine(BasePath, "Permissions.csv"));
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        return csv.GetRecords<PermissionDto>().ToList();
-    }
-    
-    public static List<GroupPermissionDto> ReadGroupPermissions()
-    {
-        using var reader = new StreamReader(Path.Combine(BasePath, "GroupPermissions.csv"));
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        return csv.GetRecords<GroupPermissionDto>().ToList();
-    }
-    
-    public static List<UserDto> ReadUsers()
-    {
-        using var reader = new StreamReader(Path.Combine(BasePath, "Users.csv"));
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        return csv.GetRecords<UserDto>().ToList();
-    }
-    
-    public static List<UserGroupDto> ReadUserGroup()
-    {
-        using var reader = new StreamReader(Path.Combine(BasePath, "UserGroup.csv"));
-        using var csv = new CsvReader(reader, CultureInfo.InvariantCulture);
-        return csv.GetRecords<UserGroupDto>().ToList();
+        return csv.GetRecords<T>().ToList();
     }
 }

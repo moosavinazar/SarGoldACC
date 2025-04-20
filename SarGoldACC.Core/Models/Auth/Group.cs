@@ -7,5 +7,4 @@ public class Group
     
     public ICollection<GroupPermission>? GroupPermissions { get; set; }
     public ICollection<UserGroup> UserGroups { get; set; }
-    public ICollection<User>? Users { get; set; }
 }

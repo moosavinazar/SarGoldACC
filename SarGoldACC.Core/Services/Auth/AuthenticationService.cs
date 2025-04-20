@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SarGoldACC.Core.Data;
 using SarGoldACC.Core.Models.Auth;
+using SarGoldACC.Core.Utils;
 
 namespace SarGoldACC.Core.Services.Auth;
 
@@ -17,12 +18,16 @@ public class AuthenticationService
     {
         using var db = _dbContextFactory.CreateDbContext();
 
-        // در دنیای واقعی حتما باید پسورد هش شده باشه و با هش مقایسه بشه
-        return await db.Users
+        var user = await db.Users
             .Include(u => u.UserGroups)
             .ThenInclude(ug => ug.Group)
-            .ThenInclude(gp => gp.GroupPermissions)
-            .ThenInclude(g => g.Permission)
-            .FirstOrDefaultAsync(u => u.Username == username && u.Password == password);
+            .ThenInclude(g => g.GroupPermissions)
+            .ThenInclude(gp => gp.Permission)
+            .FirstOrDefaultAsync(u => u.Username == username);
+
+        if (user == null)
+            return null;
+
+        return PasswordHasher.VerifyPassword(password, user.Password) ? user : null;
     }
 }

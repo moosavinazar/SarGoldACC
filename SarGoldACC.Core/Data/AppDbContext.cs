@@ -70,7 +70,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 new Permission
                 {
                     Id = p.Id, 
-                    Name = p.Name
+                    Name = p.Name,
+                    Label = p.Label
                 }).ToArray()
         );
         

@@ -7,6 +7,5 @@ public class UserDto
     public required string Password { get; set; }
     public required string Name { get; set; }
     public required string PhoneNumber { get; set; }
-    public long GroupId { get; set; }
     public long BranchId { get; set; }
 }

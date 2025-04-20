@@ -3,11 +3,16 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SarGoldACC.WpfApp.Helpers"
              mc:Ignorable="d">
     <Grid Margin="40">
         <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Width="300" >
             <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}"/>
-            <PasswordBox Margin="0,10,0,0" x:Name="PasswordBox"/>
+            <PasswordBox 
+                local:PasswordBoxHelper.BindPassword="True"
+                local:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                Margin="0,10,0,0" 
+                x:Name="PasswordBox"/>
             <Button Content="ورود" Margin="0,10,0,0" Command="{Binding LoginCommand}" />
             <TextBlock Text="{Binding ErrorMessage}" Foreground="Red" Margin="0,10,0,0"/>
         </StackPanel>

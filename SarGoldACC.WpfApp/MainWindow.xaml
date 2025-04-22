@@ -4,7 +4,7 @@
                      xmlns:Fluent="urn:fluent-ribbon"
                      xmlns:vm="clr-namespace:SarGoldACC.WpfApp.ViewModels"
                      xmlns:conv="clr-namespace:SarGoldACC.WpfApp.Converter"
-                     Title="SarGoldAcc" 
+                     Title="برنامه حسابداری سار" 
                      Height="450" 
                      Width="800"
                      WindowStartupLocation="CenterScreen"
@@ -52,8 +52,10 @@
                                    Icon="pack://application:,,,/Resources/Icons/User.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/UserLarge.png" />
                     <Fluent:Button Header="گروه"
+                                   ToolTip="کلید میانبر (۲)"
                                    Icon="pack://application:,,,/Resources/Icons/Group.png"
-                                   LargeIcon="pack://application:,,,/Resources/Icons/GroupLarge.png" />
+                                   LargeIcon="pack://application:,,,/Resources/Icons/GroupLarge.png"
+                                   Click="OpenGroupWindowButton_Click" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات">

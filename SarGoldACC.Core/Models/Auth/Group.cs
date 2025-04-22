@@ -6,5 +6,5 @@ public class Group
     public required string Name { get; set; }
     
     public ICollection<GroupPermission>? GroupPermissions { get; set; }
-    public ICollection<UserGroup> UserGroups { get; set; }
+    public ICollection<UserGroup>? UserGroups { get; set; }
 }

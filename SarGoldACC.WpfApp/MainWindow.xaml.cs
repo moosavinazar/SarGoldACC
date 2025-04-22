@@ -3,6 +3,7 @@ using System.Windows;
 using System.Windows.Input;
 using Fluent;
 using SarGoldACC.WpfApp.ViewModels;
+using SarGoldACC.WpfApp.Views;
 
 namespace SarGoldACC.WpfApp;
 
@@ -49,6 +50,11 @@ public partial class MainWindow : RibbonWindow
                 break;
             case Key.D2:
             case Key.NumPad2:
+                if (MainRibbon.SelectedTabItem == TabBaseInfo)
+                {
+                    OpenGroupWindow();
+                    break;
+                }
                 MainRibbon.IsMinimized = false;
                 MainRibbon.SelectedTabItem = TabProducts;
                 break;
@@ -86,6 +92,18 @@ public partial class MainWindow : RibbonWindow
                 }
             }
         }
+    }
+    
+    private void OpenGroupWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenGroupWindow();
+    }
+
+    private void OpenGroupWindow()
+    {
+        var groupWindow = new Group(); // نام پنجره‌ای که ساختی
+        groupWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        groupWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
 }

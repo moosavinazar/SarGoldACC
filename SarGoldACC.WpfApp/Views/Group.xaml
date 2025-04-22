@@ -1,0 +1,62 @@
+﻿<Window x:Class="SarGoldACC.WpfApp.Views.Group"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
+        mc:Ignorable="d"
+        Title="گروه" 
+        Height="600" 
+        Width="800"
+        KeyDown="GroupWindow_KeyDown"
+        Focusable="True"
+        Loaded="Window_Loaded"
+        FlowDirection="RightToLeft"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <StackPanel Margin="10">
+            <TextBlock Text="نام گروه"
+                       FontWeight="Bold"
+                       Margin="0,0,0,5" />
+            <TextBox Grid.Row="0" Margin="0 0 0 10" 
+                     Text="{Binding GroupName}"/>
+        </StackPanel>
+        
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- لیست تمام دسترسی‌ها -->
+            <ListBox x:Name="AllPermissionsListBox"
+                     Grid.Column="0"
+                     ItemsSource="{Binding AllPermissions}"
+                     DisplayMemberPath="Name"
+                     AllowDrop="True"
+                     PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
+                     Drop="AllPermissionsListBox_Drop"/>
+
+            <!-- فلش نمایشی -->
+            <TextBlock Grid.Column="1" Text="⮕" 
+                       VerticalAlignment="Center" 
+                       FontSize="20" Margin="10"/>
+
+            <!-- لیست دسترسی‌های انتخاب‌شده -->
+            <ListBox x:Name="SelectedPermissionsListBox"
+                     Grid.Column="2"
+                     ItemsSource="{Binding SelectedPermissions}"
+                     DisplayMemberPath="Name"
+                     AllowDrop="True"
+                     Drop="SelectedPermissionsListBox_Drop"/>
+        </Grid>
+    </Grid>
+</Window>

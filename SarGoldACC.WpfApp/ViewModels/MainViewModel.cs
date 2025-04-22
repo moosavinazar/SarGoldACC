@@ -8,17 +8,7 @@ public class MainViewModel : ViewModelBase
 {
     private readonly NavigationStore _navigationStore;
 
-    private object _currentViewModel;
-    public object CurrentViewModel
-    {
-        get => _currentViewModel;
-        set
-        {
-            _currentViewModel = value;
-            OnPropertyChanged();
-            OnPropertyChanged(nameof(IsRibbonVisible));
-        }
-    }
+    public object CurrentViewModel => _navigationStore.CurrentViewModel;
     
     public bool IsRibbonVisible => !(CurrentViewModel is LoginViewModel);
 
@@ -36,9 +26,12 @@ public class MainViewModel : ViewModelBase
         _navigationStore.CurrentViewModel = viewModel;
     }
 
-    private void OnCurrentViewModelChanged(object sender, PropertyChangedEventArgs e)
+    private void OnCurrentViewModelChanged(object? sender, PropertyChangedEventArgs e)
     {
         if (e.PropertyName == nameof(NavigationStore.CurrentViewModel))
+        {
             OnPropertyChanged(nameof(CurrentViewModel));
+            OnPropertyChanged(nameof(IsRibbonVisible));
+        }
     }
 }

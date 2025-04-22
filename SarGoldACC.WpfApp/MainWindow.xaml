@@ -7,6 +7,7 @@
                      Title="SarGoldAcc" 
                      Height="450" 
                      Width="800"
+                     WindowStartupLocation="CenterScreen"
                      KeyDown="RibbonWindow_KeyDown"
                      FlowDirection="RightToLeft">
     
@@ -23,7 +24,8 @@
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
         <Fluent:Ribbon Grid.Row="0" x:Name="MainRibbon"
-                       Visibility="{Binding IsRibbonVisible, Converter={StaticResource BoolToVisibilityConverter}}">
+                       Visibility="{Binding IsRibbonVisible, Converter={StaticResource BoolToVisibilityConverter}}"
+                       IsMinimized="True">
             <!--Backstage-->
             <Fluent:Ribbon.Menu>
                 <Fluent:Backstage>

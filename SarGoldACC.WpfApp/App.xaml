@@ -6,11 +6,19 @@
              xmlns:vm="clr-namespace:SarGoldACC.WpfApp.ViewModels"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-        <DataTemplate DataType="{x:Type vm:LoginViewModel}">
-            <views:LoginView/>
-        </DataTemplate>
-        <DataTemplate DataType="{x:Type vm:HomeViewModel}">
-            <views:HomeView/>
-        </DataTemplate>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <!-- Fluent.Ribbon theme -->
+                <ResourceDictionary Source="pack://application:,,,/Fluent;Component/Themes/Generic.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+
+            <!-- ViewModel-View mappings -->
+            <DataTemplate DataType="{x:Type vm:LoginViewModel}">
+                <views:LoginView/>
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type vm:HomeViewModel}">
+                <views:HomeView/>
+            </DataTemplate>
+        </ResourceDictionary>
     </Application.Resources>
 </Application>

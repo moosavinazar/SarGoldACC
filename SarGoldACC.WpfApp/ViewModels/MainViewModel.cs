@@ -8,7 +8,19 @@ public class MainViewModel : ViewModelBase
 {
     private readonly NavigationStore _navigationStore;
 
-    public ViewModelBase CurrentViewModel => _navigationStore.CurrentViewModel;
+    private object _currentViewModel;
+    public object CurrentViewModel
+    {
+        get => _currentViewModel;
+        set
+        {
+            _currentViewModel = value;
+            OnPropertyChanged();
+            OnPropertyChanged(nameof(IsRibbonVisible));
+        }
+    }
+    
+    public bool IsRibbonVisible => !(CurrentViewModel is LoginViewModel);
 
     public MainViewModel()
     {

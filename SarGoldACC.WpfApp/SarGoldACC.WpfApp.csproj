@@ -44,9 +44,19 @@
       <None Remove="Resources\Icons\NewDocumentLarge.png" />
       <Resource Include="Resources\Icons\NewDocumentLarge.png" />
       <None Remove="Resources\Icons\EditDocumentLarge.png" />
-      <Resource Include="Resources\Icons\EditDocumentLarge.png" />
       <None Remove="Resources\Icons\EditDocument.png" />
-      <Resource Include="Resources\Icons\EditDocument.png" />
+      <None Remove="Resources\Icons\ConditionalCertaintyLarge.png" />
+      <Resource Include="Resources\Icons\ConditionalCertaintyLarge.png" />
+      <None Remove="Resources\Icons\ConditionalCertainty.png" />
+      <Resource Include="Resources\Icons\ConditionalCertainty.png" />
+      <None Remove="Resources\Icons\Group.png" />
+      <Resource Include="Resources\Icons\Group.png" />
+      <None Remove="Resources\Icons\GroupLarge.png" />
+      <Resource Include="Resources\Icons\GroupLarge.png" />
+      <None Remove="Resources\Icons\User.png" />
+      <Resource Include="Resources\Icons\User.png" />
+      <None Remove="Resources\Icons\UserLarge.png" />
+      <Resource Include="Resources\Icons\UserLarge.png" />
     </ItemGroup>
 
 </Project>

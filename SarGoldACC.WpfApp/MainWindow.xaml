@@ -9,10 +9,15 @@
                      Width="800"
                      WindowStartupLocation="CenterScreen"
                      KeyDown="RibbonWindow_KeyDown"
-                     FlowDirection="RightToLeft">
+                     FlowDirection="RightToLeft"
+                     >
     
     <Fluent:RibbonWindow.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter" />
+        <!-- <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.RibbonTabControl.Background">LightBlue</SolidColorBrush> -->
+        <!-- <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.RibbonTabControl.TabsGrid.Background">LightBlue</SolidColorBrush> -->
+        <!-- <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.RibbonTabControl.Content.Background">LightBlue</SolidColorBrush> -->
+        <!-- <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.RibbonWindow.TitleBackground">LightBlue</SolidColorBrush> -->
     </Fluent:RibbonWindow.Resources>
     
     <Window.DataContext>
@@ -33,8 +38,8 @@
             </Fluent:Ribbon.Menu>
             
             <!--Tabs-->
-            <Fluent:RibbonTabItem x:Name="TabMain" ToolTip="کلید میانبر (1)" Header="عملیات اصلی">
-                <Fluent:RibbonGroupBox Header="عملیات">
+            <Fluent:RibbonTabItem x:Name="TabMain" ToolTip="کلید میانبر (1)" Header="عملیات اصلی" Style="{StaticResource CustomTabStyle}">
+                <Fluent:RibbonGroupBox Header="عملیات" >
                     <Fluent:Button Header="صدور سند"
                                    Icon="pack://application:,,,/Resources/Icons/NewDocument.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/NewDocumentLarge.png" />
@@ -43,10 +48,10 @@
                                    LargeIcon="pack://application:,,,/Resources/Icons/ConditionalCertaintyLarge.png" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem x:Name="TabProducts" ToolTip="کلید میانبر (2)" Header="کالاها">
+            <Fluent:RibbonTabItem x:Name="TabProducts" ToolTip="کلید میانبر (2)" Header="کالاها" Style="{StaticResource CustomTabStyle}">
                 
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem x:Name="TabBaseInfo" ToolTip="کلید میانبر (3)" Header="اطلاعات پایه">
+            <Fluent:RibbonTabItem x:Name="TabBaseInfo" ToolTip="کلید میانبر (3)" Header="اطلاعات پایه" Style="{StaticResource CustomTabStyle}">
                 <Fluent:RibbonGroupBox Header="کاربری">
                     <Fluent:Button Header="کاربر"
                                    Icon="pack://application:,,,/Resources/Icons/User.png"
@@ -58,10 +63,10 @@
                                    Click="OpenGroupWindowButton_Click" />
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات">
+            <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات" Style="{StaticResource CustomTabStyle}">
                 
             </Fluent:RibbonTabItem>
-            <Fluent:RibbonTabItem x:Name="TabSetting" ToolTip="کلید میانبر (5)" Header="تنظیمات سیستم">
+            <Fluent:RibbonTabItem x:Name="TabSetting" ToolTip="کلید میانبر (5)" Header="تنظیمات سیستم" Style="{StaticResource CustomTabStyle}">
                 
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>

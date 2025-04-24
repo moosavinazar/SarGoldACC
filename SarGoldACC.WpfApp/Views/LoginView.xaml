@@ -4,7 +4,11 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:local="clr-namespace:SarGoldACC.WpfApp.Helpers"
-             mc:Ignorable="d" Background="Transparent" Height="500" Width="800" >
+             mc:Ignorable="d" Background="Transparent" Height="500" Width="800"
+      
+             FlowDirection="LeftToRight"
+             
+             >
  
     <Grid >
         <Grid.ColumnDefinitions>

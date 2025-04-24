@@ -22,9 +22,14 @@ public partial class MainWindow : RibbonWindow
             if (DataContext is MainViewModel vm)
             {
                 vm.PropertyChanged += ViewModel_PropertyChanged;
+                
             }
         };
+        
+     
     }
+    
+    
     
     private void RibbonWindow_KeyDown(object sender, KeyEventArgs e)
     {

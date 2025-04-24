@@ -25,7 +25,7 @@
             <TextBlock Text="نام گروه"
                        FontWeight="Bold"
                        Margin="0,0,0,5" />
-            <TextBox Grid.Row="0" Margin="0 0 0 10" 
+            <TextBox Grid.Row="0" Margin="0 0 0 10"  Style="{StaticResource InputTextBox}"
                      Text="{Binding GroupName}"/>
         </StackPanel>
         

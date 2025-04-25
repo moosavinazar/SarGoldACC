@@ -7,7 +7,7 @@
         mc:Ignorable="d"
          Title="ثبت سند" Height="650" Width="1200" 
         WindowStartupLocation="CenterScreen" ResizeMode="NoResize"
-        FlowDirection="RightToLeft">
+       >
     <Window.Resources>
         <Style TargetType="Label">
             <Setter Property="Margin" Value="5"/>
@@ -73,27 +73,34 @@
                 </Grid.ColumnDefinitions>
                 
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left">
-                    <Button x:Name="BtnChangeDate" Content="تغییر تاریخ" Width="28" Height="28"
-                                         IsEnabled="False"/>
-                    <Button x:Name="BtnLast10Document" Content="ده معامله آخر (F10)"
-                                           Width="162" Height="40" />
-                    <Button x:Name="myButton1" Content="گزارشات"
-                                           Width="162" Height="40" Background="#64B5F6"/>
+                
+                    <Button x:Name="BtnLast10Document" ToolTip="(F10)" Content="ده معامله آخر" Width="162" Height="40" Style="{StaticResource PrimaryBtn}"/>
+                    <Button x:Name="reports" Content="گزارشات"
+                                           Width="120" Height="40" Style="{StaticResource PrimaryBtn}"/>
                 </StackPanel>
                 
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Vertical">
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
                         <Label Content="تاریخ فاکتور:"/>
                         <Label x:Name="lblFactorDate" Content="1403/12/04" BorderThickness="1" BorderBrush="Black"
-                              MinWidth="128" HorizontalContentAlignment="Center"/>
+                              MinWidth="128" HorizontalContentAlignment="Center"/>     <Button x:Name="BtnChangeDate" Content="تغییر تاریخ" Width="28" Height="28"
+                            IsEnabled="False"/>
                         
                         <Label Content="اعتبار:"/>
                         <Label x:Name="lblEtebar" Content="0" HorizontalContentAlignment="Left" Padding="0,0,5,0"/>
-                        
+                        <Button x:Name="BtnChangeAudience" ToolTip="تغییر مشتری " Width="28" Height="28" Style="{StaticResource PrimaryBtn}" />
                         <Label Content="مشتری:"/>
                         <Label x:Name="lblAudienceTitle" Content="-" HorizontalContentAlignment="Left" Padding="0,0,5,0"/>
-                        <Button x:Name="BtnChangeAudience" Width="28" Height="28" 
-                                              />
+
+                        <Grid Width="40" Height="40">
+                            <Ellipse Width="40" Height="40" Stroke="#FF6A00" StrokeThickness="2" />
+                            <Ellipse Width="40" Height="40">
+                                <Ellipse.Fill>
+                                    <ImageBrush ImageSource="your-image.jpg" />
+                                </Ellipse.Fill>
+                            </Ellipse>
+                        </Grid>
+                    
                     </StackPanel>
                     
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
@@ -145,26 +152,16 @@
             
             <!-- Right Side Buttons -->
             <StackPanel Grid.Column="1" Background="{DynamicResource {x:Static SystemColors.InactiveBorderBrushKey}}">
-                <Button x:Name="BtnReceiveMade" Content="0 - خرید ساخته" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
-                <Button x:Name="BtnReceiveGold" Content="1 - دریافت طلا" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
-                <Button x:Name="BtnReceiveMoney" Content="2 - دریافت پول نقد" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
-                <Button x:Name="BtnReceiveCheck" Content="3 - دریافت چک" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson"/>
-                <Button x:Name="BtnReceiveRemittance" Content="4 - دریافت حواله" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
-                <Button x:Name="BtnReceiveCoin" Content="5 - دریافت سکه" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
-                <Button x:Name="BtnTax" Content="6 - تخفیفات و کسورات" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
-                <Button x:Name="BtnBuyMenu" Content="8 - خرید" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
-                <Button x:Name="BtnSell" Content="9 - فروش" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
-                <Button x:Name="BtnSaveDocument" Content="0 - بستن سند" Height="40" 
-                                        Background="IndianRed" BorderBrush="Crimson" />
+                <Button x:Name="BtnReceiveMade" Content="0 - خرید ساخته" Height="40" Style="{StaticResource DangerBtn}" />
+                <Button x:Name="BtnReceiveGold" Content="1 - دریافت طلا" Height="40" Style="{StaticResource DangerBtn}" />
+                <Button x:Name="BtnReceiveMoney" Content="2 - دریافت پول نقد" Height="40" Style="{StaticResource DangerBtn}" />
+                <Button x:Name="BtnReceiveCheck" Content="3 - دریافت چک" Height="40" Style="{StaticResource DangerBtn}"/>
+                <Button x:Name="BtnReceiveRemittance" Content="4 - دریافت حواله" Height="40" Style="{StaticResource DangerBtn}" />
+                <Button x:Name="BtnReceiveCoin" Content="5 - دریافت سکه" Height="40" Style="{StaticResource DangerBtn}" />
+                <Button x:Name="BtnTax" Content="6 - تخفیفات و کسورات" Height="40" Style="{StaticResource DangerBtn}" />
+                <Button x:Name="BtnBuyMenu" Content="8 - خرید" Height="40" Style="{StaticResource DangerBtn}" />
+                <Button x:Name="BtnSell" Content="9 - فروش" Height="40" Style="{StaticResource DangerBtn}" />
+                <Button x:Name="BtnSaveDocument" Content="0 - بستن سند" Height="40" Style="{StaticResource DangerBtn}" />
             </StackPanel>
         </Grid>
         

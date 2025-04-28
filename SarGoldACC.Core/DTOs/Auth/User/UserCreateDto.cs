@@ -1,8 +1,7 @@
-﻿namespace SarGoldACC.Core.DTOs.Auth;
+﻿namespace SarGoldACC.Core.DTOs.Auth.User;
 
-public class UserDto
+public class UserCreateDto
 {
-    public long Id { get; set; }
     public required string Username { get; set; }
     public required string Password { get; set; }
     public required string Name { get; set; }

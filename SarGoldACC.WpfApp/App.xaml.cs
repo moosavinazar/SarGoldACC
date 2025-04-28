@@ -2,47 +2,41 @@
 using Microsoft.Extensions.Configuration;
 using SarGoldACC.Core.Data;
 using System.Windows;
-using SarGoldACC.Core.Services.Auth;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using SarGoldACC.Core.Services;
+using SarGoldACC.Core.Services.Interfaces;
 
 namespace SarGoldACC.WpfApp
 {
     public partial class App : Application
     {
         public static IConfiguration Configuration { get; private set; }
-        public static IDbContextFactory DbContextFactory { get; private set; }
         
-        public static IAuthorizationService AuthorizationService { get; private set; }
+        public static IServiceProvider ServiceProvider { get; private set; }
         
         protected override void OnStartup(StartupEventArgs e)
         {
-            var config = new ConfigurationBuilder()
+            
+            base.OnStartup(e);
+            
+            Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
             
-            var connectionString = config.GetConnectionString("DefaultConnection");
+            var services = new ServiceCollection();
             
-            var contextFactory = new DbContextFactory(connectionString); // اگر داریش
-            var dbContext = contextFactory.CreateDbContext();
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            
+            services.AddDbContext<AppDbContext>(options =>
+                options.UseSqlServer(connectionString));
 
-            AuthorizationService = new AuthorizationService(dbContext);
+            services.AddScoped<IUserService, UserService>();
 
-            base.OnStartup(e);
-        }
-
-        public App()
-        {
-            // خواندن تنظیمات
-            var builder = new ConfigurationBuilder()
-                .SetBasePath(System.AppDomain.CurrentDomain.BaseDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-            Configuration = builder.Build();
-
-            // گرفتن ConnectionString
-            string connectionString = Configuration.GetConnectionString("DefaultConnection");
-
-            // ایجاد DbContextFactory
-            DbContextFactory = new DbContextFactory(connectionString);
+            ServiceProvider = services.BuildServiceProvider();
+            
+            
         }
     }
 }

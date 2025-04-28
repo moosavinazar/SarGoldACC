@@ -2,6 +2,7 @@
 using System.Globalization;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Auth;
+using SarGoldACC.Core.DTOs.Auth.User;
 
 namespace SarGoldACC.Core.Data.SeedData;
 

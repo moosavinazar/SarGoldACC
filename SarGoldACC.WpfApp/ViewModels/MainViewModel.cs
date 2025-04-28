@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel;
-using SarGoldACC.Core.Services.Auth;
+using SarGoldACC.Core.Services;
 using SarGoldACC.WpfApp.Stores;
 
 namespace SarGoldACC.WpfApp.ViewModels;
@@ -12,12 +12,12 @@ public class MainViewModel : ViewModelBase
     
     public bool IsRibbonVisible => !(CurrentViewModel is LoginViewModel);
 
-    public MainViewModel()
+    public MainViewModel(AuthenticationService authenticationService, AuthorizationService authorizationService)
     {
-        _navigationStore = new NavigationStore();
-        var authService = new AuthenticationService(App.DbContextFactory);
-        _navigationStore.CurrentViewModel = new LoginViewModel(NavigateTo, authService);
-
+        _navigationStore = new NavigationStore
+        {
+            CurrentViewModel = new LoginViewModel(NavigateTo, authenticationService, authorizationService)
+        };
         _navigationStore.PropertyChanged += OnCurrentViewModelChanged;
     }
     

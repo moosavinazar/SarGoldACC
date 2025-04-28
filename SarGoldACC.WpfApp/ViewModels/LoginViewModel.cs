@@ -1,6 +1,6 @@
 ﻿using System.Windows.Input;
 using SarGoldACC.Core.Models.Auth;
-using SarGoldACC.Core.Services.Auth;
+using SarGoldACC.Core.Services;
 using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
@@ -12,6 +12,7 @@ public class LoginViewModel : ViewModelBase
     private string _errorMessage = "";
     private readonly Action<ViewModelBase> _navigateTo;
     private readonly AuthenticationService _authService;
+    private readonly AuthorizationService _authorizationService;
 
     public string Username
     {
@@ -33,10 +34,11 @@ public class LoginViewModel : ViewModelBase
 
     public ICommand LoginCommand { get; }
 
-    public LoginViewModel(Action<ViewModelBase> navigateTo, AuthenticationService authService)
+    public LoginViewModel(Action<ViewModelBase> navigateTo, AuthenticationService authService, AuthorizationService authorizationService)
     {
         _navigateTo = navigateTo;
         _authService = authService;
+        _authorizationService = authorizationService;
         LoginCommand = new AsyncRelayCommand(LoginAsync);
     }
 
@@ -45,7 +47,7 @@ public class LoginViewModel : ViewModelBase
         var user = await _authService.AuthenticateUserAsync(Username, Password);
         if (user != null)
         {
-            await App.AuthorizationService.LoadUserPermissionsAsync(user.Id);
+            _authorizationService.LoadUserPermissionsAsync(user.Id);
             _navigateTo(new HomeViewModel());
         }
         else

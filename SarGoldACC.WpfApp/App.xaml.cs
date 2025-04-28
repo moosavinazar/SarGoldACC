@@ -33,6 +33,8 @@ namespace SarGoldACC.WpfApp
                 options.UseSqlServer(connectionString));
 
             services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
+            services.AddScoped<IAuthorizationService, AuthorizationService>();
 
             ServiceProvider = services.BuildServiceProvider();
             

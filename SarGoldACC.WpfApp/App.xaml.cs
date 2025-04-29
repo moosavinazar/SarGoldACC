@@ -4,8 +4,11 @@ using SarGoldACC.Core.Data;
 using System.Windows;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
+using SarGoldACC.Core.Repositories.Interfaces;
+using SarGoldACC.Core.Repositories;
 using SarGoldACC.Core.Services;
 using SarGoldACC.Core.Services.Interfaces;
+using SarGoldACC.Core.Services.Mapper;
 using SarGoldACC.WpfApp.Stores;
 using SarGoldACC.WpfApp.ViewModels;
 
@@ -34,14 +37,18 @@ namespace SarGoldACC.WpfApp
             services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(connectionString));
 
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+            services.AddAutoMapper(typeof(MappingProfile));
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IAuthenticationRepository, AuthenticateRepository>();
+            services.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
             
             services.AddSingleton<NavigationStore>();
             // services.AddSingleton<MainViewModel>();
             
-            services.AddSingleton<MainWindow>(provider =>
+            services.AddSingleton<MainViewModel>(provider =>
             {
                 var navigationStore = provider.GetRequiredService<NavigationStore>();
                 var authService = provider.GetRequiredService<IAuthenticationService>();
@@ -50,6 +57,10 @@ namespace SarGoldACC.WpfApp
             });
 
             ServiceProvider = services.BuildServiceProvider();
+            
+            var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
+            var mainWindow = new MainWindow(mainViewModel);
+            mainWindow.Show();
             
         }
     }

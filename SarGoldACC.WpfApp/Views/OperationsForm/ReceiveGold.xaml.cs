@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Media;
 
 namespace SarGoldACC.WpfApp.Views.OperationsForm;
 

@@ -14,14 +14,16 @@ public class AuthorizationService : IAuthorizationService
         _authorizationRepository = authorizationRepository;
     }
 
-    public void LoadUserPermissionsAsync(long userId)
+    public async Task<HashSet<string>> LoadUserPermissionsAsync(long userId)
     {
         _permissions.Clear();
 
-        var permissions = _authorizationRepository.LoadUserPermissionsAsync(userId).Result;
+        var permissions = await _authorizationRepository.LoadUserPermissionsAsync(userId);
         
         foreach (var p in permissions)
             _permissions.Add(p);
+
+        return await Task.FromResult(_permissions);
     }
 
     public bool HasPermission(string permissionName)

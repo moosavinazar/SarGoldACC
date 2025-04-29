@@ -2,5 +2,5 @@
 
 public interface IAuthorizationService
 {
-    void LoadUserPermissionsAsync(long userId);
+    Task<HashSet<string>> LoadUserPermissionsAsync(long userId);
 }

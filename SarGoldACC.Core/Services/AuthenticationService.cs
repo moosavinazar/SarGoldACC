@@ -7,7 +7,7 @@ namespace SarGoldACC.Core.Services;
 
 public class AuthenticationService : IAuthenticationService
 {
-    IAuthenticationRepository _authenticationRepository;
+    private readonly IAuthenticationRepository _authenticationRepository;
     private readonly IMapper _mapper;
 
     public AuthenticationService(IAuthenticationRepository authenticationRepository, IMapper mapper)
@@ -18,7 +18,7 @@ public class AuthenticationService : IAuthenticationService
 
     public async Task<UserDto> AuthenticateUserAsync(string username, string password)
     {
-        var user = _authenticationRepository.AuthenticateUserAsync(username, password);
+        var user = await _authenticationRepository.AuthenticateUserAsync(username, password);
         return _mapper.Map<UserDto>(user);
     }
 }

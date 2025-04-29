@@ -12,13 +12,19 @@ namespace SarGoldACC.WpfApp;
 /// </summary>
 public partial class MainWindow : RibbonWindow
 {
-    public MainWindow()
+    public MainWindow(MainViewModel mainViewModel)
     {
         InitializeComponent();
+        
+        DataContext = mainViewModel;
+        
         Loaded += (s, e) =>
         {
-            MainRibbon.IsMinimized = true;
-            MainRibbon.SelectedTabItem = null; // هیچ تبی انتخاب نش
+            if (MainRibbon != null)
+            {
+                MainRibbon.IsMinimized = true;
+                MainRibbon.SelectedTabItem = null; // هیچ تبی انتخاب نش
+            }
             if (DataContext is MainViewModel vm)
             {
                 vm.PropertyChanged += ViewModel_PropertyChanged;

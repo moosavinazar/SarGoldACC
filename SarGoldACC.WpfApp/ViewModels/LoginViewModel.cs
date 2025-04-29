@@ -1,6 +1,7 @@
 ﻿using System.Windows.Input;
 using SarGoldACC.Core.Models.Auth;
 using SarGoldACC.Core.Services;
+using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
@@ -11,8 +12,8 @@ public class LoginViewModel : ViewModelBase
     private string _password = "";
     private string _errorMessage = "";
     private readonly Action<ViewModelBase> _navigateTo;
-    private readonly AuthenticationService _authService;
-    private readonly AuthorizationService _authorizationService;
+    private readonly IAuthenticationService _authService;
+    private readonly IAuthorizationService _authorizationService;
 
     public string Username
     {

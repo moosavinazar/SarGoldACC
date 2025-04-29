@@ -6,6 +6,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.Services;
 using SarGoldACC.Core.Services.Interfaces;
+using SarGoldACC.WpfApp.Stores;
+using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp
 {
@@ -35,9 +37,19 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
+            
+            services.AddSingleton<NavigationStore>();
+            // services.AddSingleton<MainViewModel>();
+            
+            services.AddSingleton<MainWindow>(provider =>
+            {
+                var navigationStore = provider.GetRequiredService<NavigationStore>();
+                var authService = provider.GetRequiredService<IAuthenticationService>();
+                var authorizationService = provider.GetRequiredService<IAuthorizationService>();
+                return new MainViewModel(navigationStore, authService, authorizationService);
+            });
 
             ServiceProvider = services.BuildServiceProvider();
-            
             
         }
     }

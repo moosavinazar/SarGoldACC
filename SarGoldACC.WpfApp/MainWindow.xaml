@@ -20,9 +20,6 @@
         <!-- <SolidColorBrush x:Key="Fluent.Ribbon.Brushes.RibbonWindow.TitleBackground">LightBlue</SolidColorBrush> -->
     </Fluent:RibbonWindow.Resources>
     
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />

@@ -50,6 +50,7 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticateRepository>();
             services.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
             services.AddScoped<IGroupRepository, GroupRepository>();
             
             

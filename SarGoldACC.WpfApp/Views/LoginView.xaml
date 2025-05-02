@@ -21,8 +21,9 @@
                 <TextBlock Text="ورود به سیستم" Style="{StaticResource TitleText}" Foreground="{DynamicResource InfoColor}"></TextBlock>
                 <TextBlock Text="لطفا نام کاربری و رمز عبورتان را وارد نمایید" Style="{StaticResource NormalText}" Foreground="{DynamicResource InfoColor}"></TextBlock>
                 
-                <TextBox x:Name="UsernameBox" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBox}" />
+                <TextBox x:Name="UsernameBox" KeyDown="UsernameBox_KeyDown" Text="{Binding Username, UpdateSourceTrigger=PropertyChanged}" Style="{StaticResource InputTextBox}" />
                 <PasswordBox
+                    KeyDown="PasswordBox_KeyDown"
                     local:PasswordBoxHelper.BindPassword="True"
                     local:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                     Margin="0,10,0,0"

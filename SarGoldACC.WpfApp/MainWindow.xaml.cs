@@ -1,7 +1,9 @@
 ﻿using System.ComponentModel;
+using System.Diagnostics;
 using System.Windows;
 using System.Windows.Input;
 using Fluent;
+using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.WpfApp.ViewModels;
 using SarGoldACC.WpfApp.Views;
 
@@ -12,9 +14,11 @@ namespace SarGoldACC.WpfApp;
 /// </summary>
 public partial class MainWindow : RibbonWindow
 {
-    public MainWindow(MainViewModel mainViewModel)
+    private readonly IServiceProvider _serviceProvider;
+    public MainWindow(MainViewModel mainViewModel, IServiceProvider serviceProvider)
     {
         InitializeComponent();
+        _serviceProvider = serviceProvider;
         
         DataContext = mainViewModel;
         
@@ -112,7 +116,7 @@ public partial class MainWindow : RibbonWindow
 
     private void OpenGroupWindow()
     {
-        var groupWindow = new Group(); // نام پنجره‌ای که ساختی
+        var groupWindow = _serviceProvider.GetRequiredService<Group>();
         groupWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
         groupWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }

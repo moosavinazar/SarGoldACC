@@ -59,7 +59,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 new Group
                 {
                     Id = g.Id, 
-                    Name = g.Name
+                    Name = g.Name,
+                    Label = g.Label
                 }).ToArray()
         );
         

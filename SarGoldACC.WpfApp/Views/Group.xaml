@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
         Title="گروه" 
         Height="600" 
@@ -21,42 +20,94 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         
-        <StackPanel Margin="10">
-            <TextBlock Text="نام گروه"
-                       FontWeight="Bold"
-                       Margin="0,0,0,5" />
-            <TextBox Grid.Row="0" Margin="0 0 0 10"  Style="{StaticResource InputTextBox}"
-                     Text="{Binding GroupName}"/>
-        </StackPanel>
-        
-        <Grid Grid.Row="1">
+        <Grid Margin="10">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- لیست تمام دسترسی‌ها -->
-            <ListBox x:Name="AllPermissionsListBox"
-                     Grid.Column="0"
-                     ItemsSource="{Binding AllPermissions}"
-                     DisplayMemberPath="Name"
-                     AllowDrop="True"
-                     PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
-                     Drop="AllPermissionsListBox_Drop"/>
+            <!-- نام گروه -->
+            <TextBlock Text="نام گروه"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="0,0,5,0"/>
+            <TextBox Grid.Column="1"
+                     Margin="0 0 10 0"
+                     Style="{StaticResource InputTextBox}"
+                     Text="{Binding GroupName}"/>
 
-            <!-- فلش نمایشی -->
-            <TextBlock Grid.Column="1" Text="⮕" 
-                       VerticalAlignment="Center" 
-                       FontSize="20" Margin="10"/>
+            <!-- برچسب گروه -->
+            <TextBlock Grid.Column="2"
+                       Text="برچسب گروه"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="10,0,5,0"/>
+            <TextBox Grid.Column="3"
+                     Margin="0"
+                     Style="{StaticResource InputTextBox}"
+                     Text="{Binding GroupLabel}"/>
+        </Grid>
+        
+        
+        <Grid Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="2*"/> <!-- لیست‌ها -->
+                <RowDefinition Height="*"/>  <!-- DataGrid -->
+            </Grid.RowDefinitions>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <!-- لیست دسترسی‌های انتخاب‌شده -->
-            <ListBox x:Name="SelectedPermissionsListBox"
-                     Grid.Column="2"
-                     ItemsSource="{Binding SelectedPermissions}"
-                     DisplayMemberPath="Name"
-                     AllowDrop="True"
-                     Drop="SelectedPermissionsListBox_Drop"/>
+                <!-- لیست تمام دسترسی‌ها -->
+                <ListBox x:Name="AllPermissionsListBox"
+                         Style="{StaticResource RoundedListBoxStyle}"
+                         Grid.Column="0"
+                         ItemsSource="{Binding AllPermissions}"
+                         DisplayMemberPath="Label"
+                         PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
+                         MouseMove="ListBox_MouseMove"
+                         Drop="AllPermissionsListBox_Drop"
+                         AllowDrop="True"
+                         SelectionMode="Extended"/>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10">
+                    <Button Content="←" Style="{StaticResource SuccessBtn}" Click="MoveToSelected_Click" Margin="0,5" FontSize="20"/>
+                    <Button Content="→" Style="{StaticResource PrimaryBtn}" Click="MoveToAll_Click" Margin="0,5" FontSize="20"/>
+                </StackPanel>
+
+
+                <!-- لیست دسترسی‌های انتخاب‌شده -->
+                <ListBox x:Name="SelectedPermissionsListBox"
+                         Style="{StaticResource RoundedListBoxStyle}"
+                         Grid.Column="2"
+                         ItemsSource="{Binding SelectedPermissions}"
+                         DisplayMemberPath="Label"
+                         PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
+                         MouseMove="ListBox_MouseMove"
+                         Drop="SelectedPermissionsListBox_Drop"
+                         AllowDrop="True"
+                         SelectionMode="Extended"/>
+            </Grid>
+            
+            <DataGrid Grid.Row="1"
+                      Margin="0,10,0,0"
+                      ItemsSource="{Binding Groups}" 
+                      AutoGenerateColumns="False"
+                      IsReadOnly="True"
+                      HeadersVisibility="Column"
+                      CanUserAddRows="False"
+                      SelectionMode="Single">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="گروه" Binding="{Binding Name}" Width="*"/>
+                    <DataGridTextColumn Header="نام گروه" Binding="{Binding Label}" Width="*"/>
+                    <DataGridTextColumn Header="تعداد دسترسی‌ها" Binding="{Binding Permissions.Count}" Width="*"/>
+                </DataGrid.Columns>
+            </DataGrid>
         </Grid>
     </Grid>
 </Window>

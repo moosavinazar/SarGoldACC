@@ -11,6 +11,7 @@ using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.Core.Services.Mapper;
 using SarGoldACC.WpfApp.Stores;
 using SarGoldACC.WpfApp.ViewModels;
+using SarGoldACC.WpfApp.Views;
 
 namespace SarGoldACC.WpfApp
 {
@@ -39,11 +40,17 @@ namespace SarGoldACC.WpfApp
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
             services.AddAutoMapper(typeof(MappingProfile));
+            
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
+            services.AddScoped<IPermissionService, PermissionService>();
+            
+            services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticateRepository>();
             services.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
+            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            
             
             services.AddSingleton<NavigationStore>();
             // services.AddSingleton<MainViewModel>();
@@ -55,11 +62,14 @@ namespace SarGoldACC.WpfApp
                 var authorizationService = provider.GetRequiredService<IAuthorizationService>();
                 return new MainViewModel(navigationStore, authService, authorizationService);
             });
+            
+            services.AddTransient<GroupViewModel>();
+            services.AddTransient<Group>();
 
             ServiceProvider = services.BuildServiceProvider();
             
             var mainViewModel = ServiceProvider.GetRequiredService<MainViewModel>();
-            var mainWindow = new MainWindow(mainViewModel);
+            var mainWindow = new MainWindow(mainViewModel, ServiceProvider);
             mainWindow.Show();
             
         }

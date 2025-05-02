@@ -45,11 +45,12 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<IAuthenticationService, AuthenticationService>();
             services.AddScoped<IAuthorizationService, AuthorizationService>();
             services.AddScoped<IPermissionService, PermissionService>();
+            services.AddScoped<IGroupService, GroupService>();
             
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IAuthenticationRepository, AuthenticateRepository>();
             services.AddScoped<IAuthorizationRepository, AuthorizationRepository>();
-            services.AddScoped<IPermissionRepository, PermissionRepository>();
+            services.AddScoped<IGroupRepository, GroupRepository>();
             
             
             services.AddSingleton<NavigationStore>();

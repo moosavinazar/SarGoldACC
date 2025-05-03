@@ -16,7 +16,7 @@ public class PermissionService : IPermissionService
         _mapper = mapper;
     }
     
-    public async Task<PermissionDto> GetByIdAsync(int id)
+    public async Task<PermissionDto> GetByIdAsync(long id)
     {
         var permission = await _permissionRepository.GetByIdAsync(id);
         return _mapper.Map<PermissionDto>(permission);

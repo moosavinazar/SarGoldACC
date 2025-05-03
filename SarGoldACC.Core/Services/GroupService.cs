@@ -17,7 +17,7 @@ public class GroupService : IGroupService
         _mapper = mapper;
     }
 
-    public async Task<GroupDto> GetByIdAsync(int id)
+    public async Task<GroupDto> GetByIdAsync(long id)
     {
         var group = await _groupRepository.GetByIdAsync(id);
         return _mapper.Map<GroupDto>(group);
@@ -45,7 +45,7 @@ public class GroupService : IGroupService
         await _groupRepository.UpdateAsync(user);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(long id)
     {
         var user = await _groupRepository.GetByIdAsync(id);
         if (user == null)

@@ -3,4 +3,5 @@
 public interface IAuthorizationService
 {
     Task<HashSet<string>> LoadUserPermissionsAsync(long userId);
+    public string GetCurrentUserIdAsString();
 }

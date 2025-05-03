@@ -7,9 +7,9 @@ public class GridSettingsFileService
 {
     private readonly string _filePath;
 
-    public GridSettingsFileService()
+    public GridSettingsFileService(string userId)
     {
-        var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SarGoldAcc");
+        var folder = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "SarGoldAcc", userId);
         Directory.CreateDirectory(folder);
         _filePath = Path.Combine(folder, "grid-settings.json");
     }

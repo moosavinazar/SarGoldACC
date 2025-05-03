@@ -17,7 +17,7 @@ public class UserService : IUserService
         _mapper = mapper;
     }
 
-    public async Task<UserDto> GetByIdAsync(int id)
+    public async Task<UserDto> GetByIdAsync(long id)
     {
         var user = await _userRepository.GetByIdAsync(id);
         return _mapper.Map<UserDto>(user);
@@ -45,7 +45,7 @@ public class UserService : IUserService
         await _userRepository.UpdateAsync(user);
     }
 
-    public async Task DeleteAsync(int id)
+    public async Task DeleteAsync(long id)
     {
         var user = await _userRepository.GetByIdAsync(id);
         if (user == null)

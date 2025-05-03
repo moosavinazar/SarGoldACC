@@ -8,11 +8,11 @@ public class BoolToVisibilityConverter : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return (value is bool flag && flag) ? Visibility.Visible : Visibility.Collapsed;
+        return value is bool b && b ? Visibility.Visible : Visibility.Collapsed;
     }
 
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
     {
-        return value is Visibility visibility && visibility == Visibility.Visible;
+        return value is Visibility v && v == Visibility.Visible;
     }
 }

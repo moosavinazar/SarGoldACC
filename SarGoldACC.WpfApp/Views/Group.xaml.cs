@@ -19,6 +19,12 @@ public partial class Group : Window
         InitializeComponent();
         _viewModel = viewModel;
         DataContext = _viewModel;
+        _viewModel.SetColumnsVisibilityAction = (showId, showName, showLabel) =>
+        {
+            IdColumn.Visibility = showId ? Visibility.Visible : Visibility.Collapsed;
+            NameColumn.Visibility = showName ? Visibility.Visible : Visibility.Collapsed;
+            LabelColumn.Visibility = showLabel ? Visibility.Visible : Visibility.Collapsed;
+        };
         var allView = CollectionViewSource.GetDefaultView(_viewModel.AllPermissions);
         allView.SortDescriptions.Add(new SortDescription(nameof(PermissionDto.Label), ListSortDirection.Ascending));
 
@@ -108,8 +114,12 @@ public partial class Group : Window
 
 
     
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+    private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
+        await _viewModel.LoadGridSettings();
+        IdColumn.Visibility = _viewModel.ShowIdColumn ? Visibility.Visible : Visibility.Collapsed;
+        NameColumn.Visibility = _viewModel.ShowNameColumn ? Visibility.Visible : Visibility.Collapsed;
+        LabelColumn.Visibility = _viewModel.ShowLabelColumn ? Visibility.Visible : Visibility.Collapsed;
         Keyboard.Focus(this);
     }
 

@@ -1,9 +1,11 @@
 ﻿<Window x:Class="SarGoldACC.WpfApp.Views.Group"
+        x:Name="GroupWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        xmlns:viewModels="clr-namespace:SarGoldACC.WpfApp.ViewModels"
         mc:Ignorable="d"
         Title="گروه" 
         Height="600" 
@@ -61,6 +63,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="2*"/> <!-- لیست‌ها -->
                 <RowDefinition Height="*"/>  <!-- DataGrid -->
+                <RowDefinition Height="Auto"/> <!-- CheckBox‌ها -->
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
@@ -111,27 +114,24 @@
                       CanUserAddRows="False"
                       SelectionMode="Single">
                 <DataGrid.Columns>
-                    <DataGridTextColumn Header="شناسه" 
-                                        Binding="{Binding Id}" 
-                                        Visibility="{Binding ShowIdColumn, 
-                                        Converter={StaticResource BoolToVisibilityConverter}}" 
+                    <DataGridTextColumn x:Name="IdColumn"
+                                        Header="شناسه" 
+                                        Binding="{Binding Id}"
                                         Width="1*"/>
-                    <DataGridTextColumn Header="گروه" 
+                    <DataGridTextColumn x:Name="NameColumn"
+                                        Header="گروه" 
                                         Binding="{Binding Name}"
-                                        Visibility="{Binding ShowNameColumn, 
-                                        Converter={StaticResource BoolToVisibilityConverter}}" 
                                         Width="5*"/>
-                    <DataGridTextColumn Header="نام گروه" 
+                    <DataGridTextColumn x:Name="LabelColumn"
+                                        Header="نام گروه" 
                                         Binding="{Binding Label}" 
-                                        Visibility="{Binding ShowLabelColumn, 
-                                        Converter={StaticResource BoolToVisibilityConverter}}" 
                                         Width="7*"/>
                 </DataGrid.Columns>
             </DataGrid>
-            <StackPanel Grid.Row="2" Orientation="Vertical">
-                <CheckBox Content="شناسه" IsChecked="{Binding ShowIdColumn}" />
-                <CheckBox Content="گروه" IsChecked="{Binding ShowNameColumn}" />
-                <CheckBox Content="نام گروه" IsChecked="{Binding ShowLabelColumn}" />
+            <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,5,0,0">
+                <CheckBox Content="شناسه" IsChecked="{Binding ShowIdColumn, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"/>
+                <CheckBox Content="گروه" IsChecked="{Binding ShowNameColumn, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"/>
+                <CheckBox Content="نام گروه" IsChecked="{Binding ShowLabelColumn, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"/>
             </StackPanel>
         </Grid>
     </Grid>

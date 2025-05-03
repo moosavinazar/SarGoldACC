@@ -4,9 +4,9 @@ namespace SarGoldACC.Core.Services.Interfaces;
 
 public interface IUserService
 {
-    Task<UserDto> GetByIdAsync(int id);
+    Task<UserDto> GetByIdAsync(long id);
     Task<List<UserDto>> GetAllAsync();
     Task AddAsync(UserCreateDto createUserDto);
     Task UpdateAsync(UserUpdateDto updateUserDto);
-    Task DeleteAsync(int id);
+    Task DeleteAsync(long id);
 }

@@ -130,5 +130,14 @@ public partial class Group : Window
             this.Close();
         }
     }
+    
+    private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    {
+        var dataGrid = sender as DataGrid;
+        if (dataGrid.SelectedItem == null)
+        {
+            e.Handled = true; // غیرفعال کردن منو اگر ردیفی انتخاب نشده باشد
+        }
+    }
 
 }

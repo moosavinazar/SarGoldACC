@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Controls"
         mc:Ignorable="d"
         Title="گروه" 
         Height="600" 
@@ -118,44 +119,17 @@
                     Padding="10,5"/>
             </StackPanel>
             
-            <DataGrid Grid.Row="2"
-                      Margin="0,0,0,0"
-                      ItemsSource="{Binding AllGroups}" 
-                      AutoGenerateColumns="False"
-                      CanUserResizeColumns="True"
-                      CanUserSortColumns="True"
-                      IsReadOnly="True"
-                      HeadersVisibility="Column"
-                      CanUserAddRows="False"
-                      SelectionMode="Single"
-                      ContextMenuOpening="DataGrid_ContextMenuOpening">
-                <!-- دکمه نمایش/مخفی کردن اطلاعات گروه -->
-                <DataGrid.Columns>
-                    <DataGridTextColumn x:Name="IdColumn"
-                                        Header="شناسه" 
-                                        Binding="{Binding Id}"
-                                        Width="1*"/>
-                    <DataGridTextColumn x:Name="NameColumn"
-                                        Header="گروه" 
-                                        Binding="{Binding Name}"
-                                        Width="5*"/>
-                    <DataGridTextColumn x:Name="LabelColumn"
-                                        Header="نام گروه" 
-                                        Binding="{Binding Label}" 
-                                        Width="7*"/>
-                </DataGrid.Columns>
-                <DataGrid.ContextMenu>
-                    <ContextMenu x:Name="DataGridContextMenu">
-                        <MenuItem Header="ستون ها">
-                            <StackPanel Orientation="Vertical">
-                                <CheckBox Content="شناسه" IsChecked="{Binding ShowIdColumn, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"/>
-                                <CheckBox Content="گروه" IsChecked="{Binding ShowNameColumn, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"/>
-                                <CheckBox Content="نام گروه" IsChecked="{Binding ShowLabelColumn, UpdateSourceTrigger=PropertyChanged}" Margin="5,0"/>
-                            </StackPanel>
-                        </MenuItem>
-                    </ContextMenu>
-                </DataGrid.ContextMenu>
-            </DataGrid>
+            <controls:CustomDataGrid x:Name="GroupDataGrid"
+                                     Grid.Row="2"
+                                     Margin="0,0,0,0"
+                                     ItemsSource="{Binding AllGroups}">
+                <controls:CustomDataGrid.Columns>
+                    <DataGridTextColumn Header="شناسه" Binding="{Binding Id}" Width="1*"/>
+                    <DataGridTextColumn Header="گروه" Binding="{Binding Name}" Width="5*"/>
+                    <DataGridTextColumn Header="نام گروه" Binding="{Binding Label}" Width="7*"/>
+                </controls:CustomDataGrid.Columns>
+            </controls:CustomDataGrid>
+            
         </Grid>
     </Grid>
 </Window>

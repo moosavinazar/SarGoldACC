@@ -1,10 +1,12 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.Models.Auth;
+using SarGoldACC.WpfApp.Controls;
 using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp.Views;
@@ -19,12 +21,14 @@ public partial class Group : Window
         InitializeComponent();
         _viewModel = viewModel;
         DataContext = _viewModel;
+        GroupDataGrid.Initialize("GroupGrid");
         _viewModel.SetColumnsVisibilityAction = (showId, showName, showLabel) =>
         {
-            IdColumn.Visibility = showId ? Visibility.Visible : Visibility.Collapsed;
+            /*IdColumn.Visibility = showId ? Visibility.Visible : Visibility.Collapsed;
             NameColumn.Visibility = showName ? Visibility.Visible : Visibility.Collapsed;
-            LabelColumn.Visibility = showLabel ? Visibility.Visible : Visibility.Collapsed;
+            LabelColumn.Visibility = showLabel ? Visibility.Visible : Visibility.Collapsed;*/
         };
+        
         var allView = CollectionViewSource.GetDefaultView(_viewModel.AllPermissions);
         allView.SortDescriptions.Add(new SortDescription(nameof(PermissionDto.Label), ListSortDirection.Ascending));
 
@@ -116,11 +120,12 @@ public partial class Group : Window
     
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        await _viewModel.LoadGridSettings();
-        IdColumn.Visibility = _viewModel.ShowIdColumn ? Visibility.Visible : Visibility.Collapsed;
+        
+        //await _viewModel.LoadGridSettings();
+        /*IdColumn.Visibility = _viewModel.ShowIdColumn ? Visibility.Visible : Visibility.Collapsed;
         NameColumn.Visibility = _viewModel.ShowNameColumn ? Visibility.Visible : Visibility.Collapsed;
-        LabelColumn.Visibility = _viewModel.ShowLabelColumn ? Visibility.Visible : Visibility.Collapsed;
-        Keyboard.Focus(this);
+        LabelColumn.Visibility = _viewModel.ShowLabelColumn ? Visibility.Visible : Visibility.Collapsed;*/
+        //Keyboard.Focus(this);
     }
 
     private void GroupWindow_KeyDown(object sender, KeyEventArgs e)
@@ -131,13 +136,35 @@ public partial class Group : Window
         }
     }
     
-    private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    private void UserControl_Loaded(object sender, RoutedEventArgs e)
+    {
+        var viewModel = DataContext as GroupViewModel;
+        if (viewModel == null) return;
+
+        // فقط بار اول ستون‌ها را تعریف کن (برای جلوگیری از اضافه شدن مجدد)
+        if (CustomDataGrid.Columns == null || CustomDataGrid.Columns.Count == 0)
+        {
+            CustomDataGrid.Columns = new ObservableCollection<DataGridColumn>()
+            {
+                new DataGridTextColumn
+                {
+                    Header = "نام گروه",
+                    Binding = new Binding("Name")
+                }
+            };
+        }
+
+        CustomDataGrid.ItemsSource = viewModel.AllGroups;
+        CustomDataGrid.Initialize("GroupsGrid");
+    }
+    
+    /*private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
     {
         var dataGrid = sender as DataGrid;
         if (dataGrid.SelectedItem == null)
         {
             e.Handled = true; // غیرفعال کردن منو اگر ردیفی انتخاب نشده باشد
         }
-    }
+    }*/
 
 }

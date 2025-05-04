@@ -98,17 +98,15 @@ public class GroupViewModel : ViewModelBase
         SaveCommand = new AsyncRelayCommand(SaveGroup);
 
         // بارگذاری تنظیمات و داده‌ها
-        Task.Run(async () =>
-        {
-            await LoadGridSettings();
-            await LoadPermissionsAsync();
-            await LoadGroupsAsync();
-        }).GetAwaiter().GetResult();
-        // _ = LoadPermissionsAsync().ContinueWith(t =>
+        // Task.Run(async () =>
         // {
-        //     if (t.Exception != null)
-        //         Debug.WriteLine("خطا در LoadPermissionsAsync: " + t.Exception.InnerException?.Message);
-        // });
+        //     await LoadGridSettings();
+        //     await LoadPermissionsAsync();
+        //     await LoadGroupsAsync();
+        // }).GetAwaiter().GetResult();
+        _ = LoadPermissionsAsync();
+        _ = LoadGroupsAsync();
+        _ = LoadGridSettings();
     }
     
     public async Task LoadGridSettings()
@@ -128,9 +126,6 @@ public class GroupViewModel : ViewModelBase
             ShowNameColumn = nameVisible;
         if (_showLabelColumn != labelVisible)
             ShowLabelColumn = labelVisible;
-        Console.WriteLine(ShowIdColumn);
-        Console.WriteLine(ShowNameColumn);
-        Console.WriteLine(ShowLabelColumn);
     }
     
     public async Task SaveGridSettings()
@@ -165,6 +160,7 @@ public class GroupViewModel : ViewModelBase
         var groups = await _groupService.GetAllAsync();
         foreach (var g in groups)
         {
+            Console.WriteLine(g.Name);
             AllGroups.Add(g);
         }
     }

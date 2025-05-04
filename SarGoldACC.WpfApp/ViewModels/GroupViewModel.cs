@@ -86,11 +86,10 @@ public class GroupViewModel : ViewModelBase
 
     public ICommand SaveCommand { get; }
 
-    public GroupViewModel(IPermissionService permissionService, IGroupService groupService, IAuthorizationService authorizationService)
+    public GroupViewModel(IPermissionService permissionService, IGroupService groupService)
     {
         _permissionService = permissionService;
         _groupService = groupService;
-        _settingsService = new GridSettingsFileService(authorizationService.GetCurrentUserIdAsString());
         AllPermissions = new ObservableCollection<PermissionDto>();
         SelectedPermissions = new ObservableCollection<PermissionDto>();
         AllGroups = new ObservableCollection<GroupDto>();

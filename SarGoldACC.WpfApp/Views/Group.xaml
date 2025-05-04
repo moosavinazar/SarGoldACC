@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Controls"
         mc:Ignorable="d"
         Title="گروه" 
         Height="600" 
@@ -118,7 +119,15 @@
                     Padding="10,5"/>
             </StackPanel>
             
-            <DataGrid Grid.Row="2"
+            <controls:CustomDataGrid Grid.Row="2"
+                                     ItemsSource="{Binding AllGroups}"
+                                     x:Name="GroupDataGrid">
+                <controls:CustomDataGrid.Columns>
+                    <DataGridTextColumn Header="نام گروه" Binding="{Binding Name}" />
+                    <DataGridTextColumn Header="برچسب" Binding="{Binding Label}" />
+                </controls:CustomDataGrid.Columns>
+            </controls:CustomDataGrid>
+            <!--<DataGrid Grid.Row="2"
                       Margin="0,0,0,0"
                       ItemsSource="{Binding AllGroups}" 
                       AutoGenerateColumns="False"
@@ -129,7 +138,7 @@
                       CanUserAddRows="False"
                       SelectionMode="Single"
                       ContextMenuOpening="DataGrid_ContextMenuOpening">
-                <!-- دکمه نمایش/مخفی کردن اطلاعات گروه -->
+                ~1~ دکمه نمایش/مخفی کردن اطلاعات گروه @1@
                 <DataGrid.Columns>
                     <DataGridTextColumn x:Name="IdColumn"
                                         Header="شناسه" 
@@ -155,7 +164,7 @@
                         </MenuItem>
                     </ContextMenu>
                 </DataGrid.ContextMenu>
-            </DataGrid>
+            </DataGrid>-->
         </Grid>
     </Grid>
 </Window>

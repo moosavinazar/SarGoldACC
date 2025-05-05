@@ -110,12 +110,14 @@
                         Style="{StaticResource SuccessBtn}"
                         HorizontalAlignment="Center"
                         Margin="10,10"
+                        Command="{Binding SaveCommand}"
                         Padding="10,5"/>
                 <Button 
                     Content="حذف"
                     Style="{StaticResource DangerBtn}"
                     HorizontalAlignment="Center"
                     Margin="10,10"
+                    Command="{Binding DeleteCommand}"
                     Padding="10,5"/>
             </StackPanel>
             

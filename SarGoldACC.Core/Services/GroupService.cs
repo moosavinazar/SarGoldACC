@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.Models.Auth;
 using SarGoldACC.Core.Repositories.Interfaces;
@@ -29,10 +30,45 @@ public class GroupService : IGroupService
         return _mapper.Map<List<GroupDto>>(groups);
     }
 
-    public async Task AddAsync(GroupCreateDto groupCreateDto)
+    public async Task<ResultDto> AddAsync(GroupCreateDto groupCreateDto)
     {
-        var group = _mapper.Map<Group>(groupCreateDto);
-        await _groupRepository.AddAsync(group);
+        if (groupCreateDto.GroupPermissions.Count == 0) 
+        {
+            return new ResultDto
+            {
+                Success = false,
+                Message = "دسترسی انتخاب نشده است",
+            };
+        }
+        try
+        {
+            var group = new Group
+            {
+                Name = groupCreateDto.Name,
+                Label = groupCreateDto.Label,
+                GroupPermissions = groupCreateDto.GroupPermissions
+                    .Select(permissionId => new GroupPermission
+                    {
+                        PermissionId = permissionId
+                    }).ToList()
+            };
+            await _groupRepository.AddAsync(group);
+            return new ResultDto
+            {
+                Success = true,
+                Message = "Group added.",
+                Data = _mapper.Map<GroupDto>(group)
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResultDto
+            {
+                Success = false,
+                Message = ex.Message,
+            };
+        }
+        
     }
 
     public async Task UpdateAsync(GroupDto groupDto)

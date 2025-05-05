@@ -57,6 +57,8 @@
       <Resource Include="Resources\Icons\User.png" />
       <None Remove="Resources\Icons\UserLarge.png" />
       <Resource Include="Resources\Icons\UserLarge.png" />
+      <None Remove="Resources\success.png" />
+      <None Remove="Resources\Icons\success.png" />
     </ItemGroup>
 
 </Project>

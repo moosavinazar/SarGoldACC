@@ -1,5 +1,6 @@
 ﻿using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Windows;
 using System.Windows.Input;
 using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.DTOs.Auth.Group;
@@ -13,7 +14,6 @@ public class GroupViewModel : ViewModelBase
 {
     private readonly IPermissionService _permissionService;
     private readonly IGroupService _groupService;
-    private const string GridName = "GroupGrid";
     private string _groupName;
     private string _groupLabel;
 
@@ -39,6 +39,7 @@ public class GroupViewModel : ViewModelBase
 
 
     public ICommand SaveCommand { get; }
+    public ICommand DeleteCommand { get; }
 
     public GroupViewModel(IPermissionService permissionService, IGroupService groupService)
     {
@@ -48,7 +49,8 @@ public class GroupViewModel : ViewModelBase
         SelectedPermissions = new ObservableCollection<PermissionDto>();
         AllGroups = new ObservableCollection<GroupDto>();
 
-        SaveCommand = new AsyncRelayCommand(SaveGroup);
+        SaveCommand = new AsyncRelayCommand(async () => await SaveGroup());
+        // DeleteCommand = new AsyncRelayCommand(async () => await DeleteAsync(), CanDelete);
 
         // بارگذاری تنظیمات و داده‌ها
         Task.Run(async () =>
@@ -69,6 +71,7 @@ public class GroupViewModel : ViewModelBase
     
     private async Task LoadGroupsAsync()
     {
+        AllGroups.Clear();
         var groups = await _groupService.GetAllAsync();
         foreach (var g in groups)
         {
@@ -78,15 +81,27 @@ public class GroupViewModel : ViewModelBase
 
     private async Task SaveGroup()
     {
-        var group = new Group
+        var groupDto = new GroupCreateDto
         {
             Name = GroupName,
             Label = GroupLabel,
             GroupPermissions = SelectedPermissions
-                .Select(p => new GroupPermission { PermissionId = p.Id })
+                .Select(p => p.Id)
                 .ToList()
         };
-
-        // ذخیره در دیتابیس...
+        
+        var result = await _groupService.AddAsync(groupDto);
+        if (result.Success)
+        {
+            
+            MessageBoxHelper.ShowSuccess("گروه با موفقیت ذخیره شد.");
+            await LoadGroupsAsync(); // بارگذاری مجدد گروه‌ها
+        }
+        else
+        {
+            MessageBoxHelper.ShowError(result.Message);
+        }
+        
+        // await _groupService.AddAsync(groupDto);
     }
 }

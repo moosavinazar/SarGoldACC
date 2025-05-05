@@ -4,7 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using SarGoldACC.Core.DTOs.Auth;
-using SarGoldACC.Core.Models.Auth;
+using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp.Views;
@@ -12,19 +12,15 @@ namespace SarGoldACC.WpfApp.Views;
 public partial class Group : Window
 {
     private readonly GroupViewModel _viewModel;
+    private readonly IAuthorizationService _authorizationService;
     private Point _dragStartPoint;
 
-    public Group(GroupViewModel viewModel)
+    public Group(GroupViewModel viewModel, IAuthorizationService authorizationService)
     {
         InitializeComponent();
         _viewModel = viewModel;
+        _authorizationService = authorizationService;
         DataContext = _viewModel;
-        _viewModel.SetColumnsVisibilityAction = (showId, showName, showLabel) =>
-        {
-            IdColumn.Visibility = showId ? Visibility.Visible : Visibility.Collapsed;
-            NameColumn.Visibility = showName ? Visibility.Visible : Visibility.Collapsed;
-            LabelColumn.Visibility = showLabel ? Visibility.Visible : Visibility.Collapsed;
-        };
         var allView = CollectionViewSource.GetDefaultView(_viewModel.AllPermissions);
         allView.SortDescriptions.Add(new SortDescription(nameof(PermissionDto.Label), ListSortDirection.Ascending));
 
@@ -111,15 +107,9 @@ public partial class Group : Window
             _viewModel.AllPermissions.Add(item);
         }
     }
-
-
     
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        await _viewModel.LoadGridSettings();
-        IdColumn.Visibility = _viewModel.ShowIdColumn ? Visibility.Visible : Visibility.Collapsed;
-        NameColumn.Visibility = _viewModel.ShowNameColumn ? Visibility.Visible : Visibility.Collapsed;
-        LabelColumn.Visibility = _viewModel.ShowLabelColumn ? Visibility.Visible : Visibility.Collapsed;
         Keyboard.Focus(this);
     }
 
@@ -131,13 +121,15 @@ public partial class Group : Window
         }
     }
     
-    private void DataGrid_ContextMenuOpening(object sender, ContextMenuEventArgs e)
+    private void GroupDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
-        var dataGrid = sender as DataGrid;
-        if (dataGrid.SelectedItem == null)
-        {
-            e.Handled = true; // غیرفعال کردن منو اگر ردیفی انتخاب نشده باشد
-        }
+        GroupDataGrid.ColumnConfigKey = $"GroupGrid_{_authorizationService.GetCurrentUserIdAsString()}"; // یا هر شناسه خاصی که می‌خواهید
+        GroupDataGrid.SetColumns(
+            new DataGridTextColumn { Header = "شناسه", Binding = new Binding("Id"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "گروه", Binding = new Binding("Name"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "نام گروه", Binding = new Binding("Label"), Width = new DataGridLength(7, DataGridLengthUnitType.Star) }
+        );
     }
+
 
 }

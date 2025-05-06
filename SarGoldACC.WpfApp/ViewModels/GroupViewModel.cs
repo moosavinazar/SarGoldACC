@@ -1,7 +1,6 @@
 ﻿using System.Collections.ObjectModel;
-using System.Diagnostics;
-using System.Windows;
 using System.Windows.Input;
+using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.Models.Auth;
@@ -16,6 +15,7 @@ public class GroupViewModel : ViewModelBase
     private readonly IGroupService _groupService;
     private string _groupName;
     private string _groupLabel;
+    private long? _editingGroupId = null;
 
     public string GroupName
     {
@@ -39,7 +39,6 @@ public class GroupViewModel : ViewModelBase
 
 
     public ICommand SaveCommand { get; }
-    public ICommand DeleteCommand { get; }
 
     public GroupViewModel(IPermissionService permissionService, IGroupService groupService)
     {
@@ -50,7 +49,6 @@ public class GroupViewModel : ViewModelBase
         AllGroups = new ObservableCollection<GroupDto>();
 
         SaveCommand = new AsyncRelayCommand(async () => await SaveGroup());
-        // DeleteCommand = new AsyncRelayCommand(async () => await DeleteAsync(), CanDelete);
 
         // بارگذاری تنظیمات و داده‌ها
         Task.Run(async () =>
@@ -81,27 +79,78 @@ public class GroupViewModel : ViewModelBase
 
     private async Task SaveGroup()
     {
-        var groupDto = new GroupCreateDto
+        var result = new ResultDto
         {
-            Name = GroupName,
-            Label = GroupLabel,
-            GroupPermissions = SelectedPermissions
-                .Select(p => p.Id)
-                .ToList()
+            Success = false
         };
+        if (_editingGroupId.HasValue)
+        {
+            var dto = new GroupDto
+            {
+                Id = _editingGroupId.Value,
+                Name = GroupName,
+                Label = GroupLabel,
+                GroupPermissions = SelectedPermissions
+                    .Select(p => new GroupPermission
+                    {
+                        PermissionId = p.Id,
+                        GroupId = _editingGroupId.Value // یا 0 اگر جدید باشه
+                    })
+                    .ToList()
+            };
+            result = await _groupService.UpdateAsync(dto);
+            _editingGroupId = null;
+            MessageBoxHelper.ShowSuccess("گروه با موفقیت ویرایش شد.");
+        }
+        else
+        {
+            var groupDto = new GroupCreateDto
+            {
+                Name = GroupName,
+                Label = GroupLabel,
+                GroupPermissions = SelectedPermissions
+                    .Select(p => p.Id)
+                    .ToList()
+            };
         
-        var result = await _groupService.AddAsync(groupDto);
+            result = await _groupService.AddAsync(groupDto);
+        }
         if (result.Success)
         {
-            
             MessageBoxHelper.ShowSuccess("گروه با موفقیت ذخیره شد.");
-            await LoadGroupsAsync(); // بارگذاری مجدد گروه‌ها
         }
         else
         {
             MessageBoxHelper.ShowError(result.Message);
         }
-        
-        // await _groupService.AddAsync(groupDto);
+        await LoadGroupsAsync();
+    }
+
+    public async Task EditAsync(long groupId)
+    {
+        _editingGroupId = groupId;
+        var groupDto = await _groupService.GetByIdAsync(groupId);
+        GroupName = groupDto.Name;
+        GroupLabel = groupDto.Label;
+        var permissionIds = groupDto.GroupPermissions?.Select(gp => gp.PermissionId).ToList() ?? new List<long>();
+        Console.WriteLine(permissionIds.Count);
+
+        SelectedPermissions.Clear();
+        AllPermissions.Clear();
+
+        var allPermissions = await _permissionService.GetAllAsync();
+    
+        foreach (var permission in allPermissions)
+        {
+            if (permissionIds.Contains(permission.Id))
+                SelectedPermissions.Add(permission);
+            else
+                AllPermissions.Add(permission);
+        }
+    }
+    
+    public async Task DeleteAsync(long groupId)
+    {
+        await _groupService.DeleteAsync(groupId);
     }
 }

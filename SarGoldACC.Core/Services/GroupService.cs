@@ -71,14 +71,20 @@ public class GroupService : IGroupService
         
     }
 
-    public async Task UpdateAsync(GroupDto groupDto)
+    public async Task<ResultDto> UpdateAsync(GroupDto groupDto)
     {
-        var user = await _groupRepository.GetByIdAsync(groupDto.Id);
-        if (user == null)
+        var group = await _groupRepository.GetByIdAsync(groupDto.Id);
+        if (group == null)
             throw new Exception("User not found");
 
-        _mapper.Map(groupDto, user);
-        await _groupRepository.UpdateAsync(user);
+        _mapper.Map(groupDto, group);
+        await _groupRepository.UpdateAsync(group);
+        return new ResultDto
+        {
+            Success = true,
+            Message = "Group added.",
+            Data = _mapper.Map<GroupDto>(group)
+        };
     }
 
     public async Task DeleteAsync(long id)

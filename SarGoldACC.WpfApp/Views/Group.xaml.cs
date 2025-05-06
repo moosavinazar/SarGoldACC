@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using SarGoldACC.Core.DTOs.Auth;
+using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.ViewModels;
 
@@ -123,6 +124,22 @@ public partial class Group : Window
     
     private void GroupDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
+        GroupDataGrid.DeleteAction = async obj =>
+        {
+            if (obj is GroupDto group)
+            {
+                await _viewModel.DeleteAsync(group.Id);
+            }
+        };
+        
+        GroupDataGrid.EditAction = async obj =>
+        {
+            if (obj is GroupDto group)
+            {
+                await _viewModel.EditAsync(group.Id);
+            }
+        };
+        
         GroupDataGrid.ColumnConfigKey = $"GroupGrid_{_authorizationService.GetCurrentUserIdAsString()}"; // یا هر شناسه خاصی که می‌خواهید
         GroupDataGrid.SetColumns(
             new DataGridTextColumn { Header = "شناسه", Binding = new Binding("Id"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },

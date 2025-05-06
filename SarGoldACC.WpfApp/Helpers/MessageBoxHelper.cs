@@ -13,7 +13,12 @@ public static class MessageBoxHelper
     {
         MessageBox.Show(message);
     }
-    
+
+    public static bool ShowDeleteConfirm(string message)
+    {
+        var result = MessageBox.Show("آیا از حذف این مورد مطمئن هستید؟", "تأیید حذف", MessageBoxButton.YesNo, MessageBoxImage.Warning);
+        return result == MessageBoxResult.Yes;
+    }
 
     public static bool ShowConfirm(string message)
     {

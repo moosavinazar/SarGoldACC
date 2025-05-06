@@ -4,6 +4,7 @@ using System.IO;
 using System.Text.Json;
 using System.Windows;
 using System.Windows.Controls;
+using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.Control;
 
@@ -18,6 +19,24 @@ public partial class CustomizableDataGrid : UserControl
     {
         get => GetValue(ItemsSourceProperty);
         set => SetValue(ItemsSourceProperty, value);
+    }
+    
+    public static readonly DependencyProperty DeleteActionProperty =
+        DependencyProperty.Register(nameof(DeleteAction), typeof(Func<object, Task>), typeof(CustomizableDataGrid));
+
+    public Func<object, Task>? DeleteAction
+    {
+        get => (Func<object, Task>?)GetValue(DeleteActionProperty);
+        set => SetValue(DeleteActionProperty, value);
+    }
+    
+    public static readonly DependencyProperty EditActionProperty =
+        DependencyProperty.Register(nameof(EditAction), typeof(Func<object, Task>), typeof(CustomizableDataGrid));
+
+    public Func<object, Task>? EditAction
+    {
+        get => (Func<object, Task>?)GetValue(EditActionProperty);
+        set => SetValue(EditActionProperty, value);
     }
     
     private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -56,6 +75,21 @@ public partial class CustomizableDataGrid : UserControl
             MainDataGrid.Columns.Add(col);
             ConfigurableColumns.Add(col);
         }
+        
+        var deleteButtonColumn = new DataGridTemplateColumn
+        {
+            Header = "حذف",
+            CellTemplate = (DataTemplate)Resources["DeleteButtonTemplate"]
+        };
+        
+        var editButtonColumn = new DataGridTemplateColumn
+        {
+            Header = "ویرایش",
+            CellTemplate = (DataTemplate)Resources["EditButtonTemplate"]
+        };
+
+        MainDataGrid.Columns.Add(editButtonColumn);
+        MainDataGrid.Columns.Add(deleteButtonColumn);
 
         LoadColumnVisibility(); // Apply saved visibility
     }
@@ -100,6 +134,35 @@ public partial class CustomizableDataGrid : UserControl
             var header = col.Header?.ToString() ?? "";
             if (config.TryGetValue(header, out var isVisible))
                 col.Visibility = isVisible ? Visibility.Visible : Visibility.Collapsed;
+        }
+    }
+    
+    private async void DeleteButton_Click(object sender, RoutedEventArgs e)
+    {
+        var result = MessageBoxHelper.ShowDeleteConfirm("آیا از حذف این مورد مطمئن هستید؟");
+        if (!result) return;
+        if (sender is Button button && button.DataContext is object item)
+        {
+            if (DeleteAction != null)
+            {
+                await DeleteAction(item);
+            }
+
+            if (ItemsSource is IList list)
+            {
+                list.Remove(item); // حذف از رابط کاربری
+            }
+        }
+    }
+
+    private async void EditButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button button && button.DataContext is object item)
+        {
+            if (EditAction != null)
+            {
+                await EditAction(item);
+            }
         }
     }
 }

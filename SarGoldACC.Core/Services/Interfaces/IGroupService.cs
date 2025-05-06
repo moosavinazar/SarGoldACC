@@ -9,6 +9,6 @@ public interface IGroupService
     Task<GroupDto> GetByIdAsync(long id);
     Task<List<GroupDto>> GetAllAsync();
     Task<ResultDto> AddAsync(GroupCreateDto createGroupDto);
-    Task UpdateAsync(GroupDto groupDto);
+    Task<ResultDto> UpdateAsync(GroupDto groupDto);
     Task DeleteAsync(long id);
 }

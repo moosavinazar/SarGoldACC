@@ -10,8 +10,9 @@ public partial class LoginView : UserControl
     public LoginView()
     {
         InitializeComponent();
+        UsernameBox.Focus();
         // Console.WriteLine("LoginView Initialized ..e.d");
-       
+
     }
     
     private void UsernameBox_KeyDown(object sender, KeyEventArgs e)

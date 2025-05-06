@@ -14,6 +14,7 @@ public class MappingProfile : Profile
         CreateMap<User, UserCreateDto>();
         CreateMap<User, UserUpdateDto>();
         CreateMap<Group, GroupDto>();
+        CreateMap<GroupDto, Group>();
         CreateMap<Group, GroupCreateDto>();
         CreateMap<Permission, PermissionDto>();
     }

@@ -58,7 +58,7 @@ public class GroupViewModel : ViewModelBase
         }).GetAwaiter().GetResult();
     }
     
-    private async Task LoadPermissionsAsync()
+    public async Task LoadPermissionsAsync()
     {
         var permissions = await _permissionService.GetAllAsync();
         foreach (var p in permissions)
@@ -77,7 +77,7 @@ public class GroupViewModel : ViewModelBase
         }
     }
 
-    private async Task SaveGroup()
+    public async Task SaveGroup()
     {
         var result = new ResultDto
         {
@@ -100,7 +100,14 @@ public class GroupViewModel : ViewModelBase
             };
             result = await _groupService.UpdateAsync(dto);
             _editingGroupId = null;
-            MessageBoxHelper.ShowSuccess("گروه با موفقیت ویرایش شد.");
+            if (result.Success)
+            {
+                MessageBoxHelper.ShowSuccess("گروه با موفقیت ویرایش شد.");
+            }
+            else
+            {
+                MessageBoxHelper.ShowError(result.Message);
+            }
         }
         else
         {
@@ -114,14 +121,14 @@ public class GroupViewModel : ViewModelBase
             };
         
             result = await _groupService.AddAsync(groupDto);
-        }
-        if (result.Success)
-        {
-            MessageBoxHelper.ShowSuccess("گروه با موفقیت ذخیره شد.");
-        }
-        else
-        {
-            MessageBoxHelper.ShowError(result.Message);
+            if (result.Success)
+            {
+                MessageBoxHelper.ShowSuccess("گروه با موفقیت ذخیره شد.");
+            }
+            else
+            {
+                MessageBoxHelper.ShowError(result.Message);
+            }
         }
         await LoadGroupsAsync();
     }

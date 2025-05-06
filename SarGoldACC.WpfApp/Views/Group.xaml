@@ -41,7 +41,9 @@
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,0,5,0"/>
-            <TextBox Grid.Column="1"
+            <TextBox x:Name="GroupNameBox" 
+                     Grid.Column="1"
+                     KeyDown="GroupNameBox_KeyDown"
                      Margin="0 0 10 0"
                      Style="{StaticResource InputTextBox}"
                      Text="{Binding GroupName}"/>
@@ -52,7 +54,9 @@
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="10,0,5,0"/>
-            <TextBox Grid.Column="3"
+            <TextBox x:Name="GroupLabelBox" 
+                     Grid.Column="3"
+                     KeyDown="GroupLabelBox_KeyDown"
                      Margin="0"
                      Style="{StaticResource InputTextBox}"
                      Text="{Binding GroupLabel}"/>
@@ -78,6 +82,7 @@
                          Grid.Column="0"
                          ItemsSource="{Binding AllPermissions}"
                          DisplayMemberPath="Label"
+                         KeyDown="AllPermissionsListBox_KeyDown"
                          PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
                          MouseMove="ListBox_MouseMove"
                          Drop="AllPermissionsListBox_Drop"
@@ -96,6 +101,7 @@
                          Grid.Column="2"
                          ItemsSource="{Binding SelectedPermissions}"
                          DisplayMemberPath="Label"
+                         KeyDown="SelectedPermissionsListBox_KeyDown"
                          PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
                          MouseMove="ListBox_MouseMove"
                          Drop="SelectedPermissionsListBox_Drop"
@@ -105,12 +111,12 @@
             
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
                 <!-- دکمه ذخیره -->
-                <Button
+                <Button x:Name="SaveButton"
                         Content="ذخیره"
                         Style="{StaticResource SuccessBtn}"
                         HorizontalAlignment="Center"
                         Margin="10,10"
-                        Command="{Binding SaveCommand}"
+                        Click="ClickSaveGroup"
                         Padding="10,5"/>
             </StackPanel>
             

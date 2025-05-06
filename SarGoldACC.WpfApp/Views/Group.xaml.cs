@@ -27,8 +27,50 @@ public partial class Group : Window
 
         var selectedView = CollectionViewSource.GetDefaultView(_viewModel.SelectedPermissions);
         selectedView.SortDescriptions.Add(new SortDescription(nameof(PermissionDto.Label), ListSortDirection.Ascending));
-
-        this.Focus();
+        GroupNameBox.Focus();
+    }
+    
+    private void GroupNameBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            GroupLabelBox.Focus();
+            e.Handled = true;
+        }
+    }
+    private void GroupLabelBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            AllPermissionsListBox.Focus();
+            e.Handled = true;
+        }
+    }
+    
+    private void AllPermissionsListBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Left)
+        {
+            MoveToSelected_Click(sender, e);
+        }
+        if (e.Key == Key.Enter)
+        {
+            SelectedPermissionsListBox.Focus();
+            e.Handled = true;
+        }
+    }
+    
+    private void SelectedPermissionsListBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Right)
+        {
+            MoveToAll_Click(sender, e);
+        }
+        if (e.Key == Key.Enter)
+        {
+            SaveButton.Focus();
+            e.Handled = true;
+        }
     }
     
     private void ListBox_PreviewMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
@@ -120,6 +162,21 @@ public partial class Group : Window
         {
             this.Close();
         }
+        if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+        {
+            ClickSaveGroup(sender, e);
+        }
+    }
+
+    private async void ClickSaveGroup(object sender, RoutedEventArgs e)
+    {
+        await _viewModel.SaveGroup();
+        GroupNameBox.Text = "";
+        GroupLabelBox.Text = "";
+        
+        _viewModel.SelectedPermissions.Clear();
+        _viewModel.AllPermissions.Clear();
+        await _viewModel.LoadPermissionsAsync();
     }
     
     private void GroupDataGrid_Loaded(object sender, RoutedEventArgs e)

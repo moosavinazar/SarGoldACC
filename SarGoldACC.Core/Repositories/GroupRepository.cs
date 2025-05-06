@@ -16,7 +16,10 @@ public class GroupRepository : IGroupRepository
 
     public async Task<Group> GetByIdAsync(long id)
     {
-        return await _context.Groups.FindAsync(id);
+        var result = await _context.Groups
+            .Include(g => g.GroupPermissions)
+            .FirstOrDefaultAsync(g => g.Id == id);
+        return result;
     }
 
     public async Task<List<Group>> GetAllAsync()

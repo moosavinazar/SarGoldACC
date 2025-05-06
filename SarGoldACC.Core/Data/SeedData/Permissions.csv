@@ -1,4 +1,5 @@
 ﻿Id,Name,Label
-1,View,مشاهده اطلاعات
-2,Edit,ویرایش اطلاعات
-3,Delete,حذف اطلاعات
+1,Group.View,مشاهده گروه کاربری
+2,Group.Create,ایجاد گروه کاربری
+3,Group.Edit,ویرایش گروه کاربری
+4,Group.Delete,حذف گروه کاربری

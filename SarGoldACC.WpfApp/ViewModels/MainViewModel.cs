@@ -9,15 +9,23 @@ public class MainViewModel : ViewModelBase
 {
     private readonly NavigationStore _navigationStore;
 
+    private readonly IAuthorizationService _authorizationService;
+
     public object CurrentViewModel => _navigationStore.CurrentViewModel;
     
     public bool IsRibbonVisible => !(CurrentViewModel is LoginViewModel);
+
+    public bool CanAccessGroupButton => _authorizationService.HasPermission("Group.View") ||
+                                        _authorizationService.HasPermission("Group.Create") ||
+                                        _authorizationService.HasPermission("Group.Edit") ||
+                                        _authorizationService.HasPermission("Group.Delete");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 
         IAuthorizationService authorizationService)
     {
         _navigationStore = navigationStore;
+        _authorizationService = authorizationService;
         _navigationStore.CurrentViewModel = new LoginViewModel(NavigateTo, authenticationService, authorizationService);
         _navigationStore.PropertyChanged += OnCurrentViewModelChanged;
     }
@@ -33,6 +41,7 @@ public class MainViewModel : ViewModelBase
         {
             OnPropertyChanged(nameof(CurrentViewModel));
             OnPropertyChanged(nameof(IsRibbonVisible));
+            OnPropertyChanged(nameof(CanAccessGroupButton));
         }
     }
 }

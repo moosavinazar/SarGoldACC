@@ -65,7 +65,7 @@ public partial class MainWindow : RibbonWindow
                 break;
             case Key.D2:
             case Key.NumPad2:
-                if (MainRibbon.SelectedTabItem == TabBaseInfo)
+                if (MainRibbon.SelectedTabItem == TabBaseInfo && UserGroup.Visibility == Visibility.Visible)
                 {
                     OpenGroupWindow();
                     break;

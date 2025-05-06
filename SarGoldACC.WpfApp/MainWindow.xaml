@@ -50,14 +50,15 @@
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabBaseInfo" ToolTip="کلید میانبر (3)" Header="اطلاعات پایه" Style="{StaticResource CustomTabStyle}">
                 <Fluent:RibbonGroupBox Header="کاربری">
-                    <Fluent:Button Header="کاربر"
+                    <Fluent:Button x:Name="User" Header="کاربر"
                                    Icon="pack://application:,,,/Resources/Icons/User.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/UserLarge.png" />
-                    <Fluent:Button Header="گروه"
+                    <Fluent:Button x:Name="UserGroup" Header="گروه"
                                    ToolTip="کلید میانبر (۲)"
                                    Icon="pack://application:,,,/Resources/Icons/Group.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/GroupLarge.png"
-                                   Click="OpenGroupWindowButton_Click" />
+                                   Click="OpenGroupWindowButton_Click"
+                                   Visibility="{Binding CanAccessGroupButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات" Style="{StaticResource CustomTabStyle}">

@@ -181,6 +181,9 @@ public partial class Group : Window
     
     private void GroupDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
+        GroupDataGrid.DeleteActionShow = _viewModel.CanAccessGroupDelete;
+        GroupDataGrid.EditActionShow = _viewModel.CanAccessGroupEdit;
+        
         GroupDataGrid.DeleteAction = async obj =>
         {
             if (obj is GroupDto group)

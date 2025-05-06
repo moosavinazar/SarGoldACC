@@ -21,6 +21,24 @@ public partial class CustomizableDataGrid : UserControl
         set => SetValue(ItemsSourceProperty, value);
     }
     
+    public static readonly DependencyProperty DeleteActionShowProperty =
+        DependencyProperty.Register(nameof(DeleteActionShow), typeof(bool), typeof(CustomizableDataGrid));
+
+    public bool DeleteActionShow
+    {
+        get => (bool)GetValue(DeleteActionShowProperty);
+        set => SetValue(DeleteActionShowProperty, value);
+    }
+    
+    public static readonly DependencyProperty EditActionShowProperty =
+        DependencyProperty.Register(nameof(EditActionShow), typeof(bool), typeof(CustomizableDataGrid));
+
+    public bool EditActionShow
+    {
+        get => (bool)GetValue(EditActionShowProperty);
+        set => SetValue(EditActionShowProperty, value);
+    }
+    
     public static readonly DependencyProperty DeleteActionProperty =
         DependencyProperty.Register(nameof(DeleteAction), typeof(Func<object, Task>), typeof(CustomizableDataGrid));
 
@@ -88,8 +106,15 @@ public partial class CustomizableDataGrid : UserControl
             CellTemplate = (DataTemplate)Resources["EditButtonTemplate"]
         };
 
-        MainDataGrid.Columns.Add(editButtonColumn);
-        MainDataGrid.Columns.Add(deleteButtonColumn);
+        if (EditActionShow)
+        {
+            MainDataGrid.Columns.Add(editButtonColumn);
+        }
+        
+        if (DeleteActionShow)
+        {
+            MainDataGrid.Columns.Add(deleteButtonColumn);
+        }
 
         LoadColumnVisibility(); // Apply saved visibility
     }

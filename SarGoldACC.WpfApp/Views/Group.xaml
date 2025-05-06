@@ -38,10 +38,12 @@
 
             <!-- نام گروه -->
             <TextBlock Text="نام گروه"
+                       Visibility="{Binding CanAccessGroupOrCreateEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,0,5,0"/>
             <TextBox x:Name="GroupNameBox" 
+                     Visibility="{Binding CanAccessGroupOrCreateEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                      Grid.Column="1"
                      KeyDown="GroupNameBox_KeyDown"
                      Margin="0 0 10 0"
@@ -50,11 +52,13 @@
 
             <!-- برچسب گروه -->
             <TextBlock Grid.Column="2"
+                       Visibility="{Binding CanAccessGroupOrCreateEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                        Text="برچسب گروه"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="10,0,5,0"/>
             <TextBox x:Name="GroupLabelBox" 
+                     Visibility="{Binding CanAccessGroupOrCreateEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                      Grid.Column="3"
                      KeyDown="GroupLabelBox_KeyDown"
                      Margin="0"
@@ -65,19 +69,20 @@
         
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="2*"/> <!-- لیست‌ها -->
+                <RowDefinition Height="Auto"/> <!-- لیست‌ها -->
                 <RowDefinition Height="Auto"/> <!-- ردیف دکمه ذخیره -->
-                <RowDefinition Height="*"/>  <!-- DataGrid -->
+                <RowDefinition Height="Auto"/>  <!-- DataGrid -->
             </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
+            <Grid Grid.Row="0" >
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
+                
                 <!-- لیست تمام دسترسی‌ها -->
                 <ListBox x:Name="AllPermissionsListBox"
+                         Visibility="{Binding CanAccessGroupOrCreateEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                          Style="{StaticResource RoundedListBoxStyle}"
                          Grid.Column="0"
                          ItemsSource="{Binding AllPermissions}"
@@ -89,7 +94,8 @@
                          AllowDrop="True"
                          SelectionMode="Extended"/>
 
-                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10">
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10"
+                            Visibility="{Binding CanAccessGroupOrCreateEdit, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button Content="←" Style="{StaticResource SuccessBtn}" Click="MoveToSelected_Click" Margin="0,5" FontSize="20"/>
                     <Button Content="→" Style="{StaticResource PrimaryBtn}" Click="MoveToAll_Click" Margin="0,5" FontSize="20"/>
                 </StackPanel>
@@ -97,6 +103,7 @@
 
                 <!-- لیست دسترسی‌های انتخاب‌شده -->
                 <ListBox x:Name="SelectedPermissionsListBox"
+                         Visibility="{Binding CanAccessGroupOrCreateEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                          Style="{StaticResource RoundedListBoxStyle}"
                          Grid.Column="2"
                          ItemsSource="{Binding SelectedPermissions}"
@@ -109,7 +116,8 @@
                          SelectionMode="Extended"/>
             </Grid>
             
-            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
+                        Visibility="{Binding CanAccessGroupOrCreateEdit, Converter={StaticResource BoolToVisibilityConverter}}">
                 <!-- دکمه ذخیره -->
                 <Button x:Name="SaveButton"
                         Content="ذخیره"
@@ -122,7 +130,8 @@
             
             <controls:CustomizableDataGrid Grid.Row="2" x:Name="GroupDataGrid"
                                            ItemsSource="{Binding AllGroups}"
-                                           Loaded="GroupDataGrid_Loaded"/>
+                                           Loaded="GroupDataGrid_Loaded"
+                                           Visibility="{Binding CanAccessGroupView, Converter={StaticResource BoolToVisibilityConverter}}"/>
             
         </Grid>
     </Grid>

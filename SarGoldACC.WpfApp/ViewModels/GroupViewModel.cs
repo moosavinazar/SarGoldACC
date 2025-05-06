@@ -13,9 +13,18 @@ public class GroupViewModel : ViewModelBase
 {
     private readonly IPermissionService _permissionService;
     private readonly IGroupService _groupService;
+    private readonly IAuthorizationService _authorizationService;
     private string _groupName;
     private string _groupLabel;
     private long? _editingGroupId = null;
+    
+    public bool CanAccessGroupView => _authorizationService.HasPermission("Group.View");
+    public bool CanAccessGroupCreate => _authorizationService.HasPermission("Group.Create");
+    public bool CanAccessGroupEdit => _authorizationService.HasPermission("Group.Edit");
+    public bool CanAccessGroupDelete => _authorizationService.HasPermission("Group.Delete");
+    
+    public bool CanAccessGroupOrCreateEdit => _authorizationService.HasPermission("Group.Create") ||
+                                            _authorizationService.HasPermission("Group.Edit");
 
     public string GroupName
     {
@@ -40,10 +49,11 @@ public class GroupViewModel : ViewModelBase
 
     public ICommand SaveCommand { get; }
 
-    public GroupViewModel(IPermissionService permissionService, IGroupService groupService)
+    public GroupViewModel(IPermissionService permissionService, IGroupService groupService, IAuthorizationService authorizationService)
     {
         _permissionService = permissionService;
         _groupService = groupService;
+        _authorizationService = authorizationService;
         AllPermissions = new ObservableCollection<PermissionDto>();
         SelectedPermissions = new ObservableCollection<PermissionDto>();
         AllGroups = new ObservableCollection<GroupDto>();

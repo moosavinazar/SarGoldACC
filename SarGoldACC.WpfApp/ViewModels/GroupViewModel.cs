@@ -23,7 +23,7 @@ public class GroupViewModel : ViewModelBase
     public bool CanAccessGroupEdit => _authorizationService.HasPermission("Group.Edit");
     public bool CanAccessGroupDelete => _authorizationService.HasPermission("Group.Delete");
     
-    public bool CanAccessGroupOrCreateEdit => _authorizationService.HasPermission("Group.Create") ||
+    public bool CanAccessGroupCreateOrEdit => _authorizationService.HasPermission("Group.Create") ||
                                             _authorizationService.HasPermission("Group.Edit");
 
     public string GroupName

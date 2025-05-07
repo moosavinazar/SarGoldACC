@@ -19,6 +19,10 @@ public class MainViewModel : ViewModelBase
                                         _authorizationService.HasPermission("Group.Create") ||
                                         _authorizationService.HasPermission("Group.Edit") ||
                                         _authorizationService.HasPermission("Group.Delete");
+    public bool CanAccessBranchButton => _authorizationService.HasPermission("Branch.View") ||
+                                        _authorizationService.HasPermission("Branch.Create") ||
+                                        _authorizationService.HasPermission("Branch.Edit") ||
+                                        _authorizationService.HasPermission("Branch.Delete");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 

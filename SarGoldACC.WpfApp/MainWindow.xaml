@@ -51,6 +51,7 @@
             <Fluent:RibbonTabItem x:Name="TabBaseInfo" ToolTip="کلید میانبر (3)" Header="اطلاعات پایه" Style="{StaticResource CustomTabStyle}">
                 <Fluent:RibbonGroupBox Header="کاربری">
                     <Fluent:Button x:Name="User" Header="کاربر"
+                                   ToolTip="کلید میانبر (1)"
                                    Icon="pack://application:,,,/Resources/Icons/User.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/UserLarge.png" />
                     <Fluent:Button x:Name="UserGroup" Header="گروه"
@@ -62,9 +63,11 @@
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="مدیریت">
                     <Fluent:Button x:Name="Branch" Header="شعبه"
+                                   ToolTip="کلید میانبر (3)"
                                    Icon="pack://application:,,,/Resources/Icons/Branch.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/BranchLarge.png"
-                                   Click="OpenBranchWindowButton_Click"/>
+                                   Click="OpenBranchWindowButton_Click"
+                                   Visibility="{Binding CanAccessBranchButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات" Style="{StaticResource CustomTabStyle}">

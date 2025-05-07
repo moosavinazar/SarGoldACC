@@ -5,6 +5,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         mc:Ignorable="d"
         Title="گروه" 
         Height="600" 
@@ -56,8 +57,9 @@
                     Click="ClickSaveBranch"
                     Padding="10,5"/>
         </Grid>
-        <Grid Grid.Row="1">
-            
-        </Grid>
+        <controls:CustomizableDataGrid Grid.Row="1" x:Name="BranchDataGrid"
+                                       ItemsSource="{Binding AllBranches}"
+                                       Loaded="BranchDataGrid_Loaded"
+                                       Visibility="{Binding CanAccessBranchView, Converter={StaticResource BoolToVisibilityConverter}}"/>
     </Grid>
 </Window>

@@ -64,7 +64,7 @@
                     <Fluent:Button x:Name="Branch" Header="شعبه"
                                    Icon="pack://application:,,,/Resources/Icons/Branch.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/BranchLarge.png"
-                                   Click="OpenGroupWindowButton_Click"/>
+                                   Click="OpenBranchWindowButton_Click"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات" Style="{StaticResource CustomTabStyle}">

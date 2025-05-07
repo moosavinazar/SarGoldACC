@@ -3,3 +3,7 @@
 2,Group.Create,ایجاد گروه کاربری
 3,Group.Edit,ویرایش گروه کاربری
 4,Group.Delete,حذف گروه کاربری
+5,Branch.View,مشاهده شعبات
+6,Branch.Create,ایجاد شعبه
+7,Branch.Edit,ویرایش شعبه
+8,Branch.Delete,حذف شعبه

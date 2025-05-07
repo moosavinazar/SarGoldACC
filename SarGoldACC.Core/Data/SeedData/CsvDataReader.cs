@@ -4,6 +4,7 @@ using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
+using SarGoldACC.Core.DTOs.Branch;
 
 namespace SarGoldACC.Core.Data.SeedData;
 

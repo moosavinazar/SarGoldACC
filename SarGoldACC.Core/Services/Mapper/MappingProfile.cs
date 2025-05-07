@@ -2,6 +2,8 @@
 using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
+using SarGoldACC.Core.DTOs.Branch;
+using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Models.Auth;
 
 namespace SarGoldACC.Core.Services.Mapper;
@@ -17,5 +19,7 @@ public class MappingProfile : Profile
         CreateMap<GroupDto, Group>();
         CreateMap<Group, GroupCreateDto>();
         CreateMap<Permission, PermissionDto>();
+        CreateMap<Branch, BranchDto>();
+        CreateMap<BranchDto, Branch>();
     }
 }

@@ -1,4 +1,4 @@
-﻿namespace SarGoldACC.Core.DTOs;
+﻿namespace SarGoldACC.Core.DTOs.Branch;
 
 public class BranchDto
 {

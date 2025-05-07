@@ -30,4 +30,19 @@ public partial class Branch : Window
             this.Close();
         }
     }
+    
+    private void BranchNameBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            SaveButton.Focus();
+            e.Handled = true;
+        }
+    }
+
+    private async void ClickSaveBranch(object sender, RoutedEventArgs e)
+    {
+        await _viewModel.SaveBranch();
+        BranchNameBox.Text = "";
+    }
 }

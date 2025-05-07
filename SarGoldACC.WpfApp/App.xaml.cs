@@ -67,6 +67,8 @@ namespace SarGoldACC.WpfApp
             
             services.AddTransient<GroupViewModel>();
             services.AddTransient<Group>();
+            services.AddTransient<BranchViewModel>();
+            services.AddTransient<Branch>();
 
             ServiceProvider = services.BuildServiceProvider();
             

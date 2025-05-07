@@ -82,7 +82,7 @@ public class GroupService : IGroupService
         return new ResultDto
         {
             Success = true,
-            Message = "Group added.",
+            Message = "Group updated.",
             Data = _mapper.Map<GroupDto>(group)
         };
     }

@@ -1,0 +1,199 @@
+﻿<Window x:Class="SarGoldACC.WpfApp.Views.User"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
+        xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        mc:Ignorable="d"
+        Title="کاربر" 
+        Height="600" 
+        Width="800"
+        KeyDown="UserWindow_KeyDown"
+        Focusable="True"
+        Loaded="Window_Loaded"
+        FlowDirection="RightToLeft"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Text="نام کاربری"
+                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="0,0,5,0"/>
+                <TextBox x:Name="UserNameBox" 
+                         Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                         Grid.Column="1"
+                         KeyDown="UserNameBox_KeyDown"
+                         Margin="0 0 10 0"
+                         Style="{StaticResource InputTextBox}"
+                         Text="{Binding UserName}"/>
+
+                <TextBlock Grid.Column="2"
+                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="رمز عبور"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="10,0,5,0"/>
+                <PasswordBox x:Name="PasswordBox" 
+                             Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="3"
+                             KeyDown="PasswordBox_KeyDown"
+                             Margin="0"
+                             Style="{StaticResource InputPasswordBox}"
+                             Password="{Binding Passwprd}"/>
+                
+                <TextBlock Grid.Column="4"
+                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Text="تکرار رمز عبور"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="10,0,5,0"/>
+                <PasswordBox x:Name="PasswordConfirmBox" 
+                             Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="5"
+                             KeyDown="PasswordConfirmBox_KeyDown"
+                             Margin="0"
+                             Style="{StaticResource InputPasswordBox}"
+                             Password="{Binding PasswordConfirm}"/>
+            </Grid>
+            
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBlock Text="نام"
+                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="0"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="0,10,5,0"/>
+                <TextBox x:Name="NameBox" 
+                         Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                         Grid.Column="1"
+                         KeyDown="NameBox_KeyDown"
+                         Margin="0 10 0 0"
+                         Style="{StaticResource InputTextBox}"
+                         Text="{Binding Name}"/>
+                <TextBlock Text="موبایل"
+                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="2"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="5,10,5,0"/>
+                <TextBox x:Name="PhoneNumberBox" 
+                         Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                         Grid.Column="3"
+                         KeyDown="PhoneNumberBox_KeyDown"
+                         Margin="0 10 0 0"
+                         Style="{StaticResource InputTextBox}"
+                         Text="{Binding PhoneNumber}"/>
+                <TextBlock Text="شعبه"
+                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="4"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="5,10,5,0"/>
+                <ComboBox Grid.Column="5"
+                          Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                          ItemsSource="{Binding Branches}"
+                          DisplayMemberPath="BranchName"
+                          SelectedValuePath="BranchId"
+                          SelectedValue="{Binding SelectedBranchId, Mode=TwoWay}"
+                          Margin="0,10,0,0">
+                </ComboBox>
+            </Grid>
+        </Grid>
+        
+        <Grid Grid.Row="1" Margin="10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            
+            <ListBox x:Name="AllGroupsListBox"
+                     Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                     Style="{StaticResource RoundedListBoxStyle}"
+                     Grid.Column="0"
+                     ItemsSource="{Binding AllGroups}"
+                     DisplayMemberPath="Label"
+                     KeyDown="AllGroupsListBox_KeyDown"
+                     PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
+                     MouseMove="ListBox_MouseMove"
+                     Drop="AllGroupsListBox_Drop"
+                     AllowDrop="True"
+                     SelectionMode="Extended"/>
+            
+            <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10"
+                        Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Button Content="←" Style="{StaticResource SuccessBtn}" Click="MoveToSelected_Click" Margin="0,5" FontSize="20"/>
+                <Button Content="→" Style="{StaticResource PrimaryBtn}" Click="MoveToAll_Click" Margin="0,5" FontSize="20"/>
+            </StackPanel>
+            
+            <ListBox x:Name="SelectedGroupsListBox"
+                     Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                     Style="{StaticResource RoundedListBoxStyle}"
+                     Grid.Column="2"
+                     ItemsSource="{Binding SelectedGroups}"
+                     DisplayMemberPath="Label"
+                     KeyDown="SelectedGroupsListBox_KeyDown"
+                     PreviewMouseLeftButtonDown="ListBox_PreviewMouseLeftButtonDown"
+                     MouseMove="ListBox_MouseMove"
+                     Drop="SelectedGroupsListBox_Drop"
+                     AllowDrop="True"
+                     SelectionMode="Extended"/>
+        </Grid>
+        
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" 
+                    Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+            <Button x:Name="SaveButton"
+                    Content="ذخیره"
+                    Style="{StaticResource SuccessBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickSaveGroup"
+                    Padding="10,5"/>
+        </StackPanel>
+        
+        <controls:CustomizableDataGrid Grid.Row="3" x:Name="UserDataGrid"
+                                       ItemsSource="{Binding AllUsers}"
+                                       Loaded="UserDataGrid_Loaded"
+                                       Visibility="{Binding CanAccessGroupView, Converter={StaticResource BoolToVisibilityConverter}}"/>
+    </Grid>
+</Window>

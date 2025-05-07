@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.Models.Auth;
 using SarGoldACC.Core.Repositories.Interfaces;
@@ -29,13 +30,50 @@ public class UserService : IUserService
         return _mapper.Map<List<UserDto>>(users);
     }
 
-    public async Task AddAsync(UserCreateDto createUserDto)
+    public async Task<ResultDto> AddAsync(UserCreateDto createUserDto)
     {
-        var user = _mapper.Map<User>(createUserDto);
-        await _userRepository.AddAsync(user);
+        if (createUserDto.UserGroups.Count == 0) 
+        {
+            return new ResultDto
+            {
+                Success = false,
+                Message = "گروه کاربری انتخاب نشده است",
+            };
+        }
+        try
+        {
+            var user = new User
+            {
+                Username = createUserDto.Username,
+                Password = createUserDto.Password,
+                Name = createUserDto.Name,
+                PhoneNumber = createUserDto.PhoneNumber,
+                BranchId = createUserDto.BranchId,
+                UserGroups = createUserDto.UserGroups
+                    .Select(groupId => new UserGroup
+                    {
+                        GroupId = groupId
+                    }).ToList()
+            };
+            await _userRepository.AddAsync(user);
+            return new ResultDto
+            {
+                Success = true,
+                Message = "User added.",
+                Data = _mapper.Map<UserDto>(user)
+            };
+        }
+        catch (Exception ex)
+        {
+            return new ResultDto
+            {
+                Success = false,
+                Message = ex.Message,
+            };
+        }
     }
 
-    public async Task UpdateAsync(UserUpdateDto updateUserDto)
+    public async Task<ResultDto> UpdateAsync(UserUpdateDto updateUserDto)
     {
         var user = await _userRepository.GetByIdAsync(updateUserDto.Id);
         if (user == null)
@@ -43,6 +81,12 @@ public class UserService : IUserService
 
         _mapper.Map(updateUserDto, user);
         await _userRepository.UpdateAsync(user);
+        return new ResultDto
+        {
+            Success = true,
+            Message = "user updated.",
+            Data = _mapper.Map<UserDto>(user)
+        };
     }
 
     public async Task DeleteAsync(long id)

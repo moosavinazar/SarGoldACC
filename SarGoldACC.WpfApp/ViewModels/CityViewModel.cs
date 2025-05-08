@@ -64,7 +64,7 @@ public class CityViewModel : ViewModelBase
             _editingCityId = null;
             if (result.Success)
             {
-                MessageBoxHelper.ShowSuccess("شعبه با موفقیت ویرایش شد.");
+                MessageBoxHelper.ShowSuccess("شهر با موفقیت ویرایش شد.");
             }
             else
             {
@@ -80,7 +80,7 @@ public class CityViewModel : ViewModelBase
             result = await _branchService.AddAsync(branchCreate);
             if (result.Success)
             {
-                MessageBoxHelper.ShowSuccess("شعبه با موفقیت ذخیره شد.");
+                MessageBoxHelper.ShowSuccess("شهر با موفقیت ذخیره شد.");
             }
             else
             {

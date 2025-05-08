@@ -5,6 +5,7 @@ using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.DTOs.Branch;
+using SarGoldACC.Core.DTOs.City;
 
 namespace SarGoldACC.Core.Data.SeedData;
 
@@ -29,6 +30,9 @@ public class CsvDataReader
 
     public static List<UserGroupDto> ReadUserGroup() =>
         ReadCsv<UserGroupDto>("UserGroup.csv");
+    
+    public static List<CityDto> ReadCity() =>
+        ReadCsv<CityDto>("City.csv");
 
     private static List<T> ReadCsv<T>(string fileName)
     {

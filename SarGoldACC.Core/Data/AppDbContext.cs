@@ -13,6 +13,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<GroupPermission> GroupPermissions { get; set; }
     public DbSet<UserGroup> UserGroups { get; set; }
     public DbSet<Branch> Branches { get; set; }
+    public DbSet<City> Cities { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -110,6 +111,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 {
                     UserId = ug.UserId,
                     GroupId = ug.GroupId
+                }).ToArray()
+        );
+        
+        // City
+        var cities = CsvDataReader.ReadCity();
+        modelBuilder.Entity<City>().HasData(
+            cities.Select(c => 
+                new City
+                {
+                    Id = c.Id, 
+                    Name = c.Name
                 }).ToArray()
         );
     }

@@ -35,6 +35,12 @@ public class UserViewModel : ViewModelBase
         get => _password;
         set => SetProperty(ref _password, value);
     }
+
+    public long SelectedBranchId
+    {
+        get => _branchId;
+        set => SetProperty(ref _branchId, value);
+    }
     
     public string ConfirmPassword
     {
@@ -157,7 +163,7 @@ public class UserViewModel : ViewModelBase
                 Id = _editingUserId.Value,
                 Name = Name,
                 PhoneNumber = PhoneNumber,
-                BranchId = BranchId,
+                BranchId = SelectedBranchId,
                 UserGroups = SelectedGroups
                     .Select(p => new UserGroup
                     {
@@ -194,14 +200,14 @@ public class UserViewModel : ViewModelBase
             result = await _userService.AddAsync(userDto);
             if (result.Success)
             {
-                MessageBoxHelper.ShowSuccess("گروه با موفقیت ذخیره شد.");
+                MessageBoxHelper.ShowSuccess("کاربر با موفقیت ذخیره شد.");
             }
             else
             {
                 MessageBoxHelper.ShowError(result.Message);
             }
         }
-        await LoadGroupsAsync();
+        await LoadUsersAsync();
     }
     
     public async Task EditAsync(long userId)

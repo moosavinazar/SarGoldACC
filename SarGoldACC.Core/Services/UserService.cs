@@ -4,6 +4,7 @@ using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.Models.Auth;
 using SarGoldACC.Core.Repositories.Interfaces;
 using SarGoldACC.Core.Services.Interfaces;
+using SarGoldACC.Core.Utils;
 
 namespace SarGoldACC.Core.Services;
 
@@ -45,7 +46,7 @@ public class UserService : IUserService
             var user = new User
             {
                 Username = createUserDto.Username,
-                Password = createUserDto.Password,
+                Password = PasswordHasher.HashPassword(createUserDto.Password),
                 Name = createUserDto.Name,
                 PhoneNumber = createUserDto.PhoneNumber,
                 BranchId = createUserDto.BranchId,

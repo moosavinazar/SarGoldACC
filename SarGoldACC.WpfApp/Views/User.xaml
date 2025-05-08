@@ -124,7 +124,8 @@
                              KeyDown="PasswordBox_KeyDown"
                              Margin="0 10 0 0"
                              Style="{StaticResource InputPasswordBox}"
-                             helpers:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             helpers:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             helpers:PasswordBoxHelper.BindPassword="True"/>
                 
                 <TextBlock Grid.Column="4"
                            Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -138,7 +139,8 @@
                              KeyDown="PasswordConfirmBox_KeyDown"
                              Margin="0 10 0 0"
                              Style="{StaticResource InputPasswordBox}"
-                             helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                             helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             helpers:PasswordBoxHelper.BindPassword="True"/>
             </Grid>
         </Grid>
         

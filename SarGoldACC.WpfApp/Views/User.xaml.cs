@@ -6,6 +6,7 @@ using System.Windows.Input;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.Services.Interfaces;
+using SarGoldACC.WpfApp.Helpers;
 using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp.Views;
@@ -191,6 +192,11 @@ public partial class User : Window
     
     private async void ClickSaveGroup(object sender, RoutedEventArgs e)
     {
+        if (PasswordBox.Password != ConfirmPasswordBox.Password)
+        {
+            MessageBoxHelper.ShowError("رمز عبور با تکرار آن مطابقت ندارد");
+            return;
+        }
         await _viewModel.SaveUser();
         UserNameBox.Text = "";
         PasswordBox.Password = "";

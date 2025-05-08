@@ -21,7 +21,7 @@ public class UserRepository : IUserRepository
 
     public async Task<List<User>> GetAllAsync()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.Users.Include(u => u.Branch).ToListAsync();
     }
 
     public async Task AddAsync(User user)

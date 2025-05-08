@@ -60,6 +60,11 @@ public partial class MainWindow : RibbonWindow
         {
             case Key.D1:
             case Key.NumPad1:
+                if (MainRibbon.SelectedTabItem == TabBaseInfo && UserGroup.Visibility == Visibility.Visible)
+                {
+                    OpenUserWindow();
+                    break;
+                }
                 MainRibbon.IsMinimized = false;
                 MainRibbon.SelectedTabItem = TabMain;
                 break;
@@ -136,6 +141,18 @@ public partial class MainWindow : RibbonWindow
         var branchWindow = _serviceProvider.GetRequiredService<Branch>();
         branchWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
         branchWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
+    private void OpenUserWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenUserWindow();
+    }
+    
+    private void OpenUserWindow()
+    {
+        var userWindow = _serviceProvider.GetRequiredService<User>();
+        userWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        userWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
 }

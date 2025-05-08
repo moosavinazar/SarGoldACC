@@ -11,5 +11,7 @@ public class UserDto
     public required string PhoneNumber { get; set; }
     public long BranchId { get; set; }
     
+    [CsvHelper.Configuration.Attributes.Ignore]
+    public string? BranchName { get; set; }
     public ICollection<UserGroup>? UserGroups { get; set; }
 }

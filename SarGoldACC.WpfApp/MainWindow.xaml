@@ -53,7 +53,9 @@
                     <Fluent:Button x:Name="User" Header="کاربر"
                                    ToolTip="کلید میانبر (1)"
                                    Icon="pack://application:,,,/Resources/Icons/User.png"
-                                   LargeIcon="pack://application:,,,/Resources/Icons/UserLarge.png" />
+                                   LargeIcon="pack://application:,,,/Resources/Icons/UserLarge.png"
+                                   Click="OpenUserWindowButton_Click"
+                                   Visibility="{Binding CanAccessUserButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <Fluent:Button x:Name="UserGroup" Header="گروه"
                                    ToolTip="کلید میانبر (۲)"
                                    Icon="pack://application:,,,/Resources/Icons/Group.png"

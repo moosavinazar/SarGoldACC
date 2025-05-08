@@ -150,7 +150,6 @@ public class GroupViewModel : ViewModelBase
         GroupName = groupDto.Name;
         GroupLabel = groupDto.Label;
         var permissionIds = groupDto.GroupPermissions?.Select(gp => gp.PermissionId).ToList() ?? new List<long>();
-        Console.WriteLine(permissionIds.Count);
 
         SelectedPermissions.Clear();
         AllPermissions.Clear();

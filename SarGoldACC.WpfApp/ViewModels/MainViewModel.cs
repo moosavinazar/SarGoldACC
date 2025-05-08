@@ -23,6 +23,11 @@ public class MainViewModel : ViewModelBase
                                         _authorizationService.HasPermission("Branch.Create") ||
                                         _authorizationService.HasPermission("Branch.Edit") ||
                                         _authorizationService.HasPermission("Branch.Delete");
+    
+    public bool CanAccessUserButton => _authorizationService.HasPermission("User.View") ||
+                                         _authorizationService.HasPermission("User.Create") ||
+                                         _authorizationService.HasPermission("User.Edit") ||
+                                         _authorizationService.HasPermission("User.Delete");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 
@@ -46,6 +51,8 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(CurrentViewModel));
             OnPropertyChanged(nameof(IsRibbonVisible));
             OnPropertyChanged(nameof(CanAccessGroupButton));
+            OnPropertyChanged(nameof(CanAccessBranchButton));
+            OnPropertyChanged(nameof(CanAccessUserButton));
         }
     }
 }

@@ -22,7 +22,7 @@ public class UserViewModel : ViewModelBase
     private string _name;
     private string _phoneNumber;
     private long _branchId;
-    private long? _editingGroupId = null;
+    private long? _editingUserId = null;
     
     public string UserName
     {
@@ -103,7 +103,7 @@ public class UserViewModel : ViewModelBase
         
     }
     
-    private async Task LoadGroupsAsync()
+    public async Task LoadGroupsAsync()
     {
         AllGroups.Clear();
         var groups = await _groupService.GetAllAsync();
@@ -126,12 +126,23 @@ public class UserViewModel : ViewModelBase
     private async Task LoadUsersAsync()
     {
         AllUsers.Clear();
+    
+        // گرفتن لیست کاربران از سرویس
         var users = await _userService.GetAllAsync();
+    
+        // گرفتن لیست شعب برای نگاشت
+        var branches = await _branchService.GetAllAsync();
+    
+        // نگاشت BranchId به BranchName با Dictionary برای دسترسی سریع‌تر
+        var branchDict = branches.ToDictionary(b => b.Id, b => b.Name);
+
         foreach (var u in users)
         {
+            u.BranchName = branchDict.TryGetValue(u.BranchId, out var name) ? name : "نامشخص";
             AllUsers.Add(u);
         }
     }
+
 
     public async Task SaveUser()
     {
@@ -139,11 +150,11 @@ public class UserViewModel : ViewModelBase
         {
             Success = false
         };
-        if (_editingGroupId.HasValue)
+        if (_editingUserId.HasValue)
         {
             var dto = new UserUpdateDto()
             {
-                Id = _editingGroupId.Value,
+                Id = _editingUserId.Value,
                 Name = Name,
                 PhoneNumber = PhoneNumber,
                 BranchId = BranchId,
@@ -151,12 +162,12 @@ public class UserViewModel : ViewModelBase
                     .Select(p => new UserGroup
                     {
                         GroupId = p.Id,
-                        UserId = _editingGroupId.Value // یا 0 اگر جدید باشه
+                        UserId = _editingUserId.Value // یا 0 اگر جدید باشه
                     })
                     .ToList()
             };
             result = await _userService.UpdateAsync(dto);
-            _editingGroupId = null;
+            _editingUserId = null;
             if (result.Success)
             {
                 MessageBoxHelper.ShowSuccess("گروه با موفقیت ویرایش شد.");
@@ -191,5 +202,33 @@ public class UserViewModel : ViewModelBase
             }
         }
         await LoadGroupsAsync();
+    }
+    
+    public async Task EditAsync(long userId)
+    {
+        _editingUserId = userId;
+        var userDto = await _userService.GetByIdAsync(userId);
+        Name = userDto.Name;
+        PhoneNumber = userDto.PhoneNumber;
+        BranchId = userDto.BranchId;
+        var groupsIds = userDto.UserGroups?.Select(gp => gp.GroupId).ToList() ?? new List<long>();
+
+        SelectedGroups.Clear();
+        AllGroups.Clear();
+
+        var allGroups = await _groupService.GetAllAsync();
+    
+        foreach (var group in allGroups)
+        {
+            if (groupsIds.Contains(group.Id))
+                SelectedGroups.Add(group);
+            else
+                AllGroups.Add(group);
+        }
+    }
+    
+    public async Task DeleteAsync(long userId)
+    {
+        await _userService.DeleteAsync(userId);
     }
 }

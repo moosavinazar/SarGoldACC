@@ -7,3 +7,7 @@
 6,Branch.Create,ایجاد شعبه
 7,Branch.Edit,ویرایش شعبه
 8,Branch.Delete,حذف شعبه
+9,User.View,مشاهده کاربران
+10,User.Create,ایجاد کاربر
+11,User.Edit,ویرایش کاربر
+12,User.Delete,حذف کاربر

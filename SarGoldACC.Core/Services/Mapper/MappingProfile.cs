@@ -13,12 +13,17 @@ public class MappingProfile : Profile
     public MappingProfile()
     {
         CreateMap<User, UserDto>();
+        CreateMap<UserDto, User>();
         CreateMap<User, UserCreateDto>();
+        CreateMap<UserCreateDto, User>();
         CreateMap<User, UserUpdateDto>();
+        CreateMap<UserUpdateDto, User>();
         CreateMap<Group, GroupDto>();
         CreateMap<GroupDto, Group>();
         CreateMap<Group, GroupCreateDto>();
+        CreateMap<GroupCreateDto, Group>();
         CreateMap<Permission, PermissionDto>();
+        CreateMap<PermissionDto, Permission>();
         CreateMap<Branch, BranchDto>();
         CreateMap<BranchDto, Branch>();
     }

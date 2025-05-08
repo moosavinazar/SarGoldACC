@@ -40,4 +40,9 @@ public class AuthorizationService : IAuthorizationService
     {
         return _currentUser?.Id.ToString() ?? "Unknown";
     }
+
+    public UserDto GetCurrentUser()
+    {
+        return _currentUser;
+    }
 }

@@ -6,6 +6,7 @@ using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.DTOs.Branch;
 using SarGoldACC.Core.Models.Auth;
 using SarGoldACC.Core.Services.Interfaces;
+using SarGoldACC.Core.Utils;
 using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
@@ -106,7 +107,9 @@ public class UserViewModel : ViewModelBase
             await LoadBranchesAsync();
             await LoadUsersAsync();
         }).GetAwaiter().GetResult();
-        
+
+        SelectedBranchId = _authorizationService.GetCurrentUser().BranchId;
+
     }
     
     public async Task LoadGroupsAsync()
@@ -158,25 +161,50 @@ public class UserViewModel : ViewModelBase
         };
         if (_editingUserId.HasValue)
         {
-            var dto = new UserUpdateDto()
+            UserUpdateDto dto;
+            if (Password != null)
             {
-                Id = _editingUserId.Value,
-                Name = Name,
-                PhoneNumber = PhoneNumber,
-                BranchId = SelectedBranchId,
-                UserGroups = SelectedGroups
-                    .Select(p => new UserGroup
-                    {
-                        GroupId = p.Id,
-                        UserId = _editingUserId.Value // یا 0 اگر جدید باشه
-                    })
-                    .ToList()
-            };
+                dto = new UserUpdateDto
+                {
+                    Id = _editingUserId.Value,
+                    Username = UserName,
+                    Password = PasswordHasher.HashPassword(Password),
+                    Name = Name,
+                    PhoneNumber = PhoneNumber,
+                    BranchId = SelectedBranchId,
+                    UserGroups = SelectedGroups
+                        .Select(p => new UserGroup
+                        {
+                            GroupId = p.Id,
+                            UserId = _editingUserId.Value // یا 0 اگر جدید باشه
+                        })
+                        .ToList()
+                };
+            }
+            else
+            {
+                dto = new UserUpdateDto
+                {
+                    Id = _editingUserId.Value,
+                    Username = UserName,
+                    Name = Name,
+                    PhoneNumber = PhoneNumber,
+                    BranchId = SelectedBranchId,
+                    UserGroups = SelectedGroups
+                        .Select(p => new UserGroup
+                        {
+                            GroupId = p.Id,
+                            UserId = _editingUserId.Value // یا 0 اگر جدید باشه
+                        })
+                        .ToList()
+                };
+            }
+            
             result = await _userService.UpdateAsync(dto);
             _editingUserId = null;
             if (result.Success)
             {
-                MessageBoxHelper.ShowSuccess("گروه با موفقیت ویرایش شد.");
+                MessageBoxHelper.ShowSuccess("کاربر با موفقیت ویرایش شد.");
             }
             else
             {
@@ -214,11 +242,12 @@ public class UserViewModel : ViewModelBase
     {
         _editingUserId = userId;
         var userDto = await _userService.GetByIdAsync(userId);
+        UserName = userDto.Username;
         Name = userDto.Name;
         PhoneNumber = userDto.PhoneNumber;
-        BranchId = userDto.BranchId;
+        SelectedBranchId = userDto.BranchId;
         var groupsIds = userDto.UserGroups?.Select(gp => gp.GroupId).ToList() ?? new List<long>();
-
+        
         SelectedGroups.Clear();
         AllGroups.Clear();
 

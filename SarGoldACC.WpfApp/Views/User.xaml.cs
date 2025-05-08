@@ -203,7 +203,7 @@ public partial class User : Window
         ConfirmPasswordBox.Password = "";
         NameBox.Text = "";
         PhoneNumberBox.Text = "";
-        BranchComboBox.Text = "";
+        _viewModel.SelectedBranchId = _authorizationService.GetCurrentUser().BranchId;
         
         _viewModel.SelectedGroups.Clear();
         _viewModel.AllGroups.Clear();
@@ -225,7 +225,6 @@ public partial class User : Window
         
         UserDataGrid.EditAction = async obj =>
         {
-            UserPass.Visibility = Visibility.Hidden;
             if (obj is UserDto user)
             {
                 await _viewModel.EditAsync(user.Id);

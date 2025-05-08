@@ -80,6 +80,10 @@ public class UserService : IUserService
         if (user == null)
             throw new Exception("User not found");
 
+        if (updateUserDto.Password == null)
+        {
+            updateUserDto.Password = user.Password;
+        }
         _mapper.Map(updateUserDto, user);
         await _userRepository.UpdateAsync(user);
         return new ResultDto

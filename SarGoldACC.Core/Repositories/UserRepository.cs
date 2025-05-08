@@ -16,7 +16,7 @@ public class UserRepository : IUserRepository
 
     public async Task<User> GetByIdAsync(long id)
     {
-        return await _context.Users.FindAsync(id);
+        return await _context.Users.Include(u => u.UserGroups).FirstOrDefaultAsync(u => u.Id == id);
     }
 
     public async Task<List<User>> GetAllAsync()

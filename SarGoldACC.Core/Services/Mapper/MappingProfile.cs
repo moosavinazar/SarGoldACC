@@ -3,6 +3,7 @@ using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.DTOs.Branch;
+using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Models.Auth;
 
@@ -26,5 +27,7 @@ public class MappingProfile : Profile
         CreateMap<PermissionDto, Permission>();
         CreateMap<Branch, BranchDto>();
         CreateMap<BranchDto, Branch>();
+        CreateMap<City, CityDto>();
+        CreateMap<CityDto, City>();
     }
 }

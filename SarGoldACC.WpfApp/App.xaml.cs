@@ -56,6 +56,8 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<IBranchRepository, BranchRepository>();
             services.AddScoped<IBranchService, BranchService>();
             
+            services.AddScoped<ICityRepository, CityRepository>();
+            
             
             services.AddSingleton<NavigationStore>();
             // services.AddSingleton<MainViewModel>();

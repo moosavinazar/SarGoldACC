@@ -11,3 +11,7 @@
 10,User.Create,ایجاد کاربر
 11,User.Edit,ویرایش کاربر
 12,User.Delete,حذف کاربر
+13,City.View,مشاهده کاربران
+14,City.Create,ایجاد کاربر
+15,City.Edit,ویرایش کاربر
+16,City.Delete,حذف کاربر

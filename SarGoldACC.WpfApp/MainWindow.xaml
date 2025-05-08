@@ -70,6 +70,12 @@
                                    LargeIcon="pack://application:,,,/Resources/Icons/BranchLarge.png"
                                    Click="OpenBranchWindowButton_Click"
                                    Visibility="{Binding CanAccessBranchButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Fluent:Button x:Name="City" Header="شهر"
+                                   ToolTip="کلید میانبر (4)"
+                                   Icon="pack://application:,,,/Resources/Icons/Branch.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/BranchLarge.png"
+                                   Click="OpenCityWindowButton_Click"
+                                   Visibility="{Binding CanAccessCityButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات" Style="{StaticResource CustomTabStyle}">

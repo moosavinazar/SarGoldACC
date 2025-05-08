@@ -1,0 +1,65 @@
+﻿<Window x:Class="SarGoldACC.WpfApp.Views.City"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
+        xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        mc:Ignorable="d"
+        Title="گروه" 
+        Height="600" 
+        Width="800"
+        KeyDown="CityWindow_KeyDown"
+        Focusable="True"
+        Loaded="Window_Loaded"
+        FlowDirection="RightToLeft"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Text="نام شهر"
+                       Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="0,0,5,0"/>
+            <TextBox Grid.Column="1" 
+                     x:Name="CityNameBox" 
+                     Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                     KeyDown="CityNameBox_KeyDown"
+                     Margin="0 0 10 0"
+                     Style="{StaticResource InputTextBox}"
+                     Text="{Binding CityName}"/>
+            <Button Grid.Column="2" 
+                    x:Name="SaveButton"
+                    Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Content="ذخیره"
+                    Style="{StaticResource SuccessBtn}"
+                    HorizontalAlignment="Center"
+                    Margin="10,10"
+                    Click="ClickSaveCity"
+                    Padding="10,5"/>
+        </Grid>
+        <controls:CustomizableDataGrid Grid.Row="1" x:Name="CityDataGrid"
+                                       ItemsSource="{Binding AllCities}"
+                                       Loaded="CityDataGrid_Loaded"
+                                       Visibility="{Binding CanAccessCityView, Converter={StaticResource BoolToVisibilityConverter}}"/>
+    </Grid>
+</Window>

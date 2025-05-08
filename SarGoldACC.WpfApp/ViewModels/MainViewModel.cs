@@ -28,6 +28,11 @@ public class MainViewModel : ViewModelBase
                                          _authorizationService.HasPermission("User.Create") ||
                                          _authorizationService.HasPermission("User.Edit") ||
                                          _authorizationService.HasPermission("User.Delete");
+    
+    public bool CanAccessCityButton => _authorizationService.HasPermission("City.View") ||
+                                         _authorizationService.HasPermission("City.Create") ||
+                                         _authorizationService.HasPermission("City.Edit") ||
+                                         _authorizationService.HasPermission("City.Delete");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 
@@ -53,6 +58,7 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanAccessGroupButton));
             OnPropertyChanged(nameof(CanAccessBranchButton));
             OnPropertyChanged(nameof(CanAccessUserButton));
+            OnPropertyChanged(nameof(CanAccessCityButton));
         }
     }
 }

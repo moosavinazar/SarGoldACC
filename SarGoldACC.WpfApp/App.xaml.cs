@@ -77,6 +77,7 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<Branch>();
             services.AddTransient<UserViewModel>();
             services.AddTransient<User>();
+            services.AddTransient<CityViewModel>();
 
             ServiceProvider = services.BuildServiceProvider();
             

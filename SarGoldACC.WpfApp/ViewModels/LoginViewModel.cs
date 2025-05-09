@@ -6,8 +6,8 @@ namespace SarGoldACC.WpfApp.ViewModels;
 
 public class LoginViewModel : ViewModelBase
 {
-    private string _username = "";
-    private string _password = "";
+    private string _username = "admin";
+    private string _password = "Admin@123";
     private string _errorMessage = "";
     private readonly Action<ViewModelBase> _navigateTo;
     private readonly IAuthenticationService _authService;

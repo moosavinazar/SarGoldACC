@@ -15,6 +15,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Branch> Branches { get; set; }
     public DbSet<City> Cities { get; set; }
     
+    public DbSet<InvoiceRow> InvoiceRows { get; set; }
+    public DbSet<Invoice> Invoices { get; set; }
+    public DbSet<Document> Documents { get; set; }
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
@@ -40,6 +44,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasOne(ug => ug.Group)
             .WithMany(ug => ug.UserGroups)
             .HasForeignKey(ug => ug.GroupId);
+        
+        modelBuilder.Entity<Invoice>()
+            .HasOne(i => i.Document)
+            .WithMany(d => d.Invoices)
+            .HasForeignKey(i => i.DocumentId)
+            .OnDelete(DeleteBehavior.Cascade);
+
+        modelBuilder.Entity<InvoiceRow>()
+            .HasOne(r => r.Invoice)
+            .WithMany(i => i.InvoiceRows)
+            .HasForeignKey(r => r.InvoiceId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         // خواندن داده‌ها از فایل‌های CSV
         // Branch

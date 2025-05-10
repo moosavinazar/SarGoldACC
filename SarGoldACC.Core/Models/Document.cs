@@ -1,0 +1,8 @@
+﻿namespace SarGoldACC.Core.Models;
+
+public class Document
+{
+    public DateTime Date { get; set; }
+    public string Description { get; set; }
+    public ICollection<Invoice> Invoices { get; set; }
+}

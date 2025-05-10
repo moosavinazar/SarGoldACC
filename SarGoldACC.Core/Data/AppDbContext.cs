@@ -18,6 +18,10 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<InvoiceRow> InvoiceRows { get; set; }
     public DbSet<Invoice> Invoices { get; set; }
     public DbSet<Document> Documents { get; set; }
+    public DbSet<Counterparty> Counterparties { get; set; }
+    public DbSet<GeneralAccount> GeneralAccounts { get; set; }
+    public DbSet<Customer> Customers { get; set; }
+    public DbSet<CustomerBank> CustomerBanks { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -45,16 +49,50 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany(ug => ug.UserGroups)
             .HasForeignKey(ug => ug.GroupId);
         
+        modelBuilder.Entity<User>()
+            .HasOne(u => u.Branch)
+            .WithMany(b => b.Users)
+            .HasForeignKey(u => u.BranchId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         modelBuilder.Entity<Invoice>()
             .HasOne(i => i.Document)
             .WithMany(d => d.Invoices)
             .HasForeignKey(i => i.DocumentId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Invoice>()
+            .HasOne(i => i.Counterparty)
+            .WithMany(a => a.Invoices)
+            .HasForeignKey(i => i.CounterpartyId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<InvoiceRow>()
             .HasOne(r => r.Invoice)
             .WithMany(i => i.InvoiceRows)
             .HasForeignKey(r => r.InvoiceId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<GeneralAccount>()
+            .HasOne(ga => ga.Counterparty)
+            .WithOne(cp => cp.GeneralAccount)
+            .HasForeignKey<Counterparty>(cp => cp.GeneralAccountId);
+        
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.Branch)
+            .WithMany(b => b.Counterparties)
+            .HasForeignKey(c => c.BranchId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<City>()
+            .HasOne(c => c.Customer)
+            .WithOne(cu => cu.City)
+            .HasForeignKey<Customer>(cu => cu.CityId);
+        
+        modelBuilder.Entity<CustomerBank>()
+            .HasOne(cb => cb.Customer)
+            .WithMany(c => c.CustomerBanks)
+            .HasForeignKey(cb => cb.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
         
         // خواندن داده‌ها از فایل‌های CSV
@@ -133,11 +171,34 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         // City
         var cities = CsvDataReader.ReadCity();
         modelBuilder.Entity<City>().HasData(
-            cities.Select(c => 
+            cities.Select(c =>
                 new City
                 {
-                    Id = c.Id, 
+                    Id = c.Id,
                     Name = c.Name
+                }).ToArray()
+        );
+        
+        // GeneralAccount
+        var generalAccounts = CsvDataReader.ReadGeneralAccount();
+        modelBuilder.Entity<GeneralAccount>().HasData(
+            generalAccounts.Select(g => 
+                new GeneralAccount
+                {
+                    Id = g.Id, 
+                    Title = g.Title
+                }).ToArray()
+        );
+        
+        // CounterParty
+        var counterParties = CsvDataReader.ReadCounterparty();
+        modelBuilder.Entity<Counterparty>().HasData(
+            counterParties.Select(c => 
+                new Counterparty
+                {
+                    Id = c.Id,
+                    GeneralAccountId = c.GeneralAccountId,
+                    BranchId = c.BranchId
                 }).ToArray()
         );
     }

@@ -6,6 +6,9 @@ using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.DTOs.Branch;
 using SarGoldACC.Core.DTOs.City;
+using SarGoldACC.Core.DTOs.CounterParty;
+using SarGoldACC.Core.DTOs.GeneralAccountDto;
+using SarGoldACC.Core.Models;
 
 namespace SarGoldACC.Core.Data.SeedData;
 
@@ -33,6 +36,12 @@ public class CsvDataReader
     
     public static List<CityDto> ReadCity() =>
         ReadCsv<CityDto>("City.csv");
+    
+    public static List<GeneralAccountDto> ReadGeneralAccount() =>
+        ReadCsv<GeneralAccountDto>("GeneralAccount.csv");
+    
+    public static List<CounterpartySeedDataDto> ReadCounterparty() =>
+        ReadCsv<CounterpartySeedDataDto>("Counterparty.csv");
 
     private static List<T> ReadCsv<T>(string fileName)
     {

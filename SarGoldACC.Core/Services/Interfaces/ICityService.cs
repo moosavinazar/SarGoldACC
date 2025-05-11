@@ -8,7 +8,7 @@ public interface ICityService
 {
     Task<CityDto> GetByIdAsync(long id);
     Task<List<CityDto>> GetAllAsync();
-    Task<ResultDto> AddAsync(CityCreateDto branchCreate);
-    Task<ResultDto> UpdateAsync(CityDto branch);
+    Task<ResultDto> AddAsync(CityCreateDto cityCreate);
+    Task<ResultDto> UpdateAsync(CityDto city);
     Task DeleteAsync(long id);
 }

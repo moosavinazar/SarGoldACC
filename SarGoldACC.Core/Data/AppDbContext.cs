@@ -73,10 +73,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey(r => r.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<GeneralAccount>()
-            .HasOne(ga => ga.Counterparty)
-            .WithOne(cp => cp.GeneralAccount)
-            .HasForeignKey<Counterparty>(cp => cp.GeneralAccountId);
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.GeneralAccount)
+            .WithMany(g => g.Counterparties)
+            .HasForeignKey(c => c.GeneralAccountId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<Counterparty>()
             .HasOne(c => c.Branch)

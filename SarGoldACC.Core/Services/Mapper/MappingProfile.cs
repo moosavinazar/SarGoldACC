@@ -4,6 +4,8 @@ using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.DTOs.Branch;
 using SarGoldACC.Core.DTOs.City;
+using SarGoldACC.Core.DTOs.CounterParty;
+using SarGoldACC.Core.DTOs.GeneralAccountDto;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Models.Auth;
 
@@ -29,5 +31,9 @@ public class MappingProfile : Profile
         CreateMap<BranchDto, Branch>();
         CreateMap<City, CityDto>();
         CreateMap<CityDto, City>();
+        CreateMap<GeneralAccount, GeneralAccountDto>();
+        CreateMap<GeneralAccountDto, GeneralAccount>();
+        CreateMap<Counterparty, CounterpartyDto>();
+        CreateMap<CounterpartyDto, Counterparty>();
     }
 }

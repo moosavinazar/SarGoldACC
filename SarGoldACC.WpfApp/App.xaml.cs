@@ -59,6 +59,11 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<ICityService, CityService>();
             
+            services.AddScoped<ICounterpartyRepository, CounterpartyRepository>();
+            services.AddScoped<ICounterpartyService, CounterpartyService>();
+            
+            services.AddScoped<IGeneralAccountRepository, GeneralAccountRepository>();
+            services.AddScoped<IGeneralAccountService, GeneralAccountService>();
             
             services.AddSingleton<NavigationStore>();
             // services.AddSingleton<MainViewModel>();

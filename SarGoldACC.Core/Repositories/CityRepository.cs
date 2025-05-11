@@ -24,21 +24,21 @@ public class CityRepository : ICityRepository
         return await _context.Cities.ToListAsync();
     }
 
-    public async Task AddAsync(City branch)
+    public async Task AddAsync(City city)
     {
-        _context.Cities.Add(branch);
+        _context.Cities.Add(city);
         await _context.SaveChangesAsync();
     }
 
-    public async Task UpdateAsync(City branch)
+    public async Task UpdateAsync(City city)
     {
-        _context.Cities.Update(branch);
+        _context.Cities.Update(city);
         await _context.SaveChangesAsync();
     }
 
-    public async Task DeleteAsync(City branch)
+    public async Task DeleteAsync(City city)
     {
-        _context.Cities.Remove(branch);
+        _context.Cities.Remove(city);
         await _context.SaveChangesAsync();
     }
 }

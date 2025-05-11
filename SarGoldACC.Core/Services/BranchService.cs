@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
+using SarGoldACC.Core.Data;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Branch;
+using SarGoldACC.Core.DTOs.CounterParty;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Repositories.Interfaces;
 using SarGoldACC.Core.Services.Interfaces;
@@ -11,12 +13,24 @@ public class BranchService : IBranchService
 {
     
     private readonly IBranchRepository _branchRepository;
+    private readonly IGeneralAccountService _generalAccountService;
+    private readonly ICounterpartyService _counterpartyService;
     private readonly IMapper _mapper;
+    private readonly AppDbContext _dbContext;
 
-    public BranchService(IBranchRepository branchRepository, IMapper mapper)
+
+    public BranchService(
+        IBranchRepository branchRepository, 
+        IGeneralAccountService generalAccountService, 
+        ICounterpartyService counterpartyService,
+        IMapper mapper,
+        AppDbContext dbContext)
     {
         _branchRepository = branchRepository;
+        _generalAccountService = generalAccountService;
+        _counterpartyService = counterpartyService;
         _mapper = mapper;
+        _dbContext = dbContext;
     }
 
     public async Task<BranchDto> GetByIdAsync(long id)
@@ -33,13 +47,27 @@ public class BranchService : IBranchService
 
     public async Task<ResultDto> AddAsync(BranchCreateDto branchCreate)
     {
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
         try
         {
+            var generalAccountList = await _generalAccountService.GetAllAsync();
             var branch = new Branch
             {
                 Name = branchCreate.Name,
             };
-            await _branchRepository.AddAsync(branch);
+            var addedBranch = _branchRepository.AddWithoutSave(branch);
+            await _dbContext.SaveChangesAsync();
+            foreach (var generalAccount in generalAccountList)
+            {
+                var counterparty = new CounterpartyDto
+                {
+                    BranchId = addedBranch.Id,
+                    GeneralAccountId = generalAccount.Id,
+                };
+                _counterpartyService.AddWithoutSave(counterparty);
+            }
+            await _dbContext.SaveChangesAsync();
+            await transaction.CommitAsync();
             return new ResultDto
             {
                 Success = true,
@@ -49,6 +77,7 @@ public class BranchService : IBranchService
         }
         catch (Exception ex)
         {
+            await transaction.RollbackAsync();
             return new ResultDto
             {
                 Success = false,

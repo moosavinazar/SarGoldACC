@@ -24,10 +24,17 @@ public class BranchRepository : IBranchRepository
         return await _context.Branches.ToListAsync();
     }
 
-    public async Task AddAsync(Branch branch)
+    public async Task<Branch> AddAsync(Branch branch)
     {
-        _context.Branches.Add(branch);
+        var result = _context.Branches.Add(branch);
         await _context.SaveChangesAsync();
+        return result.Entity;
+    }
+    
+    public Branch AddWithoutSave(Branch branch)
+    {
+        var result = _context.Branches.Add(branch);
+        return result.Entity;
     }
 
     public async Task UpdateAsync(Branch branch)

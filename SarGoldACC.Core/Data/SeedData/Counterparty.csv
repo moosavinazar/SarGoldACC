@@ -1,2 +1,2 @@
-﻿Id,GeneralAccountId,BranchId
-1,1,1
+﻿Id,GeneralAccountId,CustomerId,BranchId
+1,1,,1

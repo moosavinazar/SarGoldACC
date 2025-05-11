@@ -77,13 +77,21 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasOne(c => c.GeneralAccount)
             .WithMany(g => g.Counterparties)
             .HasForeignKey(c => c.GeneralAccountId)
-            .OnDelete(DeleteBehavior.Cascade);
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Counterparty>()
             .HasOne(c => c.Branch)
             .WithMany(b => b.Counterparties)
             .HasForeignKey(c => c.BranchId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Customer>()
+            .HasOne(c => c.Counterparty)
+            .WithOne(cp => cp.Customer)
+            .HasForeignKey<Counterparty>(cp => cp.CustomerId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<City>()
             .HasOne(c => c.Customer)

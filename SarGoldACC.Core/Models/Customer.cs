@@ -20,4 +20,5 @@ public class Customer
     public City City { get; set; }
     public long CityId { get; set; }
     public ICollection<CustomerBank> CustomerBanks { get; set; }
+    public Counterparty Counterparty { get; set; }
 }

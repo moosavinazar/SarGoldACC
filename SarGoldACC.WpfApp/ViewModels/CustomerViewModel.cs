@@ -230,7 +230,6 @@ public class CustomerViewModel : ViewModelBase
         }
         else
         {
-            Console.WriteLine(BranchId);
             var customerDto = new CustomerCreateDto
             {
                 Name = Name,

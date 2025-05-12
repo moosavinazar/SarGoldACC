@@ -50,7 +50,6 @@ public class CustomerService : ICustomerService
         {
             customerCreate.BranchId = _authorizationService.GetCurrentUser().BranchId;
         }
-        Console.WriteLine(customerCreate.BranchId);
         try
         {
             var customer = _mapper.Map<Customer>(customerCreate);

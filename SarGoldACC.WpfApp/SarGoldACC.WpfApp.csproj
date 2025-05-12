@@ -68,6 +68,10 @@
       <Resource Include="Resources\Icons\Branch.png" />
       <None Remove="Resources\Icons\BranchLarge.png" />
       <Resource Include="Resources\Icons\BranchLarge.png" />
+      <None Remove="Resources\Icons\City.png" />
+      <Resource Include="Resources\Icons\City.png" />
+      <None Remove="Resources\Icons\CityLarge.png" />
+      <Resource Include="Resources\Icons\CityLarge.png" />
     </ItemGroup>
 
 </Project>

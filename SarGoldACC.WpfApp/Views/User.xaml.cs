@@ -35,7 +35,10 @@ public partial class User : Window
     
     private void UserWindow_KeyDown(object sender, KeyEventArgs e)
     {
-        
+        if (e.Key == Key.Escape)
+        {
+            this.Close();
+        }
     }
     
     private void UserNameBox_KeyDown(object sender, KeyEventArgs e)

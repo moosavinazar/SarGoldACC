@@ -45,9 +45,4 @@ public class AuthorizationService : IAuthorizationService
     {
         return _currentUser;
     }
-
-    public long GetCurrentUserBranchId()
-    {
-        return _currentUser?.BranchId ?? 0;
-    }
 }

@@ -72,6 +72,10 @@
       <Resource Include="Resources\Icons\City.png" />
       <None Remove="Resources\Icons\CityLarge.png" />
       <Resource Include="Resources\Icons\CityLarge.png" />
+      <None Remove="Resources\Icons\Customer.png" />
+      <Resource Include="Resources\Icons\Customer.png" />
+      <None Remove="Resources\Icons\CustomerLarge.png" />
+      <Resource Include="Resources\Icons\CustomerLarge.png" />
     </ItemGroup>
 
 </Project>

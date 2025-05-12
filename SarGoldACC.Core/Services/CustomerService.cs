@@ -46,10 +46,11 @@ public class CustomerService : ICustomerService
     public async Task<ResultDto> AddAsync(CustomerCreateDto customerCreate)
     {
         await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        if (customerCreate.BranchId == null)
+        if (customerCreate.BranchId == 0)
         {
-            customerCreate.BranchId = _authorizationService.GetCurrentUserBranchId();
+            customerCreate.BranchId = _authorizationService.GetCurrentUser().BranchId;
         }
+        Console.WriteLine(customerCreate.BranchId);
         try
         {
             var customer = _mapper.Map<Customer>(customerCreate);
@@ -81,13 +82,13 @@ public class CustomerService : ICustomerService
         }
     }
 
-    public async Task<ResultDto> UpdateAsync(CustomerDto customerDto)
+    public async Task<ResultDto> UpdateAsync(CustomerUpdateDto customerUpdate)
     {
-        var customer = await _customerRepository.GetByIdAsync(customerDto.Id);
+        var customer = await _customerRepository.GetByIdAsync(customerUpdate.Id);
         if (customer == null)
             throw new Exception("Customer not found");
 
-        _mapper.Map(customerDto, customer);
+        _mapper.Map(customerUpdate, customer);
         await _customerRepository.UpdateAsync(customer);
         return new ResultDto
         {

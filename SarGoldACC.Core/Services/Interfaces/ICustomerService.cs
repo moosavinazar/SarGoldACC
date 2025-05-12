@@ -8,6 +8,6 @@ public interface ICustomerService
     Task<CustomerDto> GetByIdAsync(long id);
     Task<List<CustomerDto>> GetAllAsync();
     Task<ResultDto> AddAsync(CustomerCreateDto customerCreate);
-    Task<ResultDto> UpdateAsync(CustomerDto customer);
+    Task<ResultDto> UpdateAsync(CustomerUpdateDto customerUpdate);
     Task DeleteAsync(long id);
 }

@@ -77,6 +77,14 @@
                                    Click="OpenCityWindowButton_Click"
                                    Visibility="{Binding CanAccessCityButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Fluent:RibbonGroupBox>
+                <Fluent:RibbonGroupBox Header="طرف حساب">
+                    <Fluent:Button x:Name="Customer" Header="مشتری"
+                                   ToolTip="کلید میانبر (5)"
+                                   Icon="pack://application:,,,/Resources/Icons/Customer.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/CustomerLarge.png"
+                                   Click="OpenCustomerWindowButton_Click"
+                                   Visibility="{Binding CanAccessCustomerButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات" Style="{StaticResource CustomTabStyle}">
                 

@@ -8,5 +8,4 @@ public interface IAuthorizationService
     string GetCurrentUserIdAsString();
     bool HasPermission(string permissionName);
     UserDto GetCurrentUser();
-    long GetCurrentUserBranchId();
 }

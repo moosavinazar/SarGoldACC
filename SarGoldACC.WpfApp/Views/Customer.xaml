@@ -36,9 +36,12 @@
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
@@ -72,21 +75,99 @@
                          Margin="0 0 0 0"
                          Style="{StaticResource InputTextBox}"
                          Text="{Binding CellPhone}"/>
-                <TextBlock Text="تلفن"
+                <TextBlock Text="شهر"
                            Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                            Grid.Column="4"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="5,10,5,0"/>
+                <ComboBox x:Name="CityComboBox" Grid.Column="5"
+                          Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                          ItemsSource="{Binding Cities}"
+                          DisplayMemberPath="Name"
+                          SelectedValuePath="Id"
+                          SelectedValue="{Binding SelectedCityId, Mode=TwoWay}"
+                          Margin="0,0,0,0">
+                </ComboBox>
+                <TextBlock Text="تلفن"
+                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="6"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="0,0,5,0"/>
                 <TextBox x:Name="Phone" 
                          Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="5"
+                         Grid.Column="7"
                          KeyDown="PhoneBox_KeyDown"
                          Margin="0 0 0 0"
                          Style="{StaticResource InputTextBox}"
                          Text="{Binding Phone}"/>
             </Grid>
             <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="بدهکاری طلا"
+                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="0"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="0,5,5,0"/>
+                <TextBox x:Name="WeightBed" 
+                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                         Grid.Column="1"
+                         KeyDown="WeightBedBox_KeyDown"
+                         Margin="0 5 0 0"
+                         Style="{StaticResource InputTextBox}"
+                         Text="{Binding WeightBed}"/>
+                <TextBlock Text="بستانکاری طلا"
+                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="2"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="0,5,5,0"/>
+                <TextBox x:Name="WeightBes" 
+                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                         Grid.Column="3"
+                         KeyDown="WeightBesBox_KeyDown"
+                         Margin="0 5 0 0"
+                         Style="{StaticResource InputTextBox}"
+                         Text="{Binding WeightBes}"/>
+                <TextBlock Text="بدهکاری ریال"
+                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="4"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="0,5,5,0"/>
+                <TextBox x:Name="RiyalBed" 
+                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                         Grid.Column="5"
+                         KeyDown="RiyalBedBox_KeyDown"
+                         Margin="0 5 0 0"
+                         Style="{StaticResource InputTextBox}"
+                         Text="{Binding RiyalBed}"/>
+                <TextBlock Text="بستانکاری ریال"
+                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="6"
+                           FontWeight="Bold"
+                           VerticalAlignment="Center"
+                           Margin="0,5,5,0"/>
+                <TextBox x:Name="RiyalBes" 
+                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                         Grid.Column="7"
+                         KeyDown="RiyalBesBox_KeyDown"
+                         Margin="0 5 0 0"
+                         Style="{StaticResource InputTextBox}"
+                         Text="{Binding RiyalBes}"/>
+            </Grid>
+            <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -142,15 +223,15 @@
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="0,5,5,0"/>
-                <TextBox x:Name="ReyalLimit" 
+                <TextBox x:Name="RiyalLimit" 
                          Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                          Grid.Column="7"
-                         KeyDown="ReyalLimitBox_KeyDown"
+                         KeyDown="RiyalLimitBox_KeyDown"
                          Margin="0 5 0 0"
                          Style="{StaticResource InputTextBox}"
-                         Text="{Binding WeightLimit}"/>
+                         Text="{Binding RiyalLimit}"/>
             </Grid>
-            <Grid Grid.Row="2">
+            <Grid Grid.Row="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -199,7 +280,7 @@
                          Style="{StaticResource InputTextBox}"
                          Text="{Binding Email}"/>
             </Grid>
-            <Grid Grid.Row="3">
+            <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -218,7 +299,7 @@
                          Style="{StaticResource InputTextBox}"
                          Text="{Binding Address}"/>
             </Grid>
-            <Grid Grid.Row="4">
+            <Grid Grid.Row="5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>

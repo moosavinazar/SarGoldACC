@@ -100,6 +100,11 @@ public partial class MainWindow : RibbonWindow
                 break;
             case Key.D5:
             case Key.NumPad5:
+                if (MainRibbon.SelectedTabItem == TabBaseInfo && City.Visibility == Visibility.Visible)
+                {
+                    OpenCustomerWindow();
+                    break;
+                }
                 MainRibbon.IsMinimized = false;
                 MainRibbon.SelectedTabItem = TabSetting;
                 break;
@@ -170,6 +175,18 @@ public partial class MainWindow : RibbonWindow
         var cityWindow = _serviceProvider.GetRequiredService<City>();
         cityWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
         cityWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
+    private void OpenCustomerWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenCustomerWindow();
+    }
+    
+    private void OpenCustomerWindow()
+    {
+        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
+        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
 }

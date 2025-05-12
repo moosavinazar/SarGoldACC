@@ -65,6 +65,9 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<IGeneralAccountRepository, GeneralAccountRepository>();
             services.AddScoped<IGeneralAccountService, GeneralAccountService>();
             
+            services.AddScoped<ICustomerRepository, CustomerRepository>();
+            services.AddScoped<ICustomerService, CustomerService>();
+            
             services.AddSingleton<NavigationStore>();
             // services.AddSingleton<MainViewModel>();
             
@@ -84,6 +87,8 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<User>();
             services.AddTransient<CityViewModel>();
             services.AddTransient<City>();
+            services.AddTransient<CustomerViewModel>();
+            services.AddTransient<Customer>();
 
             ServiceProvider = services.BuildServiceProvider();
             

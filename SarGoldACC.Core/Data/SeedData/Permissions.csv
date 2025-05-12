@@ -15,3 +15,7 @@
 14,City.Create,ایجاد کاربر
 15,City.Edit,ویرایش کاربر
 16,City.Delete,حذف کاربر
+17,Customer.View,مشاهده مشتریان
+18,Customer.Create,ایجاد مشتری
+19,Customer.Edit,ویرایش مشتری
+20,Customer.Delete,حذف مشتری

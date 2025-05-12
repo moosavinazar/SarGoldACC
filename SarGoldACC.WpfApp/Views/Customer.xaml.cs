@@ -1,5 +1,10 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Data;
 using System.Windows.Input;
+using SarGoldACC.Core.DTOs.Customer;
+using SarGoldACC.Core.Services;
+using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp.Views;
@@ -7,11 +12,14 @@ namespace SarGoldACC.WpfApp.Views;
 public partial class Customer : Window
 {
     private readonly CustomerViewModel _viewModel;
+    private readonly IAuthorizationService _authorizationService;
     
-    public Customer(CustomerViewModel viewModel)
+    public Customer(CustomerViewModel viewModel, IAuthorizationService authorizationService)
     {
         InitializeComponent();
         _viewModel = viewModel;
+        DataContext = _viewModel;
+        _authorizationService = authorizationService;
     }
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -44,6 +52,38 @@ public partial class Customer : Window
     {
         if (e.Key == Key.Enter)
         {
+            WeightBed.Focus();
+            e.Handled = true;
+        }
+    }
+    private void WeightBedBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            WeightBes.Focus();
+            e.Handled = true;
+        }
+    }
+    private void WeightBesBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            RiyalBed.Focus();
+            e.Handled = true;
+        }
+    }
+    private void RiyalBedBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
+            RiyalBes.Focus();
+            e.Handled = true;
+        }
+    }
+    private void RiyalBesBox_KeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Enter)
+        {
             BirthDate.Focus();
             e.Handled = true;
         }
@@ -68,11 +108,11 @@ public partial class Customer : Window
     {
         if (e.Key == Key.Enter)
         {
-            ReyalLimit.Focus();
+            RiyalLimit.Focus();
             e.Handled = true;
         }
     }
-    private void ReyalLimitBox_KeyDown(object sender, KeyEventArgs e)
+    private void RiyalLimitBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
@@ -122,10 +162,45 @@ public partial class Customer : Window
     }
     private async void ClickSaveCustomer(object sender, RoutedEventArgs e)
     {
+        await _viewModel.SaveCustomer();
     }
 
     private void CustomerDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
+        CustomerDataGrid.DeleteActionShow = _viewModel.CanAccessCustomerDelete;
+        CustomerDataGrid.EditActionShow = _viewModel.CanAccessCustomerEdit;
         
+        CustomerDataGrid.DeleteAction = async obj =>
+        {
+            if (obj is CustomerDto customer)
+            {
+                await _viewModel.DeleteAsync(customer.Id);
+            }
+        };
+        
+        CustomerDataGrid.EditAction = async obj =>
+        {
+            if (obj is CustomerDto customer)
+            {
+                await _viewModel.EditAsync(customer.Id);
+            }
+        };
+        
+        CustomerDataGrid.ColumnConfigKey = $"CustomerGrid_{_authorizationService.GetCurrentUserIdAsString()}"; // یا هر شناسه خاصی که می‌خواهید
+        CustomerDataGrid.SetColumns(
+            new DataGridTextColumn { Header = "شناسه", Binding = new Binding("Id"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "نام", Binding = new Binding("Name"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "موبایل", Binding = new Binding("CellPhone"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "تلفن", Binding = new Binding("Phone"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "تاریخ تولد", Binding = new Binding("BirthDate"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "نام فروشگاه", Binding = new Binding("StoreName"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "محدودیت وزن", Binding = new Binding("WeightLimit"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "محدودیت ریال", Binding = new Binding("RiyalLimit"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "کد ملی", Binding = new Binding("IdCode"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "معرف", Binding = new Binding("Moaref"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "ایمیل", Binding = new Binding("Email"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "آدرس", Binding = new Binding("Address"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
+            new DataGridTextColumn { Header = "توضیحات", Binding = new Binding("Description"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) }
+        );
     }
 }

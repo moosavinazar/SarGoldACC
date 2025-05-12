@@ -20,14 +20,20 @@ public class CounterpartyService : ICounterpartyService
 
     public async Task<CounterpartyDto> GetByIdAsync(long id)
     {
-        var city = await _counterpartyRepository.GetByIdAsync(id);
-        return _mapper.Map<CounterpartyDto>(city);
+        var counterparty = await _counterpartyRepository.GetByIdAsync(id);
+        return _mapper.Map<CounterpartyDto>(counterparty);
+    }
+
+    public async Task<CounterpartyDto> GetByIdAndBranchIdAsync(long id, long branchId)
+    {
+        var counterparty = await _counterpartyRepository.GetByIdAndBranchIdAsync(id, branchId);
+        return _mapper.Map<CounterpartyDto>(counterparty);
     }
 
     public async Task<List<CounterpartyDto>> GetAllAsync()
     {
-        var cities = await _counterpartyRepository.GetAllAsync();
-        return _mapper.Map<List<CounterpartyDto>>(cities);
+        var counterparties = await _counterpartyRepository.GetAllAsync();
+        return _mapper.Map<List<CounterpartyDto>>(counterparties);
     }
 
     public async Task<ResultDto> AddAsync(CounterpartyDto counterpartyDto)

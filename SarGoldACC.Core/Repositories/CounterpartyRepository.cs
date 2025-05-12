@@ -19,6 +19,13 @@ public class CounterpartyRepository : ICounterpartyRepository
         return await _context.Counterparties.FindAsync(id);
     }
 
+    public async Task<Counterparty> GetByIdAndBranchIdAsync(long id, long branchId)
+    {
+        return await _context.Counterparties
+            .FirstOrDefaultAsync(c => c.Id == id && c.BranchId == branchId);
+    }
+
+
     public async Task<List<Counterparty>> GetAllAsync()
     {
         return await _context.Counterparties.ToListAsync();

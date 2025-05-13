@@ -163,6 +163,23 @@ public partial class Customer : Window
     private async void ClickSaveCustomer(object sender, RoutedEventArgs e)
     {
         await _viewModel.SaveCustomer();
+        NameBox.Text = "";
+        CellPhone.Text = "";
+        _viewModel.CityId = 0;
+        Phone.Text = "";
+        WeightBed.Text = "";
+        WeightBes.Text = "";
+        RiyalBed.Text = "";
+        RiyalBes.Text = "";
+        BirthDate.Text = "";
+        StoreName.Text = "";
+        WeightLimit.Text = "";
+        RiyalLimit.Text = "";
+        IdCode.Text = "";
+        Moaref.Text = "";
+        Email.Text = "";
+        Address.Text = "";
+        Description.Text = "";
     }
 
     private void CustomerDataGrid_Loaded(object sender, RoutedEventArgs e)

@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Globalization;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.DTOs.Customer;
@@ -22,7 +23,7 @@ public class CustomerViewModel : ViewModelBase
     private string _address;
     private string _photo;
     private string _moaref;
-    private DateTime _birthDate;
+    private DateTime? _birthDate;
     private string _email;
     private string _storeName;
     private double _weightLimit;
@@ -105,10 +106,63 @@ public class CustomerViewModel : ViewModelBase
         set => SetProperty(ref _moaref, value);
     }
     
-    public DateTime BirthDate
+    public DateTime? BirthDate
     {
         get => _birthDate;
-        set => SetProperty(ref _birthDate, value);
+        set
+        {
+            _birthDate = value;
+            OnPropertyChanged(nameof(BirthDate));
+            OnPropertyChanged(nameof(BirthDateShamsi));
+        }
+    }
+    
+    public string? BirthDateShamsi
+    {
+        get
+        {
+            if (_birthDate.HasValue)
+            {
+                var pc = new PersianCalendar();
+                var date = _birthDate.Value;
+                return $"{pc.GetYear(date):0000}/{pc.GetMonth(date):00}/{pc.GetDayOfMonth(date):00}";
+            }
+            return null;
+        }
+        set
+        {
+            if (!string.IsNullOrWhiteSpace(value))
+            {
+                try
+                {
+                    var parts = value.Split('/');
+                    if (parts.Length == 3 &&
+                        int.TryParse(parts[0], out int year) &&
+                        int.TryParse(parts[1], out int month) &&
+                        int.TryParse(parts[2], out int day))
+                    {
+                        var pc = new PersianCalendar();
+                        Console.WriteLine(year);
+                        _birthDate = pc.ToDateTime(year, month, day, 0, 0, 0, 0);
+                    }
+                    else
+                    {
+                        _birthDate = null;
+                    }
+                }
+                catch
+                {
+                    _birthDate = null;
+                }
+            }
+            else
+            {
+                _birthDate = null;
+            }
+
+            OnPropertyChanged(nameof(BirthDateShamsi));
+            OnPropertyChanged(nameof(BirthDate));
+        }
     }
 
     public string Email

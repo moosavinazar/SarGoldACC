@@ -26,6 +26,7 @@ public class CustomerRepository : ICustomerRepository
 
     public async Task<Customer> AddAsync(Customer customer)
     {
+        customer.BirthDate = DateTime.Now;
         _context.Customers.Add(customer);
         await _context.SaveChangesAsync();
         return customer;

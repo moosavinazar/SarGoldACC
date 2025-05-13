@@ -74,6 +74,7 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             
             services.AddScoped<IInvoiceRowRepository, InvoiceRowRepository>();
+            services.AddScoped<IGeneralAccountAmountRepository, GeneralAccountAmountRepository>();
             
             services.AddSingleton<NavigationStore>();
             // services.AddSingleton<MainViewModel>();

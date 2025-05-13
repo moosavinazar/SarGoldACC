@@ -7,4 +7,7 @@ public class InvoiceRow
     public Invoice Invoice { get; set; }
     public string Description { get; set; }
     public string? AdminDescription { get; set; }
+    
+    public GeneralAccountAmount? GeneralAccountAmount { get; set; }
+    public long? GeneralAccountAmountId { get; set; }
 }

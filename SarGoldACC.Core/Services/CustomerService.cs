@@ -70,10 +70,10 @@ public class CustomerService : ICustomerService
             {
                 counterpartyId = counterpartyDto.Id,
                 branchId = counterpartyDto.BranchId,
-                WeightBed = 0,
-                WeightBes = 0,
-                RiyalBed = 0,
-                RiyalBes = 0
+                WeightBed = customerCreate.WeightBed ?? 0,
+                WeightBes = customerCreate.WeightBes ?? 0,
+                RiyalBed = customerCreate.RiyalBed ?? 0,
+                RiyalBes = customerCreate.RiyalBes ?? 0
             };
             await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
             await transaction.CommitAsync();

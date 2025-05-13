@@ -22,6 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<GeneralAccount> GeneralAccounts { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<CustomerBank> CustomerBanks { get; set; }
+    public DbSet<GeneralAccountAmount> GeneralAccountAmounts { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -103,6 +104,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany(c => c.CustomerBanks)
             .HasForeignKey(cb => cb.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<GeneralAccountAmount>()
+            .HasOne(g => g.InvoiceRow)
+            .WithOne(i => i.GeneralAccountAmount)
+            .HasForeignKey<InvoiceRow>(i => i.GeneralAccountAmountId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
         
         // خواندن داده‌ها از فایل‌های CSV
         // Branch

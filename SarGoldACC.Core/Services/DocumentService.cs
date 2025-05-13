@@ -19,6 +19,7 @@ public class DocumentService : IDocumentService
     private readonly IDocumentRepository _documentRepository;
     private readonly IInvoiceRepository _invoiceRepository;
     private readonly IInvoiceRowRepository _invoiceRowRepository;
+    private readonly IGeneralAccountAmountRepository _generalAccountAmountRepository;
     private readonly IMapper _mapper;
 
     public DocumentService(
@@ -27,6 +28,7 @@ public class DocumentService : IDocumentService
         IDocumentRepository documentRepository,
         IInvoiceRepository invoiceRepository,
         IInvoiceRowRepository invoiceRowRepository,
+        IGeneralAccountAmountRepository generalAccountAmountRepository,
         IMapper mapper)
     {
         _dbContext = dbContext;
@@ -34,6 +36,7 @@ public class DocumentService : IDocumentService
         _documentRepository = documentRepository;
         _invoiceRepository = invoiceRepository;
         _invoiceRowRepository = invoiceRowRepository;
+        _generalAccountAmountRepository = generalAccountAmountRepository;
         _mapper = mapper;
     }
 
@@ -72,15 +75,33 @@ public class DocumentService : IDocumentService
                 Number = "2"
             };
             var addedOpeningEntryInvoice = await _invoiceRepository.AddAsync(openingEntryInvoice);
+            var generalAccountAmount = new GeneralAccountAmount
+            {
+                RiyalBed = openingEntry.RiyalBed,
+                RiyalBes = openingEntry.RiyalBes,
+                WeightBed = openingEntry.WeightBed,
+                WeightBes = openingEntry.WeightBes,
+            };
+            var addedGeneralAccountAmount = await _generalAccountAmountRepository.AddAsync(generalAccountAmount);
             var invoiceRow = new InvoiceRow
             {
                 InvoiceId = addedInvoice.Id,
+                GeneralAccountAmountId = addedGeneralAccountAmount.Id,
                 Description = "سند افتتاحیه"
             };
             await _invoiceRowRepository.AddAsync(invoiceRow);
+            var openingEntrygeneralAccountAmount = new GeneralAccountAmount
+            {
+                RiyalBed = openingEntry.RiyalBes,
+                RiyalBes = openingEntry.RiyalBed,
+                WeightBed = openingEntry.WeightBes,
+                WeightBes = openingEntry.WeightBed,
+            };
+            var addedOpeningEntryGeneralAccountAmount = await _generalAccountAmountRepository.AddAsync(openingEntrygeneralAccountAmount);
             var openingEntryInvoiceRow = new InvoiceRow
             {
                 InvoiceId = addedOpeningEntryInvoice.Id,
+                GeneralAccountAmountId = addedOpeningEntryGeneralAccountAmount.Id,
                 Description = "سند افتتاحیه"
             };
             await _invoiceRowRepository.AddAsync(openingEntryInvoiceRow);

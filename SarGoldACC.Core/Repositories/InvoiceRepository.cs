@@ -24,10 +24,11 @@ public class InvoiceRepository : IInvoiceRepository
         return await _context.Invoices.ToListAsync();
     }
 
-    public async Task AddAsync(Invoice invoice)
+    public async Task<Invoice> AddAsync(Invoice invoice)
     {
         _context.Invoices.Add(invoice);
         await _context.SaveChangesAsync();
+        return invoice;
     }
     
     public Invoice AddWithoutSave(Invoice invoice)

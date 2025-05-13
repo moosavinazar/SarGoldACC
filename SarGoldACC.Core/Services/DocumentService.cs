@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Storage;
 using SarGoldACC.Core.Data;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.CounterParty;
@@ -6,6 +7,7 @@ using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.DTOs.Invoice;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Repositories;
+using SarGoldACC.Core.Repositories.Interfaces;
 using SarGoldACC.Core.Services.Interfaces;
 
 namespace SarGoldACC.Core.Services;
@@ -13,64 +15,84 @@ namespace SarGoldACC.Core.Services;
 public class DocumentService : IDocumentService
 {
     private readonly AppDbContext _dbContext;
-    private readonly CounterpartyService _counterpartyService;
-    private readonly CustomerService _customerService;
-    private readonly GeneralAccountService _generalAccountService;
-    
-    private readonly DocumentRepository _documentRepository;
+    private readonly ICounterpartyService _counterpartyService;
+    private readonly IDocumentRepository _documentRepository;
+    private readonly IInvoiceRepository _invoiceRepository;
+    private readonly IInvoiceRowRepository _invoiceRowRepository;
     private readonly IMapper _mapper;
 
     public DocumentService(
         AppDbContext dbContext,
-        CounterpartyService counterpartyService,
-        CustomerService customerService,
-        GeneralAccountService generalAccountService,
-        DocumentRepository documentRepository,
+        ICounterpartyService counterpartyService,
+        IDocumentRepository documentRepository,
+        IInvoiceRepository invoiceRepository,
+        IInvoiceRowRepository invoiceRowRepository,
         IMapper mapper)
     {
         _dbContext = dbContext;
         _counterpartyService = counterpartyService;
-        _customerService = customerService;
-        _generalAccountService = generalAccountService;
         _documentRepository = documentRepository;
+        _invoiceRepository = invoiceRepository;
+        _invoiceRowRepository = invoiceRowRepository;
         _mapper = mapper;
     }
 
     public async Task<ResultDto> AddCounterpartyOpeningEntry(CounterPartyOpeningEntryDto openingEntry)
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        var counterparty = await _counterpartyService.GetByIdAsync(openingEntry.counterpartyId);
-        var generalAccount = await _generalAccountService.GetByIdAsync(1);
-        var openingEntryCounterparty = await _counterpartyService.GetByIdAndBranchIdAsync(generalAccount.Id, counterparty.BranchId);
-        string name = "";
-        if (counterparty.CustomerId != null)
+        // await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        // var counterparty = await _counterpartyService.GetByIdAsync(openingEntry.counterpartyId);
+        Console.WriteLine(openingEntry.branchId);
+        var openingEntryCounterparty = await _counterpartyService.GetByIdAndBranchIdAsync(1, openingEntry.branchId);
+        try
         {
-            var customer = await _customerService.GetByIdAsync((long)counterparty.CustomerId);
-            name = customer.Name;
+            /*if (counterparty.CustomerId != null)
+            {
+                var customer = await _customerService.GetByIdAsync((long)counterparty.CustomerId);
+                name = customer.Name;
+            }*/
+
+            var documentCreate = new DocumentCreateDto
+            {
+                Date = DateTime.Now,
+                Description = "سند افتتاحیه"
+            };
+            Document document = _mapper.Map<Document>(documentCreate);
+            var addedDocument = await _documentRepository.AddAsync(document);
+            var invoice = new Invoice
+            {
+                DocumentId = addedDocument.Id,
+                CounterpartyId = openingEntry.counterpartyId,
+                Number = "1"
+            };
+            var addedInvoice = await _invoiceRepository.AddAsync(invoice);
+            var openingEntryInvoice = new Invoice
+            {
+                DocumentId = addedDocument.Id,
+                CounterpartyId = openingEntryCounterparty.Id,
+                Number = "2"
+            };
+            var addedOpeningEntryInvoice = await _invoiceRepository.AddAsync(openingEntryInvoice);
+            var invoiceRow = new InvoiceRow
+            {
+                InvoiceId = addedInvoice.Id,
+                Description = "سند افتتاحیه"
+            };
+            await _invoiceRowRepository.AddAsync(invoiceRow);
+            var openingEntryInvoiceRow = new InvoiceRow
+            {
+                InvoiceId = addedOpeningEntryInvoice.Id,
+                Description = "سند افتتاحیه"
+            };
+            await _invoiceRowRepository.AddAsync(openingEntryInvoiceRow);
+            return new ResultDto
+            {
+                Success = true,
+                Message = "Document added."
+            };
         }
-        var documentCreate = new DocumentCreateDto
+        catch (Exception ex)
         {
-            Date = DateTime.Now,
-            Description = "سند افتتاحیه برای " + name
-        };
-        Document document = _mapper.Map<Document>(documentCreate);
-        var addedDocument = _documentRepository.AddWithoutSave(document);
-        await _dbContext.SaveChangesAsync();
-        var invoiceCreate = new InvoiceCreateDto
-        {
-            DocumentId = addedDocument.Id,
-            CounterpartyId = counterparty.Id,
-            Number = "1"
-        };
-        var openingEntryInvoiceCreate = new InvoiceCreateDto
-        {
-            DocumentId = addedDocument.Id,
-            CounterpartyId = openingEntryCounterparty.Id,
-            Number = "2"
-        };
-        var addedInvoiceCreate = .AddWithoutSave(document);
-        await _dbContext.SaveChangesAsync();
-        var addedOpeningEntryInvoiceCreate = _documentRepository.AddWithoutSave(document);
-        await _dbContext.SaveChangesAsync();
+            throw new Exception("خطا در ثبت سند افتتاحیه: " + ex.Message, ex);
+        }
     }
 }

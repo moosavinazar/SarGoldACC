@@ -1,4 +1,5 @@
-﻿using SarGoldACC.Core.DTOs;
+﻿using Microsoft.EntityFrameworkCore.Storage;
+using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Document;
 
 namespace SarGoldACC.Core.Services.Interfaces;

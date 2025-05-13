@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
+using Microsoft.EntityFrameworkCore.Storage;
 using SarGoldACC.Core.Data;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.CounterParty;
 using SarGoldACC.Core.DTOs.Customer;
+using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Repositories.Interfaces;
 using SarGoldACC.Core.Services.Interfaces;
@@ -16,19 +18,22 @@ public class CustomerService : ICustomerService
     private readonly AppDbContext _dbContext;
     private readonly IAuthorizationService _authorizationService;
     private readonly ICounterpartyService _counterpartyService;
+    private readonly IDocumentService _documentService;
 
     public CustomerService(
         ICustomerRepository customerRepository, 
         IMapper mapper, 
         AppDbContext appDbContext,
         IAuthorizationService authorizationService,
-        ICounterpartyService counterpartyService)
+        ICounterpartyService counterpartyService,
+        IDocumentService documentService)
     {
         _customerRepository = customerRepository;
         _mapper = mapper;
         _dbContext = appDbContext;
         _authorizationService = authorizationService;
         _counterpartyService = counterpartyService;
+        _documentService = documentService;
     }
 
     public async Task<CustomerDto> GetByIdAsync(long id)
@@ -45,7 +50,7 @@ public class CustomerService : ICustomerService
 
     public async Task<ResultDto> AddAsync(CustomerCreateDto customerCreate)
     {
-        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
         if (customerCreate.BranchId == 0)
         {
             customerCreate.BranchId = _authorizationService.GetCurrentUser().BranchId;
@@ -53,15 +58,24 @@ public class CustomerService : ICustomerService
         try
         {
             var customer = _mapper.Map<Customer>(customerCreate);
-            var addedCustomer = _customerRepository.AddWithoutSave(customer);
-            await _dbContext.SaveChangesAsync();
+            var addedCustomer = await _customerRepository.AddAsync(customer);
             var counterparty = new CounterpartyDto
             {
                 CustomerId = addedCustomer.Id,
                 BranchId = customerCreate.BranchId
             };
-            _counterpartyService.AddWithoutSave(counterparty);
-            await _dbContext.SaveChangesAsync();
+            var addedCounterparty = await _counterpartyService.AddAsync(counterparty);
+            CounterpartyDto counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
+            var counterpartyOpeningEntry = new CounterPartyOpeningEntryDto
+            {
+                counterpartyId = counterpartyDto.Id,
+                branchId = counterpartyDto.BranchId,
+                WeightBed = 0,
+                WeightBes = 0,
+                RiyalBed = 0,
+                RiyalBes = 0
+            };
+            await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
             await transaction.CommitAsync();
             return new ResultDto
             {

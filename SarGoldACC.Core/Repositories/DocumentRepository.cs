@@ -25,10 +25,11 @@ public class DocumentRepository : IDocumentRepository
         return await _context.Documents.ToListAsync();
     }
 
-    public async Task AddAsync(Document document)
+    public async Task<Document> AddAsync(Document document)
     {
         _context.Documents.Add(document);
         await _context.SaveChangesAsync();
+        return document;
     }
     
     public Document AddWithoutSave(Document document)

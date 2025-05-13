@@ -7,7 +7,7 @@ public interface IDocumentRepository
 {
     Task<Document> GetByIdAsync(long id);
     Task<List<Document>> GetAllAsync();
-    Task AddAsync(Document document);
+    Task<Document> AddAsync(Document document);
     Document AddWithoutSave(Document document);
     Task UpdateAsync(Document document);
     Task DeleteAsync(Document document);

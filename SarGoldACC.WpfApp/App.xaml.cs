@@ -69,7 +69,7 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<ICustomerService, CustomerService>();
             
             services.AddScoped<IDocumentRepository, DocumentRepository>();
-            services.AddScoped<IDocumentService, IDocumentService>();
+            services.AddScoped<IDocumentService, DocumentService>();
             
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             

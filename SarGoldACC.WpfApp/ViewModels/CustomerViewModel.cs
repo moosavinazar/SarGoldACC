@@ -22,7 +22,7 @@ public class CustomerViewModel : ViewModelBase
     private string _address;
     private string _photo;
     private string _moaref;
-    private DateTime _birthDate;
+    private DateTime? _birthDate = DateTime.Now;
     private string _email;
     private string _storeName;
     private double _weightLimit;
@@ -105,7 +105,7 @@ public class CustomerViewModel : ViewModelBase
         set => SetProperty(ref _moaref, value);
     }
     
-    public DateTime BirthDate
+    public DateTime? BirthDate
     {
         get => _birthDate;
         set => SetProperty(ref _birthDate, value);

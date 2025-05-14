@@ -1,7 +1,9 @@
-﻿using System.IO;
+﻿using System.Globalization;
+using System.IO;
 using Microsoft.Extensions.Configuration;
 using SarGoldACC.Core.Data;
 using System.Windows;
+using System.Windows.Markup;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.Repositories.Interfaces;
@@ -25,6 +27,12 @@ namespace SarGoldACC.WpfApp
         {
             
             base.OnStartup(e);
+            
+            FrameworkElement.LanguageProperty.OverrideMetadata(
+                typeof(FrameworkElement),
+                new FrameworkPropertyMetadata(
+                    XmlLanguage.GetLanguage(CultureInfo.CurrentCulture.IetfLanguageTag)));
+
             
             Configuration = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())

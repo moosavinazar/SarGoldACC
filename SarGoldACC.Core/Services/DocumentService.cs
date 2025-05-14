@@ -44,7 +44,6 @@ public class DocumentService : IDocumentService
     {
         // await using var transaction = await _dbContext.Database.BeginTransactionAsync();
         // var counterparty = await _counterpartyService.GetByIdAsync(openingEntry.counterpartyId);
-        Console.WriteLine(openingEntry.branchId);
         var openingEntryCounterparty = await _counterpartyService.GetByIdAndBranchIdAsync(1, openingEntry.branchId);
         try
         {

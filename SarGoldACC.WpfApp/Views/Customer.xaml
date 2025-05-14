@@ -185,19 +185,12 @@
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="0,5,5,0"/>
-                <!--<TextBox x:Name="BirthDate" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         KeyDown="BirthDateBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding BirthDate}"/>-->
-                <hc:PersianDatePicker
-                    x:Name="BirthDate" 
-                    Text="{Binding BirthDateShamsi, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                    Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Grid.Column="1"
-                    Margin="0 5 0 0"/>
+                <DatePicker x:Name="BirthDate" 
+                            Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Grid.Column="1"
+                            KeyDown="BirthDateBox_KeyDown"
+                            Margin="0 5 0 0"
+                            SelectedDate="{Binding BirthDate, Mode=TwoWay}" />
                 <TextBlock Text="نام فروشگاه"
                            Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                            Grid.Column="2"

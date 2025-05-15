@@ -41,6 +41,8 @@ public class MappingProfile : Profile
         CreateMap<CustomerDto, Customer>();
         CreateMap<Customer, CustomerCreateDto>();
         CreateMap<CustomerCreateDto, Customer>();
+        CreateMap<Customer, CustomerUpdateDto>();
+        CreateMap<CustomerUpdateDto, Customer>();
         CreateMap<Document, DocumentCreateDto>();
         CreateMap<DocumentCreateDto, Document>();
     }

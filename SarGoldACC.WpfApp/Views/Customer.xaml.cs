@@ -184,16 +184,16 @@ public partial class Customer : Window
 
     private void CustomerDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
-        CustomerDataGrid.DeleteActionShow = _viewModel.CanAccessCustomerDelete;
+        // CustomerDataGrid.DeleteActionShow = _viewModel.CanAccessCustomerDelete;
         CustomerDataGrid.EditActionShow = _viewModel.CanAccessCustomerEdit;
         
-        CustomerDataGrid.DeleteAction = async obj =>
+        /*CustomerDataGrid.DeleteAction = async obj =>
         {
             if (obj is CustomerDto customer)
             {
                 await _viewModel.DeleteAsync(customer.Id);
             }
-        };
+        };*/
         
         CustomerDataGrid.EditAction = async obj =>
         {

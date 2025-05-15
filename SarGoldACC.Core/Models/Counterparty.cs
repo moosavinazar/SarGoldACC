@@ -10,4 +10,9 @@ public class Counterparty
     public ICollection<Invoice> Invoices { get; set; }
     public long BranchId { get; set; }
     public Branch Branch { get; set; }
+    
+    // صادر کننده چک
+    public ICollection<Cheque> Drawers { get; set; }
+    // دریافت کننده چک
+    public ICollection<Cheque> Payees { get; set; }
 }

@@ -23,6 +23,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Customer> Customers { get; set; }
     public DbSet<CustomerBank> CustomerBanks { get; set; }
     public DbSet<GeneralAccountAmount> GeneralAccountAmounts { get; set; }
+    public DbSet<Cheque> Cheques { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -107,6 +108,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey<Counterparty>(cp => cp.CustomerId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Cheque>()
+            .HasOne(ch => ch.Drawer)
+            .WithMany(c => c.Drawers)
+            .HasForeignKey(ch => ch.DrawerId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Cheque>()
+            .HasOne(ch => ch.Payee)
+            .WithMany(c => c.Payees)
+            .HasForeignKey(ch => ch.PayeeId)
+            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Customer>()
             .HasOne(c => c.City)

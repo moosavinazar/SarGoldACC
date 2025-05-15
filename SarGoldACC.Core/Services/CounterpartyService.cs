@@ -41,7 +41,7 @@ public class CounterpartyService : ICounterpartyService
         try
         {
             var counterparty = _mapper.Map<Counterparty>(counterpartyDto);
-            await _counterpartyRepository.AddAsync(counterparty);
+            counterparty = await _counterpartyRepository.AddAsync(counterparty);
             return new ResultDto
             {
                 Success = true,
@@ -51,6 +51,7 @@ public class CounterpartyService : ICounterpartyService
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex);
             return new ResultDto
             {
                 Success = false,

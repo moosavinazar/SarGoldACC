@@ -108,10 +108,11 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<City>()
-            .HasOne(c => c.Customer)
-            .WithOne(cu => cu.City)
-            .HasForeignKey<Customer>(cu => cu.CityId);
+        modelBuilder.Entity<Customer>()
+            .HasOne(c => c.City)
+            .WithMany(ci => ci.Customers)
+            .HasForeignKey(c => c.CityId)
+            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<CustomerBank>()
             .HasOne(cb => cb.Customer)

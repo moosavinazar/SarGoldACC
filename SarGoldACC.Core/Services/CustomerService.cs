@@ -70,7 +70,10 @@ public class CustomerService : ICustomerService
             var entry = _dbContext.Entry(customer);
             Console.WriteLine(entry.State); // باید Detached باشد
             var addedCounterparty = await _counterpartyService.AddAsync(counterparty);
-            CounterpartyDto counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
+            Console.WriteLine(addedCounterparty.Success);
+            var counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
+            Console.WriteLine(counterpartyDto);
+            Console.WriteLine(counterpartyDto.Id);
             var counterpartyOpeningEntry = new CounterPartyOpeningEntryDto
             {
                 counterpartyId = counterpartyDto.Id,
@@ -80,7 +83,7 @@ public class CustomerService : ICustomerService
                 RiyalBed = customerCreate.RiyalBed ?? 0,
                 RiyalBes = customerCreate.RiyalBes ?? 0
             };
-            // await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
+            await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
             await transaction.CommitAsync();
             return new ResultDto
             {
@@ -92,6 +95,7 @@ public class CustomerService : ICustomerService
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
+            Console.WriteLine(ex);
             return new ResultDto
             {
                 Success = false,

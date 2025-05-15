@@ -31,10 +31,11 @@ public class CounterpartyRepository : ICounterpartyRepository
         return await _context.Counterparties.ToListAsync();
     }
 
-    public async Task AddAsync(Counterparty counterparty)
+    public async Task<Counterparty> AddAsync(Counterparty counterparty)
     {
         _context.Counterparties.Add(counterparty);
         await _context.SaveChangesAsync();
+        return counterparty;
     }
     
     public Counterparty AddWithoutSave(Counterparty counterparty)

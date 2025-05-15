@@ -171,12 +171,6 @@ public class CustomerViewModel : ViewModelBase
         set => SetProperty(ref _branchId, value);
     }
     
-    public long SelectedCityId
-    {
-        get => _cityId;
-        set => SetProperty(ref _cityId, value);
-    }
-    
     public long CityId
     {
         get => _cityId;
@@ -214,7 +208,7 @@ public class CustomerViewModel : ViewModelBase
                 WeightLimit = WeightLimit,
                 RiyalLimit = RiyalLimit,
                 Description = Description,
-                CityId = SelectedCityId
+                CityId = CityId
             };
             
             result = await _customerService.UpdateAsync(dto);
@@ -249,7 +243,7 @@ public class CustomerViewModel : ViewModelBase
                 WeightBes = WeightBes,
                 RiyalBed = RiyalBed,
                 RiyalBes = RiyalBes,
-                CityId = SelectedCityId
+                CityId = CityId
             };
             result = await _customerService.AddAsync(customerDto);
             if (result.Success)

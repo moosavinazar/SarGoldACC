@@ -8,5 +8,5 @@ public interface ICounterpartyRepository
     Task<Counterparty> GetByIdAndBranchIdAsync(long id, long branchId);
     Task<List<Counterparty>> GetAllAsync();
     Counterparty AddWithoutSave(Counterparty counterparty);
-    Task AddAsync(Counterparty counterparty);
+    Task<Counterparty> AddAsync(Counterparty counterparty);
 }

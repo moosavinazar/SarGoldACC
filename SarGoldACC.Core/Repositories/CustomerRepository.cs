@@ -24,20 +24,6 @@ public class CustomerRepository : ICustomerRepository
         return await _context.Customers.ToListAsync();
     }
 
-    public async Task<Customer> AddAsync(Customer customer)
-    {
-        customer.BirthDate = DateTime.Now;
-        _context.Customers.Add(customer);
-        await _context.SaveChangesAsync();
-        return customer;
-    }
-    
-    public Customer AddWithoutSave(Customer customer)
-    {
-        var result = _context.Customers.Add(customer);
-        return result.Entity;
-    }
-
     public async Task UpdateAsync(Customer customer)
     {
         _context.Customers.Update(customer);

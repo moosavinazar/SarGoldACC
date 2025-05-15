@@ -2,12 +2,14 @@
 using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
+using SarGoldACC.Core.DTOs.Bank;
 using SarGoldACC.Core.DTOs.Branch;
 using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.DTOs.CounterParty;
 using SarGoldACC.Core.DTOs.Customer;
 using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.DTOs.GeneralAccountDto;
+using SarGoldACC.Core.DTOs.Pos;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Models.Auth;
 
@@ -45,5 +47,13 @@ public class MappingProfile : Profile
         CreateMap<CustomerUpdateDto, Customer>();
         CreateMap<Document, DocumentCreateDto>();
         CreateMap<DocumentCreateDto, Document>();
+        CreateMap<Bank, BankDto>();
+        CreateMap<BankDto, Bank>();
+        CreateMap<BankCreateDto, Bank>();
+        CreateMap<Bank, BankCreateDto>();
+        CreateMap<Pos, PosDto>();
+        CreateMap<PosDto, Pos>();
+        CreateMap<PosCreateDto, Pos>();
+        CreateMap<Pos, PosCreateDto>();
     }
 }

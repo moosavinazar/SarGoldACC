@@ -19,3 +19,7 @@
 18,Customer.Create,ایجاد مشتری
 19,Customer.Edit,ویرایش مشتری
 20,Customer.Delete,حذف مشتری
+21,Bank.View,مشاهده بانک ها
+22,Bank.Create,ایجاد بانک
+23,Bank.Edit,ویرایش بانک
+24,Bank.Delete,حذف بانک

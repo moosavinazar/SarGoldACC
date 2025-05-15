@@ -24,6 +24,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<CustomerBank> CustomerBanks { get; set; }
     public DbSet<GeneralAccountAmount> GeneralAccountAmounts { get; set; }
     public DbSet<Cheque> Cheques { get; set; }
+    public DbSet<Bank> Banks { get; set; }
+    public DbSet<Currency> Currencies { get; set; }
+    public DbSet<Pos> Poses { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -109,6 +112,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
         
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.Bank)
+            .WithOne(b => b.Counterparty)
+            .HasForeignKey<Counterparty>(c => c.BankId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.Pos)
+            .WithOne(p => p.Counterparty)
+            .HasForeignKey<Counterparty>(c => c.PosId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         modelBuilder.Entity<Cheque>()
             .HasOne(ch => ch.Drawer)
             .WithMany(c => c.Drawers)
@@ -132,6 +149,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany(c => c.CustomerBanks)
             .HasForeignKey(cb => cb.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Bank>()
+            .HasOne(b => b.Currency)
+            .WithMany(c => c.Banks)
+            .HasForeignKey(b => b.CurrencyId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Pos>()
+            .HasOne(p => p.Bank)
+            .WithMany(b => b.Pos)
+            .HasForeignKey(b => b.BankId)
+            .OnDelete(DeleteBehavior.Restrict);
         
         // خواندن داده‌ها از فایل‌های CSV
         // Branch
@@ -237,6 +266,18 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     Id = c.Id,
                     GeneralAccountId = c.GeneralAccountId,
                     BranchId = c.BranchId
+                }).ToArray()
+        );
+        
+        // Currency
+        var currency = CsvDataReader.ReadCurrency();
+        modelBuilder.Entity<Currency>().HasData(
+            currency.Select(c => 
+                new Currency()
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Label = c.Label
                 }).ToArray()
         );
     }

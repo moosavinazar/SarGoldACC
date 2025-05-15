@@ -7,6 +7,7 @@ using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.DTOs.Branch;
 using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.DTOs.CounterParty;
+using SarGoldACC.Core.DTOs.Currency;
 using SarGoldACC.Core.DTOs.GeneralAccountDto;
 using SarGoldACC.Core.Models;
 
@@ -42,6 +43,9 @@ public class CsvDataReader
     
     public static List<CounterpartySeedDataDto> ReadCounterparty() =>
         ReadCsv<CounterpartySeedDataDto>("Counterparty.csv");
+    
+    public static List<CurrencyDto> ReadCurrency() =>
+        ReadCsv<CurrencyDto>("Currency.csv");
 
     private static List<T> ReadCsv<T>(string fileName)
     {

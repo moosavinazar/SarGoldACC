@@ -7,6 +7,10 @@ public class Counterparty
     public long? GeneralAccountId { get; set; }
     public Customer? Customer { get; set; }
     public long? CustomerId { get; set; }
+    public Bank? Bank { get; set; }
+    public long? BankId { get; set; }
+    public Pos? Pos { get; set; }
+    public long? PosId { get; set; }
     public ICollection<Invoice> Invoices { get; set; }
     public long BranchId { get; set; }
     public Branch Branch { get; set; }

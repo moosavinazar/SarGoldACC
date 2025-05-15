@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using PersianDateControlsPlus.PersianDate;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.DTOs.Customer;
@@ -22,7 +23,10 @@ public class CustomerViewModel : ViewModelBase
     private string _address;
     private string _photo;
     private string _moaref;
-    private DateTime? _birthDate = DateTime.Now;
+    // private DateTime? _birthDate = DateTime.Now;
+    // private PersianDate? _persianBirthDate = new PersianDate(DateTime.Now);
+    private DateTime? _birthDate;
+    private PersianDate? _persianBirthDate;
     private string _email;
     private string _storeName;
     private double _weightLimit;
@@ -108,7 +112,41 @@ public class CustomerViewModel : ViewModelBase
     public DateTime? BirthDate
     {
         get => _birthDate;
-        set => SetProperty(ref _birthDate, value);
+        set
+        {
+            if (SetProperty(ref _birthDate, value))
+            {
+                if (value.HasValue)
+                {
+                    PersianDate = new PersianDate(value.Value);
+                }
+                else
+                {
+                    PersianDate = null;
+                }
+            }
+        }
+    }
+
+
+    public PersianDate? PersianDate
+    {
+        get => _persianBirthDate;
+        set
+        {
+            if (SetProperty(ref _persianBirthDate, value))
+            {
+                // اگر مقدار PersianDate دارد، تبدیل به DateTime کن
+                if (value.HasValue)
+                {
+                    BirthDate = value.Value.ToDateTime();
+                }
+                else
+                {
+                    BirthDate = null;
+                }
+            }
+        }
     }
 
     public string Email

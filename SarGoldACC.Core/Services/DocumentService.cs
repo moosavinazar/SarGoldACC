@@ -42,38 +42,9 @@ public class DocumentService : IDocumentService
 
     public async Task<ResultDto> AddCounterpartyOpeningEntry(CounterPartyOpeningEntryDto openingEntry)
     {
-        // await using var transaction = await _dbContext.Database.BeginTransactionAsync();
-        // var counterparty = await _counterpartyService.GetByIdAsync(openingEntry.counterpartyId);
         var openingEntryCounterparty = await _counterpartyService.GetByIdAndBranchIdAsync(1, openingEntry.branchId);
         try
         {
-            /*if (counterparty.CustomerId != null)
-            {
-                var customer = await _customerService.GetByIdAsync((long)counterparty.CustomerId);
-                name = customer.Name;
-            }*/
-
-            var documentCreate = new DocumentCreateDto
-            {
-                Date = DateTime.Now,
-                Description = "سند افتتاحیه"
-            };
-            Document document = _mapper.Map<Document>(documentCreate);
-            var addedDocument = await _documentRepository.AddAsync(document);
-            var invoice = new Invoice
-            {
-                DocumentId = addedDocument.Id,
-                CounterpartyId = openingEntry.counterpartyId,
-                Number = "1"
-            };
-            var addedInvoice = await _invoiceRepository.AddAsync(invoice);
-            var openingEntryInvoice = new Invoice
-            {
-                DocumentId = addedDocument.Id,
-                CounterpartyId = openingEntryCounterparty.Id,
-                Number = "2"
-            };
-            var addedOpeningEntryInvoice = await _invoiceRepository.AddAsync(openingEntryInvoice);
             var generalAccountAmount = new GeneralAccountAmount
             {
                 RiyalBed = openingEntry.RiyalBed,
@@ -81,29 +52,46 @@ public class DocumentService : IDocumentService
                 WeightBed = openingEntry.WeightBed,
                 WeightBes = openingEntry.WeightBes,
             };
-            var addedGeneralAccountAmount = await _generalAccountAmountRepository.AddAsync(generalAccountAmount);
             var invoiceRow = new InvoiceRow
             {
-                InvoiceId = addedInvoice.Id,
-                GeneralAccountAmountId = addedGeneralAccountAmount.Id,
-                Description = "سند افتتاحیه"
+                Description = "سند افتتاحیه",
+                GeneralAccountAmount = generalAccountAmount
             };
-            await _invoiceRowRepository.AddAsync(invoiceRow);
-            var openingEntrygeneralAccountAmount = new GeneralAccountAmount
+            var openingEntryGeneralAccountAmount = new GeneralAccountAmount
             {
                 RiyalBed = openingEntry.RiyalBes,
                 RiyalBes = openingEntry.RiyalBed,
                 WeightBed = openingEntry.WeightBes,
                 WeightBes = openingEntry.WeightBed,
             };
-            var addedOpeningEntryGeneralAccountAmount = await _generalAccountAmountRepository.AddAsync(openingEntrygeneralAccountAmount);
             var openingEntryInvoiceRow = new InvoiceRow
             {
-                InvoiceId = addedOpeningEntryInvoice.Id,
-                GeneralAccountAmountId = addedOpeningEntryGeneralAccountAmount.Id,
-                Description = "سند افتتاحیه"
+                Description = "سند افتتاحیه",
+                GeneralAccountAmount = openingEntryGeneralAccountAmount
             };
-            await _invoiceRowRepository.AddAsync(openingEntryInvoiceRow);
+            var openingEntryInvoice = new Invoice
+            {
+                CounterpartyId = openingEntryCounterparty.Id,
+                Number = "2",
+                InvoiceRows = new List<InvoiceRow>()
+            };
+            openingEntryInvoice.InvoiceRows.Add(invoiceRow);
+            var invoice = new Invoice
+            {
+                CounterpartyId = openingEntry.counterpartyId,
+                Number = "1",
+                InvoiceRows = new List<InvoiceRow>()
+            };
+            invoice.InvoiceRows.Add(openingEntryInvoiceRow);
+            var document = new Document()
+            {
+                Date = DateTime.Now,
+                Description = "سند افتتاحیه",
+                Invoices = new List<Invoice>()
+            };
+            document.Invoices.Add(invoice);
+            document.Invoices.Add(openingEntryInvoice);
+            await _documentRepository.AddAsync(document);
             return new ResultDto
             {
                 Success = true,
@@ -112,6 +100,7 @@ public class DocumentService : IDocumentService
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex);
             throw new Exception("خطا در ثبت سند افتتاحیه: " + ex.Message, ex);
         }
     }

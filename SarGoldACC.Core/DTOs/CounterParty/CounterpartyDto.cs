@@ -7,5 +7,7 @@ public class CounterpartyDto
     public long Id { get; set; }
     public long BranchId { get; set; }
     public long? GeneralAccountId { get; set; }
+    public GeneralAccount? GeneralAccount { get; set; }
     public long? CustomerId{ get; set; }
+    public Models.Customer? Customer { get; set; }
 }

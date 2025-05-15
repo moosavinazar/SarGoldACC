@@ -57,15 +57,15 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<Invoice>()
-            .HasOne(i => i.Document)
-            .WithMany(d => d.Invoices)
-            .HasForeignKey(i => i.DocumentId)
-            .OnDelete(DeleteBehavior.Cascade);
-        
-        modelBuilder.Entity<Invoice>()
             .HasOne(i => i.Counterparty)
             .WithMany(a => a.Invoices)
             .HasForeignKey(i => i.CounterpartyId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Invoice>()
+            .HasOne(i => i.Document)
+            .WithMany(d => d.Invoices)
+            .HasForeignKey(i => i.DocumentId)
             .OnDelete(DeleteBehavior.Cascade);
 
         modelBuilder.Entity<InvoiceRow>()
@@ -73,6 +73,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany(i => i.InvoiceRows)
             .HasForeignKey(r => r.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<GeneralAccountAmount>()
+            .HasOne(g => g.InvoiceRow)
+            .WithOne(i => i.GeneralAccountAmount)
+            .HasForeignKey<InvoiceRow>(i => i.GeneralAccountAmountId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Counterparty>()
             .HasOne(c => c.GeneralAccount)
@@ -87,12 +94,19 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey(c => c.BranchId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<Customer>()
+        /*modelBuilder.Entity<Customer>()
             .HasOne(c => c.Counterparty)
             .WithOne(cp => cp.Customer)
             .HasForeignKey<Counterparty>(cp => cp.CustomerId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);*/
+        
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.Customer)
+            .WithOne(cp => cp.Counterparty)
+            .HasForeignKey<Counterparty>(cp => cp.CustomerId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<City>()
             .HasOne(c => c.Customer)
@@ -104,13 +118,6 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany(c => c.CustomerBanks)
             .HasForeignKey(cb => cb.CustomerId)
             .OnDelete(DeleteBehavior.Cascade);
-        
-        modelBuilder.Entity<GeneralAccountAmount>()
-            .HasOne(g => g.InvoiceRow)
-            .WithOne(i => i.GeneralAccountAmount)
-            .HasForeignKey<InvoiceRow>(i => i.GeneralAccountAmountId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.Restrict);
         
         // خواندن داده‌ها از فایل‌های CSV
         // Branch

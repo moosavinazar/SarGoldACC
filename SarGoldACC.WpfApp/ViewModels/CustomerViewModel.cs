@@ -13,7 +13,7 @@ public class CustomerViewModel : ViewModelBase
     private readonly IAuthorizationService _authorizationService;
     private readonly ICustomerService _customerService;
     private readonly ICityService _cityService;
-    private long? _editingUserId = null;
+    private long? _editingCustomerId = null;
     
     private string _name;
     private string _idCode;
@@ -195,12 +195,12 @@ public class CustomerViewModel : ViewModelBase
         {
             Success = false
         };
-        if (_editingUserId.HasValue)
+        if (_editingCustomerId.HasValue)
         {
             CustomerUpdateDto dto;
             dto = new CustomerUpdateDto()
             {
-                Id = _editingUserId.Value,
+                Id = _editingCustomerId.Value,
                 Name = Name,
                 IdCode = IdCode,
                 CellPhone = CellPhone,
@@ -218,7 +218,7 @@ public class CustomerViewModel : ViewModelBase
             };
             
             result = await _customerService.UpdateAsync(dto);
-            _editingUserId = null;
+            _editingCustomerId = null;
             if (result.Success)
             {
                 MessageBoxHelper.ShowSuccess("مشتری با موفقیت ویرایش شد.");
@@ -251,7 +251,6 @@ public class CustomerViewModel : ViewModelBase
                 RiyalBes = RiyalBes,
                 CityId = SelectedCityId
             };
-        
             result = await _customerService.AddAsync(customerDto);
             if (result.Success)
             {
@@ -267,7 +266,7 @@ public class CustomerViewModel : ViewModelBase
     
     public async Task EditAsync(long customerId)
     {
-        _editingUserId = customerId;
+        _editingCustomerId = customerId;
         var customerDto = await _customerService.GetByIdAsync(customerId);
         Name = customerDto.Name;
         IdCode = customerDto.IdCode;

@@ -58,12 +58,17 @@ public class CustomerService : ICustomerService
         try
         {
             var customer = _mapper.Map<Customer>(customerCreate);
-            var addedCustomer = await _customerRepository.AddAsync(customer);
+            Console.WriteLine("Adding customer");
+            Console.WriteLine(customer.Id);
             var counterparty = new CounterpartyDto
             {
-                CustomerId = addedCustomer.Id,
+                Customer = customer,
                 BranchId = customerCreate.BranchId
             };
+            Console.WriteLine(counterparty.Customer.Id);
+            Console.WriteLine(counterparty.Id);
+            var entry = _dbContext.Entry(customer);
+            Console.WriteLine(entry.State); // باید Detached باشد
             var addedCounterparty = await _counterpartyService.AddAsync(counterparty);
             CounterpartyDto counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
             var counterpartyOpeningEntry = new CounterPartyOpeningEntryDto
@@ -75,7 +80,7 @@ public class CustomerService : ICustomerService
                 RiyalBed = customerCreate.RiyalBed ?? 0,
                 RiyalBes = customerCreate.RiyalBes ?? 0
             };
-            await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
+            // await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
             await transaction.CommitAsync();
             return new ResultDto
             {

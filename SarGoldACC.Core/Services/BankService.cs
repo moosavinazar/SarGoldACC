@@ -58,22 +58,14 @@ public class BankService : IBankService
         try
         {
             var bank = _mapper.Map<Bank>(bankCreate);
-            Console.WriteLine("Adding bank");
-            Console.WriteLine(bank.Id);
             var counterparty = new CounterpartyDto()
             {
                 Bank = bank,
                 BranchId = bankCreate.BranchId
             };
-            Console.WriteLine(counterparty.Bank.Id);
-            Console.WriteLine(counterparty.Id);
             var entry = _dbContext.Entry(bank);
-            Console.WriteLine(entry.State); // باید Detached باشد
             var addedCounterparty = await _counterpartyService.AddAsync(counterparty);
-            Console.WriteLine(addedCounterparty.Success);
             var counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
-            Console.WriteLine(counterpartyDto);
-            Console.WriteLine(counterpartyDto.Id);
             var counterpartyOpeningEntry = new CounterPartyOpeningEntryDto()
             {
                 counterpartyId = counterpartyDto.Id,
@@ -104,7 +96,7 @@ public class BankService : IBankService
         }
     }
 
-    public async Task<ResultDto> UpdateAsync(BankDto bankUpdate)
+    public async Task<ResultDto> UpdateAsync(BankUpdateDto bankUpdate)
     {
         var bank = await _bankRepository.GetByIdAsync(bankUpdate.Id);
         if (bank == null)

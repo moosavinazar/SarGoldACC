@@ -1,6 +1,8 @@
 ﻿using System.Collections.ObjectModel;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Bank;
+using SarGoldACC.Core.DTOs.Currency;
+using SarGoldACC.Core.Repositories.Interfaces;
 using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.Helpers;
 
@@ -10,6 +12,7 @@ public class BankViewModel : ViewModelBase
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly IBankService _bankService;
+    private readonly ICurrencyService _currencyService;
     private long? _editingBankId = null;
 
     private string _name;
@@ -23,8 +26,9 @@ public class BankViewModel : ViewModelBase
     private long _riyalBed;
     private long _riyalBes;
     private long _branchId;
+    private long _currencyId;
     private ObservableCollection<BankDto> _allBanks = new();
-    
+    public ObservableCollection<CurrencyDto> Currencies { get; }
     public bool CanAccessBankView => _authorizationService.HasPermission("Bank.View");
     public bool CanAccessBankCreate => _authorizationService.HasPermission("Bank.Create");
     public bool CanAccessBankEdit => _authorizationService.HasPermission("Bank.Edit");
@@ -35,14 +39,18 @@ public class BankViewModel : ViewModelBase
     
     public BankViewModel(
         IAuthorizationService authorizationService, 
-        IBankService bankService)
+        IBankService bankService,
+        ICurrencyService currencyService)
     {
         _authorizationService = authorizationService;
         _bankService = bankService;
+        _currencyService = currencyService;
+        Currencies = new ObservableCollection<CurrencyDto>();
         
         Task.Run(async () =>
         {
             await LoadBankAsync();
+            await LoadCurrenciesAsync();
         }).GetAwaiter().GetResult();
     }
     
@@ -112,6 +120,12 @@ public class BankViewModel : ViewModelBase
         set => SetProperty(ref _branchId, value);
     }
     
+    public long CurrencyId
+    {
+        get => _currencyId;
+        set => SetProperty(ref _currencyId, value);
+    }
+    
     public ObservableCollection<BankDto> AllBanks
     {
         get => _allBanks;
@@ -130,6 +144,16 @@ public class BankViewModel : ViewModelBase
         }
     }
     
+    private async Task LoadCurrenciesAsync()
+    {
+        Currencies.Clear();
+        var currencies = await _currencyService.GetAllAsync();
+        foreach (var c in currencies)
+        {
+            Currencies.Add(c);
+        }
+    }
+    
     public async Task SaveBank()
     {
         var result = new ResultDto()
@@ -138,8 +162,8 @@ public class BankViewModel : ViewModelBase
         };
         if (_editingBankId.HasValue)
         {
-            BankDto dto;
-            dto = new BankDto()
+            BankUpdateDto dto;
+            dto = new BankUpdateDto
             {
                 Id = _editingBankId.Value,
                 Name = Name,
@@ -147,14 +171,14 @@ public class BankViewModel : ViewModelBase
                 Iban = Iban,
                 CardNumber = CardNumber,
                 AccountNumber = AccountNumber,
-                Description = Description
+                Description = Description,
             };
             
             result = await _bankService.UpdateAsync(dto);
             _editingBankId = null;
             if (result.Success)
             {
-                MessageBoxHelper.ShowSuccess("مشتری با موفقیت ویرایش شد.");
+                MessageBoxHelper.ShowSuccess("بانک با موفقیت ویرایش شد.");
             }
             else
             {
@@ -175,11 +199,12 @@ public class BankViewModel : ViewModelBase
                 WeightBes = WeightBes,
                 RiyalBed = RiyalBed,
                 RiyalBes = RiyalBes,
+                CurrencyId = CurrencyId
             };
             result = await _bankService.AddAsync(bankDto);
             if (result.Success)
             {
-                MessageBoxHelper.ShowSuccess("کاربر با موفقیت ذخیره شد.");
+                MessageBoxHelper.ShowSuccess("بانک با موفقیت ذخیره شد.");
             }
             else
             {

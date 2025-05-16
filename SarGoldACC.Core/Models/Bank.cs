@@ -8,7 +8,7 @@ public class Bank
     public string Iban { get; set; }
     public string CardNumber { get; set; }
     public string AccountNumber { get; set; }
-    public string Description { get; set; }
+    public string? Description { get; set; }
     public Counterparty Counterparty { get; set; }
     public Currency Currency { get; set; }
     public long CurrencyId { get; set; }

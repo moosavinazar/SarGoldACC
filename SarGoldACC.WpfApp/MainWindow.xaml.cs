@@ -108,6 +108,14 @@ public partial class MainWindow : RibbonWindow
                 MainRibbon.IsMinimized = false;
                 MainRibbon.SelectedTabItem = TabSetting;
                 break;
+            case Key.D7:
+            case Key.NumPad7:
+                if (MainRibbon.SelectedTabItem == TabBaseInfo && City.Visibility == Visibility.Visible)
+                {
+                    OpenBankWindow();
+                    break;
+                }
+                break;
             case Key.Escape:
                 MainRibbon.SelectedTabItem = null;
                 MainRibbon.IsMinimized = true;
@@ -187,6 +195,30 @@ public partial class MainWindow : RibbonWindow
         var customerWindow = _serviceProvider.GetRequiredService<Customer>();
         customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
         customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
+    private void OpenBankWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenBankWindow();
+    }
+    
+    private void OpenBankWindow()
+    {
+        var bankWindow = _serviceProvider.GetRequiredService<Bank>();
+        bankWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        bankWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
+    private void OpenPosWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenPosWindow();
+    }
+    
+    private void OpenPosWindow()
+    {
+        var bankWindow = _serviceProvider.GetRequiredService<Pos>();
+        bankWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        bankWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
 }

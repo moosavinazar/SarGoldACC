@@ -77,6 +77,14 @@
       <Resource Include="Resources\Icons\Customer.png" />
       <None Remove="Resources\Icons\CustomerLarge.png" />
       <Resource Include="Resources\Icons\CustomerLarge.png" />
+      <None Remove="Resources\Icons\Pos.png" />
+      <Resource Include="Resources\Icons\Pos.png" />
+      <None Remove="Resources\Icons\PosLarge.png" />
+      <Resource Include="Resources\Icons\PosLarge.png" />
+      <None Remove="Resources\Icons\BankLarge.png" />
+      <Resource Include="Resources\Icons\BankLarge.png" />
+      <None Remove="Resources\Icons\Bank.png" />
+      <Resource Include="Resources\Icons\Bank.png" />
     </ItemGroup>
 
 </Project>

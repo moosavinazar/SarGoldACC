@@ -21,7 +21,7 @@ public class BankRepository : IBankRepository
 
     public async Task<List<Bank>> GetAllAsync()
     {
-        return await _context.Banks.ToListAsync();
+        return await _context.Banks.Include(b => b.Counterparty).ToListAsync();
     }
 
     public async Task UpdateAsync(Bank bank)

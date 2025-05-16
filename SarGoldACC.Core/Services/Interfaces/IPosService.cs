@@ -8,6 +8,6 @@ public interface IPosService
     Task<PosDto> GetByIdAsync(long id);
     Task<List<PosDto>> GetAllAsync();
     Task<ResultDto> AddAsync(PosCreateDto posCreate);
-    Task<ResultDto> UpdateAsync(PosDto pos);
+    Task<ResultDto> UpdateAsync(PosUpdateDto pos);
     Task DeleteAsync(long id);
 }

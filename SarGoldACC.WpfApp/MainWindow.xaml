@@ -84,6 +84,18 @@
                                    LargeIcon="pack://application:,,,/Resources/Icons/CustomerLarge.png"
                                    Click="OpenCustomerWindowButton_Click"
                                    Visibility="{Binding CanAccessCustomerButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    
+                    <Fluent:Button x:Name="Bank" Header="بانک"
+                                   ToolTip="کلید میانبر (7)"
+                                   Icon="pack://application:,,,/Resources/Icons/Bank.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/BankLarge.png"
+                                   Click="OpenBankWindowButton_Click"
+                                   Visibility="{Binding CanAccessBankButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Fluent:Button x:Name="Pos" Header="پوز بانک"
+                                   Icon="pack://application:,,,/Resources/Icons/Pos.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/PosLarge.png"
+                                   Click="OpenPosWindowButton_Click"
+                                   Visibility="{Binding CanAccessPosButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabReport" ToolTip="کلید میانبر (4)" Header="گزارشات" Style="{StaticResource CustomTabStyle}">

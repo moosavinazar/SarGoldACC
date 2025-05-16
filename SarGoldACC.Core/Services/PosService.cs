@@ -54,12 +54,14 @@ public class PosService : IPosService
     public async Task<ResultDto> AddAsync(PosCreateDto posCreate)
     {
         await using IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
+        Console.WriteLine(posCreate.BankId);
         var bankDto = await _bankService.GetByIdAsync(posCreate.BankId);
         try
         {
             var pos = _mapper.Map<Pos>(posCreate);
             Console.WriteLine("Adding pos");
-            Console.WriteLine(pos.Id);
+            Console.WriteLine(pos.Name);
+            Console.WriteLine(bankDto.Counterparty.BranchId);
             var counterparty = new CounterpartyDto()
             {
                 Pos = pos,
@@ -104,7 +106,7 @@ public class PosService : IPosService
         }
     }
 
-    public async Task<ResultDto> UpdateAsync(PosDto posUpdate)
+    public async Task<ResultDto> UpdateAsync(PosUpdateDto posUpdate)
     {
         var pos = await _posRepository.GetByIdAsync(posUpdate.Id);
         if (pos == null)

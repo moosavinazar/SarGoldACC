@@ -23,3 +23,7 @@
 22,Bank.Create,ایجاد بانک
 23,Bank.Edit,ویرایش بانک
 24,Bank.Delete,حذف بانک
+25,Pos.View,مشاهده پوز بانک ها
+26,Pos.Create,ایجاد پوز بانک
+27,Pos.Edit,ویرایش پوز بانک
+28,Pos.Delete,حذف پوز بانک

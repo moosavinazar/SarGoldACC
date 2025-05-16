@@ -334,7 +334,7 @@
                     Click="ClickSaveCustomer"
                     Padding="10,5"/>
         </StackPanel>
-        <controls:CustomizableDataGrid Grid.Row="3" x:Name="CustomerDataGrid"
+        <controls:CustomizableDataGrid Grid.Row="2" x:Name="CustomerDataGrid"
                                        ItemsSource="{Binding AllCustomers}"
                                        Loaded="CustomerDataGrid_Loaded"
                                        Visibility="{Binding CanAccessCustomerView, Converter={StaticResource BoolToVisibilityConverter}}"/>

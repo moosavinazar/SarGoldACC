@@ -116,8 +116,8 @@ public partial class MainWindow : RibbonWindow
                     break;
                 }
                 break;
-            case Key.D7:
-            case Key.NumPad7:
+            case Key.D8:
+            case Key.NumPad8:
                 if (MainRibbon.SelectedTabItem == TabBaseInfo && City.Visibility == Visibility.Visible)
                 {
                     OpenBankWindow();
@@ -251,6 +251,18 @@ public partial class MainWindow : RibbonWindow
         var cashWindow = _serviceProvider.GetRequiredService<Cash>();
         cashWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
         cashWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
+    private void OpenLaboratoryWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenLaboratoryWindow();
+    }
+    
+    private void OpenLaboratoryWindow()
+    {
+        var laboratoryWindow = _serviceProvider.GetRequiredService<Laboratory>();
+        laboratoryWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        laboratoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
 }

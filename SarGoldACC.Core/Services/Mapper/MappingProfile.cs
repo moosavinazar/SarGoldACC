@@ -11,6 +11,7 @@ using SarGoldACC.Core.DTOs.Currency;
 using SarGoldACC.Core.DTOs.Customer;
 using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.DTOs.GeneralAccountDto;
+using SarGoldACC.Core.DTOs.Laboratory;
 using SarGoldACC.Core.DTOs.Pos;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Models.Auth;
@@ -71,5 +72,11 @@ public class MappingProfile : Profile
         CreateMap<Cash, CashCreateDto>();
         CreateMap<CashUpdateDto, Cash>();
         CreateMap<Cash, CashUpdateDto>();
+        CreateMap<Laboratory, LaboratoryDto>();
+        CreateMap<LaboratoryDto, Laboratory>();
+        CreateMap<Laboratory, LaboratoryCreateDto>();
+        CreateMap<LaboratoryCreateDto, Laboratory>();
+        CreateMap<Laboratory, LaboratoryUpdateDto>();
+        CreateMap<LaboratoryUpdateDto, Laboratory>();
     }
 }

@@ -95,9 +95,14 @@
                                    LargeIcon="pack://application:,,,/Resources/Icons/CustomerLarge.png"
                                    Click="OpenCustomerWindowButton_Click"
                                    Visibility="{Binding CanAccessCustomerButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    
-                    <Fluent:Button x:Name="Bank" Header="بانک"
+                    <Fluent:Button x:Name="Laboratory" Header="ری گیری"
                                    ToolTip="کلید میانبر (7)"
+                                   Icon="pack://application:,,,/Resources/Icons/Laboratory.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/LaboratoryLarge.png"
+                                   Click="OpenLaboratoryWindowButton_Click"
+                                   Visibility="{Binding CanAccessLaboratoryButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Fluent:Button x:Name="Bank" Header="بانک"
+                                   ToolTip="کلید میانبر (8)"
                                    Icon="pack://application:,,,/Resources/Icons/Bank.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/BankLarge.png"
                                    Click="OpenBankWindowButton_Click"

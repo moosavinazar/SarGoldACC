@@ -93,6 +93,10 @@
       <Resource Include="Resources\Icons\Cash.png" />
       <None Remove="Resources\Icons\CashLarge.png" />
       <Resource Include="Resources\Icons\CashLarge.png" />
+      <None Remove="Resources\Icons\LaboratoryLarge.png" />
+      <Resource Include="Resources\Icons\LaboratoryLarge.png" />
+      <None Remove="Resources\Icons\Laboratory.png" />
+      <Resource Include="Resources\Icons\Laboratory.png" />
     </ItemGroup>
 
 </Project>

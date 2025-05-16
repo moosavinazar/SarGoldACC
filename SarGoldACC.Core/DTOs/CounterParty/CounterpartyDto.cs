@@ -17,4 +17,6 @@ public class CounterpartyDto
     
     public long? CashId{ get; set; }
     public Models.Cash? Cash { get; set; }
+    public long? LaboratoryId{ get; set; }
+    public Models.Laboratory? Laboratory { get; set; }
 }

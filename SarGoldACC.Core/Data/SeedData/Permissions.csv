@@ -35,3 +35,7 @@
 34,Cash.Create,ایجاد صندوق
 35,Cash.Edit,ویرایش صندوق
 36,Cash.Delete,حذف صندوق
+37,Laboratory.View,مشاهده ری گیری ها
+38,Laboratory.Create,ایجاد ری گیری
+39,Laboratory.Edit,ویرایش ری گیری
+40,Laboratory.Delete,حذف ری گیری

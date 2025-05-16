@@ -85,6 +85,9 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<ICashRepository, CashRepository>();
             services.AddScoped<ICashService, CashService>();
             
+            services.AddScoped<ILaboratoryRepository, LaboratoryRepository>();
+            services.AddScoped<ILaboratoryService, LaboratoryService>();
+            
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             
             services.AddScoped<IInvoiceRowRepository, InvoiceRowRepository>();
@@ -119,6 +122,8 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<Currency>();
             services.AddTransient<CashViewModel>();
             services.AddTransient<Cash>();
+            services.AddTransient<LaboratoryViewModel>();
+            services.AddTransient<Laboratory>();
 
             ServiceProvider = services.BuildServiceProvider();
             

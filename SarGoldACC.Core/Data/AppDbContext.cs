@@ -28,6 +28,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<Pos> Poses { get; set; }
     public DbSet<Cash> Cash { get; set; }
+    public DbSet<Laboratory> Laboratories { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -134,6 +135,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
         
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.Laboratory)
+            .WithOne(l => l.Counterparty)
+            .HasForeignKey<Counterparty>(c => c.LaboratoryId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         modelBuilder.Entity<Cheque>()
             .HasOne(ch => ch.Drawer)
             .WithMany(c => c.Drawers)
@@ -150,6 +158,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasOne(c => c.City)
             .WithMany(ci => ci.Customers)
             .HasForeignKey(c => c.CityId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Laboratory>()
+            .HasOne(l => l.City)
+            .WithMany(c => c.Laboratories)
+            .HasForeignKey(l => l.CityId)
             .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<CustomerBank>()

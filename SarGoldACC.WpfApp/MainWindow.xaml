@@ -76,6 +76,11 @@
                                    LargeIcon="pack://application:,,,/Resources/Icons/CityLarge.png"
                                    Click="OpenCityWindowButton_Click"
                                    Visibility="{Binding CanAccessCityButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Fluent:Button x:Name="Currency" Header="واحد پولی"
+                                   Icon="pack://application:,,,/Resources/Icons/Currency.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/CurrencyLarge.png"
+                                   Click="OpenCurrencyWindowButton_Click"
+                                   Visibility="{Binding CanAccessCurrencyButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="طرف حساب">
                     <Fluent:Button x:Name="Customer" Header="مشتری"

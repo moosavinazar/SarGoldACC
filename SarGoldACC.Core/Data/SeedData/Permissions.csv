@@ -27,3 +27,7 @@
 26,Pos.Create,ایجاد پوز بانک
 27,Pos.Edit,ویرایش پوز بانک
 28,Pos.Delete,حذف پوز بانک
+29,Currency.View,مشاهده واحدهای پولی
+30,Currency.Create,ایجاد واحد پولی
+31,Currency.Edit,ویرایش واحد پولی
+32,Currency.Delete,حذف واحد پولی

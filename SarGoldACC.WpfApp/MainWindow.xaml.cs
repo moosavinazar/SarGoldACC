@@ -221,4 +221,16 @@ public partial class MainWindow : RibbonWindow
         bankWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
+    private void OpenCurrencyWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenCurrencyWindow();
+    }
+    
+    private void OpenCurrencyWindow()
+    {
+        var currencyWindow = _serviceProvider.GetRequiredService<Currency>();
+        currencyWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        currencyWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
 }

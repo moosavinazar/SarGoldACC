@@ -23,7 +23,7 @@ public partial class City : Window
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        
+        Keyboard.Focus(this);
     }
 
     private void CityWindow_KeyDown(object sender, KeyEventArgs e)
@@ -73,7 +73,7 @@ public partial class City : Window
         CityDataGrid.ColumnConfigKey = $"CityGrid_{_authorizationService.GetCurrentUserIdAsString()}"; // یا هر شناسه خاصی که می‌خواهید
         CityDataGrid.SetColumns(
             new DataGridTextColumn { Header = "شناسه", Binding = new Binding("Id"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
-            new DataGridTextColumn { Header = "شعبه", Binding = new Binding("Name"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
+            new DataGridTextColumn { Header = "شهر", Binding = new Binding("Name"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
     }
 }

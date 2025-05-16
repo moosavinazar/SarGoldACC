@@ -48,6 +48,11 @@ public class MainViewModel : ViewModelBase
                                        _authorizationService.HasPermission("Pos.Create") ||
                                        _authorizationService.HasPermission("Pos.Edit") ||
                                        _authorizationService.HasPermission("Pos.Delete");
+    
+    public bool CanAccessCurrencyButton => _authorizationService.HasPermission("Currency.View") ||
+                                           _authorizationService.HasPermission("Currency.Create") ||
+                                           _authorizationService.HasPermission("Currency.Edit") ||
+                                           _authorizationService.HasPermission("Currency.Delete");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 
@@ -77,6 +82,7 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanAccessCustomerButton));
             OnPropertyChanged(nameof(CanAccessBankButton));
             OnPropertyChanged(nameof(CanAccessPosButton));
+            OnPropertyChanged(nameof(CanAccessCurrencyButton));
         }
     }
 }

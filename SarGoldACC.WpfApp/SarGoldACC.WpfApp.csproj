@@ -85,6 +85,10 @@
       <Resource Include="Resources\Icons\BankLarge.png" />
       <None Remove="Resources\Icons\Bank.png" />
       <Resource Include="Resources\Icons\Bank.png" />
+      <None Remove="Resources\Icons\Currency.png" />
+      <Resource Include="Resources\Icons\Currency.png" />
+      <None Remove="Resources\Icons\CurrencyLarge.png" />
+      <Resource Include="Resources\Icons\CurrencyLarge.png" />
     </ItemGroup>
 
 </Project>

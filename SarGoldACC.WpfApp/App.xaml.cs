@@ -112,6 +112,8 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<Bank>();
             services.AddTransient<PosViewModel>();
             services.AddTransient<Pos>();
+            services.AddTransient<CurrencyViewModel>();
+            services.AddTransient<Currency>();
 
             ServiceProvider = services.BuildServiceProvider();
             

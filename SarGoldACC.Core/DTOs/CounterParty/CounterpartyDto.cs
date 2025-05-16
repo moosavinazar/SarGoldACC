@@ -14,4 +14,7 @@ public class CounterpartyDto
     public Models.Bank? Bank { get; set; }
     public long? PosId{ get; set; }
     public Models.Pos? Pos { get; set; }
+    
+    public long? CashId{ get; set; }
+    public Models.Cash? Cash { get; set; }
 }

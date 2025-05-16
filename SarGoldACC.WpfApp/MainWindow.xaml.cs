@@ -102,11 +102,19 @@ public partial class MainWindow : RibbonWindow
             case Key.NumPad5:
                 if (MainRibbon.SelectedTabItem == TabBaseInfo && City.Visibility == Visibility.Visible)
                 {
-                    OpenCustomerWindow();
+                    OpenCashWindow();
                     break;
                 }
                 MainRibbon.IsMinimized = false;
                 MainRibbon.SelectedTabItem = TabSetting;
+                break;
+            case Key.D6:
+            case Key.NumPad6:
+                if (MainRibbon.SelectedTabItem == TabBaseInfo && City.Visibility == Visibility.Visible)
+                {
+                    OpenCustomerWindow();
+                    break;
+                }
                 break;
             case Key.D7:
             case Key.NumPad7:
@@ -231,6 +239,18 @@ public partial class MainWindow : RibbonWindow
         var currencyWindow = _serviceProvider.GetRequiredService<Currency>();
         currencyWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
         currencyWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
+    private void OpenCashWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenCashWindow();
+    }
+    
+    private void OpenCashWindow()
+    {
+        var cashWindow = _serviceProvider.GetRequiredService<Cash>();
+        cashWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        cashWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
 }

@@ -4,6 +4,7 @@ using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.DTOs.Bank;
 using SarGoldACC.Core.DTOs.Branch;
+using SarGoldACC.Core.DTOs.Cash;
 using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.DTOs.CounterParty;
 using SarGoldACC.Core.DTOs.Currency;
@@ -64,5 +65,11 @@ public class MappingProfile : Profile
         CreateMap<CurrencyDto, Currency>();
         CreateMap<CurrencyCreateDto, Currency>();
         CreateMap<Currency, CurrencyCreateDto>();
+        CreateMap<Cash, CashDto>();
+        CreateMap<CashDto, Cash>();
+        CreateMap<CashCreateDto, Cash>();
+        CreateMap<Cash, CashCreateDto>();
+        CreateMap<CashUpdateDto, Cash>();
+        CreateMap<Cash, CashUpdateDto>();
     }
 }

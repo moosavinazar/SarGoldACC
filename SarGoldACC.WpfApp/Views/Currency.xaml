@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         mc:Ignorable="d"
-        Title="گروه" 
+        Title="واحد پولی" 
         Height="600" 
         Width="800"
         KeyDown="CurrencyWindow_KeyDown"

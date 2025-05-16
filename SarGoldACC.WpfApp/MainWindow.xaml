@@ -83,8 +83,14 @@
                                    Visibility="{Binding CanAccessCurrencyButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                 </Fluent:RibbonGroupBox>
                 <Fluent:RibbonGroupBox Header="طرف حساب">
-                    <Fluent:Button x:Name="Customer" Header="مشتری"
+                    <Fluent:Button x:Name="Cash" Header="صندوق"
                                    ToolTip="کلید میانبر (5)"
+                                   Icon="pack://application:,,,/Resources/Icons/Cash.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/CashLarge.png"
+                                   Click="OpenCashWindowButton_Click"
+                                   Visibility="{Binding CanAccessCashButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Fluent:Button x:Name="Customer" Header="مشتری"
+                                   ToolTip="کلید میانبر (6)"
                                    Icon="pack://application:,,,/Resources/Icons/Customer.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/CustomerLarge.png"
                                    Click="OpenCustomerWindowButton_Click"

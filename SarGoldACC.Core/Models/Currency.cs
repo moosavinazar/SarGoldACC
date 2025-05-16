@@ -6,4 +6,5 @@ public class Currency
     public string Name { get; set; }
     public string Label { get; set; }
     public ICollection<Bank> Banks { get; set; }
+    public ICollection<Cash> Cash { get; set; }
 }

@@ -52,9 +52,9 @@ public partial class Bank : Window
         
         BankDataGrid.EditAction = async obj =>
         {
-            if (obj is BankDto customer)
+            if (obj is BankDto bank)
             {
-                await _viewModel.EditAsync(customer.Id);
+                await _viewModel.EditAsync(bank.Id);
             }
         };
         

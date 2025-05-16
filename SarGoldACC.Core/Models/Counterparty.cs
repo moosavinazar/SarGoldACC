@@ -7,6 +7,8 @@ public class Counterparty
     public long? GeneralAccountId { get; set; }
     public Customer? Customer { get; set; }
     public long? CustomerId { get; set; }
+    public Cash? Cash { get; set; }
+    public long? CashId { get; set; }
     public Bank? Bank { get; set; }
     public long? BankId { get; set; }
     public Pos? Pos { get; set; }
@@ -14,7 +16,6 @@ public class Counterparty
     public ICollection<Invoice> Invoices { get; set; }
     public long BranchId { get; set; }
     public Branch Branch { get; set; }
-    
     // صادر کننده چک
     public ICollection<Cheque> Drawers { get; set; }
     // دریافت کننده چک

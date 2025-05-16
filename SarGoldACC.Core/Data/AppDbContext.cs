@@ -27,6 +27,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Bank> Banks { get; set; }
     public DbSet<Currency> Currencies { get; set; }
     public DbSet<Pos> Poses { get; set; }
+    public DbSet<Cash> Cash { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -126,6 +127,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
         
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.Cash)
+            .WithOne(ca => ca.Counterparty)
+            .HasForeignKey<Counterparty>(c => c.CashId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         modelBuilder.Entity<Cheque>()
             .HasOne(ch => ch.Drawer)
             .WithMany(c => c.Drawers)
@@ -154,6 +162,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasOne(b => b.Currency)
             .WithMany(c => c.Banks)
             .HasForeignKey(b => b.CurrencyId)
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<Cash>()
+            .HasOne(c => c.Currency)
+            .WithMany(cu => cu.Cash)
+            .HasForeignKey(c => c.CurrencyId)
             .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Pos>()
@@ -265,6 +279,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                 {
                     Id = c.Id,
                     GeneralAccountId = c.GeneralAccountId,
+                    CustomerId = c.CustomerId,
+                    CashId = c.CashId,
                     BranchId = c.BranchId
                 }).ToArray()
         );
@@ -273,11 +289,25 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         var currency = CsvDataReader.ReadCurrency();
         modelBuilder.Entity<Currency>().HasData(
             currency.Select(c => 
-                new Currency()
+                new Currency
                 {
                     Id = c.Id,
                     Name = c.Name,
                     Label = c.Label
+                }).ToArray()
+        );
+        
+        // Cash
+        var cash = CsvDataReader.ReadCash();
+        modelBuilder.Entity<Cash>().HasData(
+            cash.Select(c => 
+                new Cash
+                {
+                    Id = c.Id,
+                    Name = c.Name,
+                    Label = c.Label,
+                    CurrencyId = c.CurrencyId,
+                    Description = c.Description
                 }).ToArray()
         );
     }

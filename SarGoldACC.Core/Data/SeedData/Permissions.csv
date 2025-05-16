@@ -31,3 +31,7 @@
 30,Currency.Create,ایجاد واحد پولی
 31,Currency.Edit,ویرایش واحد پولی
 32,Currency.Delete,حذف واحد پولی
+33,Cash.View,مشاهده صندوق ها
+34,Cash.Create,ایجاد صندوق
+35,Cash.Edit,ویرایش صندوق
+36,Cash.Delete,حذف صندوق

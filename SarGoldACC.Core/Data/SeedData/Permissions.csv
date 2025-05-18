@@ -39,3 +39,11 @@
 38,Laboratory.Create,ایجاد ری گیری
 39,Laboratory.Edit,ویرایش ری گیری
 40,Laboratory.Delete,حذف ری گیری
+41,Income.View,مشاهده درآمد ها
+42,Income.Create,ایجاد درآمد
+43,Income.Edit,ویرایش درآمد
+44,Income.Delete,حذف درآمد
+45,Cost.View,مشاهده هزینه ها
+46,Cost.Create,ایجاد هزینه
+47,Cost.Edit,ویرایش هزینه
+48,Cost.Delete,حذف هزینه

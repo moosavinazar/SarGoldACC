@@ -63,6 +63,16 @@ public class MainViewModel : ViewModelBase
                                        _authorizationService.HasPermission("Laboratory.Create") ||
                                        _authorizationService.HasPermission("Laboratory.Edit") ||
                                        _authorizationService.HasPermission("Laboratory.Delete");
+    
+    public bool CanAccessIncomeButton => _authorizationService.HasPermission("Income.View") ||
+                                             _authorizationService.HasPermission("Income.Create") ||
+                                             _authorizationService.HasPermission("Income.Edit") ||
+                                             _authorizationService.HasPermission("Income.Delete");
+    
+    public bool CanAccessCostButton => _authorizationService.HasPermission("Cost.View") ||
+                                         _authorizationService.HasPermission("Cost.Create") ||
+                                         _authorizationService.HasPermission("Cost.Edit") ||
+                                         _authorizationService.HasPermission("Cost.Delete");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 
@@ -95,6 +105,8 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanAccessCurrencyButton));
             OnPropertyChanged(nameof(CanAccessCashButton));
             OnPropertyChanged(nameof(CanAccessLaboratoryButton));
+            OnPropertyChanged(nameof(CanAccessIncomeButton));
+            OnPropertyChanged(nameof(CanAccessCostButton));
         }
     }
 }

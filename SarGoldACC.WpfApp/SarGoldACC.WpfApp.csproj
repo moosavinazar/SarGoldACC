@@ -107,6 +107,14 @@
       <Resource Include="Resources\Icons\LaboratoryLarge.png" />
       <None Remove="Resources\Icons\Laboratory.png" />
       <Resource Include="Resources\Icons\Laboratory.png" />
+      <None Remove="Resources\Icons\Cost.png" />
+      <Resource Include="Resources\Icons\Cost.png" />
+      <None Remove="Resources\Icons\CostLarge.png" />
+      <Resource Include="Resources\Icons\CostLarge.png" />
+      <None Remove="Resources\Icons\Income.png" />
+      <Resource Include="Resources\Icons\Income.png" />
+      <None Remove="Resources\Icons\IncomeLarge.png" />
+      <Resource Include="Resources\Icons\IncomeLarge.png" />
     </ItemGroup>
 
 </Project>

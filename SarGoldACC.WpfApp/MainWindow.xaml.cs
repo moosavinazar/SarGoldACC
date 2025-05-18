@@ -265,4 +265,28 @@ public partial class MainWindow : RibbonWindow
         laboratoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
+    private void OpenIncomeWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenIncomeWindow();
+    }
+    
+    private void OpenIncomeWindow()
+    {
+        var incomeWindow = _serviceProvider.GetRequiredService<Income>();
+        incomeWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        incomeWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
+    private void OpenCostWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenCostWindow();
+    }
+    
+    private void OpenCostWindow()
+    {
+        var costWindow = _serviceProvider.GetRequiredService<Cost>();
+        costWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        costWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
 }

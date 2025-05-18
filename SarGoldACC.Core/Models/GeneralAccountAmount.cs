@@ -3,6 +3,7 @@
 public class GeneralAccountAmount
 {
     public long Id { get; set; }
+    public string Description {get; set;}
     public double WeightBed { get; set; }
     public double WeightBes { get; set; }
     public long RiyalBed { get; set; }

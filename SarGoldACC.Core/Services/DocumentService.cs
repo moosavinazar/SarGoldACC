@@ -5,6 +5,7 @@ using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.CounterParty;
 using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.DTOs.Invoice;
+using SarGoldACC.Core.Enums;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Repositories;
 using SarGoldACC.Core.Repositories.Interfaces;
@@ -40,13 +41,14 @@ public class DocumentService : IDocumentService
         _mapper = mapper;
     }
 
-    public async Task<ResultDto> AddCounterpartyOpeningEntry(CounterPartyOpeningEntryDto openingEntry)
+    public async Task<ResultDto> AddCounterpartyOpeningEntry(OrderDto openingEntry)
     {
         var openingEntryCounterparty = await _counterpartyService.GetByIdAndBranchIdAsync(1, openingEntry.branchId);
         try
         {
             var generalAccountAmount = new GeneralAccountAmount
             {
+                Description = "سند افتتاحیه",
                 RiyalBed = openingEntry.RiyalBed,
                 RiyalBes = openingEntry.RiyalBes,
                 WeightBed = openingEntry.WeightBed,
@@ -59,6 +61,7 @@ public class DocumentService : IDocumentService
             };
             var openingEntryGeneralAccountAmount = new GeneralAccountAmount
             {
+                Description = "سند افتتاحیه",
                 RiyalBed = openingEntry.RiyalBes,
                 RiyalBes = openingEntry.RiyalBed,
                 WeightBed = openingEntry.WeightBes,
@@ -102,6 +105,40 @@ public class DocumentService : IDocumentService
         {
             Console.WriteLine(ex);
             throw new Exception("خطا در ثبت سند افتتاحیه: " + ex.Message, ex);
+        }
+    }
+    
+    public async Task<ResultDto> AddOrderEntry(DocumentItemListDto documentItemList)
+    {
+        var groupedLists = documentItemList.DocumentItems
+            .GroupBy(item => item.CounterpartySideTwoId);
+        var document = new Document();
+        foreach (var group in groupedLists)
+        {
+            var invoice = new Invoice();
+            foreach (var item in group)
+            {
+                switch (item.Type)
+                {
+                    case DocumentItemType.ORDER:
+                        var generalAccountAmount = new GeneralAccountAmount
+                        {
+                            Description = item.Description,
+                            RiyalBed = item.RiyalBed,
+                            RiyalBes = item.RiyalBes,
+                            WeightBed = item.WeightBed,
+                            WeightBes = item.WeightBes,
+                        };
+                        var invoiceRow = new InvoiceRow
+                        {
+                            Description = item.Description,
+                            GeneralAccountAmount = generalAccountAmount
+                        };
+                        invoice.InvoiceRows.Add(invoiceRow);
+                        break;
+                }
+            }
+            document.Invoices.Add(invoice);
         }
     }
 }

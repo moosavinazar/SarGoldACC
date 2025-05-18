@@ -66,7 +66,7 @@ public class IncomeService : IIncomeService
             var entry = _dbContext.Entry(income);
             var addedCounterparty = await _counterpartyService.AddAsync(counterparty);
             var counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
-            var counterpartyOpeningEntry = new CounterPartyOpeningEntryDto()
+            var counterpartyOpeningEntry = new OrderDto()
             {
                 counterpartyId = counterpartyDto.Id,
                 branchId = counterpartyDto.BranchId,

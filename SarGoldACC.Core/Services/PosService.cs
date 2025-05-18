@@ -76,7 +76,7 @@ public class PosService : IPosService
             var counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
             Console.WriteLine(counterpartyDto);
             Console.WriteLine(counterpartyDto.Id);
-            var counterpartyOpeningEntry = new CounterPartyOpeningEntryDto()
+            var counterpartyOpeningEntry = new OrderDto()
             {
                 counterpartyId = counterpartyDto.Id,
                 branchId = counterpartyDto.BranchId,

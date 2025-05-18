@@ -6,5 +6,5 @@ namespace SarGoldACC.Core.Services.Interfaces;
 
 public interface IDocumentService
 {
-    Task<ResultDto> AddCounterpartyOpeningEntry(CounterPartyOpeningEntryDto openingEntry);
+    Task<ResultDto> AddCounterpartyOpeningEntry(OrderDto openingEntry);
 }

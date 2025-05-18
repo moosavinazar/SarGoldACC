@@ -65,7 +65,7 @@ public class LaboratoryService : ILaboratoryService
             };
             var addedCounterparty = await _counterpartyService.AddAsync(counterparty);
             var counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
-            var counterpartyOpeningEntry = new CounterPartyOpeningEntryDto()
+            var counterpartyOpeningEntry = new OrderDto()
             {
                 counterpartyId = counterpartyDto.Id,
                 branchId = counterpartyDto.BranchId,

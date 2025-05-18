@@ -29,6 +29,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Pos> Poses { get; set; }
     public DbSet<Cash> Cash { get; set; }
     public DbSet<Laboratory> Laboratories { get; set; }
+    public DbSet<Income> Incomes { get; set; }
+    public DbSet<Cost> Costs { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -132,6 +134,20 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasOne(c => c.Cash)
             .WithOne(ca => ca.Counterparty)
             .HasForeignKey<Counterparty>(c => c.CashId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.Income)
+            .WithOne(i => i.Counterparty)
+            .HasForeignKey<Counterparty>(c => c.IncomeId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Counterparty>()
+            .HasOne(c => c.Cost)
+            .WithOne(co => co.Counterparty)
+            .HasForeignKey<Counterparty>(c => c.CostId)
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Cascade);
         

@@ -6,11 +6,13 @@ using SarGoldACC.Core.DTOs.Bank;
 using SarGoldACC.Core.DTOs.Branch;
 using SarGoldACC.Core.DTOs.Cash;
 using SarGoldACC.Core.DTOs.City;
+using SarGoldACC.Core.DTOs.Cost;
 using SarGoldACC.Core.DTOs.CounterParty;
 using SarGoldACC.Core.DTOs.Currency;
 using SarGoldACC.Core.DTOs.Customer;
 using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.DTOs.GeneralAccountDto;
+using SarGoldACC.Core.DTOs.Income;
 using SarGoldACC.Core.DTOs.Laboratory;
 using SarGoldACC.Core.DTOs.Pos;
 using SarGoldACC.Core.Models;
@@ -78,5 +80,17 @@ public class MappingProfile : Profile
         CreateMap<LaboratoryCreateDto, Laboratory>();
         CreateMap<Laboratory, LaboratoryUpdateDto>();
         CreateMap<LaboratoryUpdateDto, Laboratory>();
+        CreateMap<Income, IncomeDto>();
+        CreateMap<IncomeDto, Income>();
+        CreateMap<IncomeCreateDto, Income>();
+        CreateMap<Income, IncomeCreateDto>();
+        CreateMap<IncomeUpdateDto, Income>();
+        CreateMap<Income, IncomeUpdateDto>();
+        CreateMap<Cost, CostDto>();
+        CreateMap<CostDto, Cost>();
+        CreateMap<CostCreateDto, Cost>();
+        CreateMap<Cost, CostCreateDto>();
+        CreateMap<CostUpdateDto, Cost>();
+        CreateMap<Cost, CostUpdateDto>();
     }
 }

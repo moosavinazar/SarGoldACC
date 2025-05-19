@@ -22,7 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<GeneralAccount> GeneralAccounts { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<CustomerBank> CustomerBanks { get; set; }
-    public DbSet<GeneralAccountAmount> GeneralAccountAmounts { get; set; }
+    public DbSet<OrderAmount> GeneralAccountAmounts { get; set; }
     public DbSet<Cheque> Cheques { get; set; }
     public DbSet<Bank> Banks { get; set; }
     public DbSet<Currency> Currencies { get; set; }
@@ -82,7 +82,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey(r => r.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<GeneralAccountAmount>()
+        modelBuilder.Entity<OrderAmount>()
             .HasOne(g => g.InvoiceRow)
             .WithOne(i => i.GeneralAccountAmount)
             .HasForeignKey<InvoiceRow>(i => i.GeneralAccountAmountId)

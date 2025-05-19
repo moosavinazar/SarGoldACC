@@ -8,6 +8,6 @@ public class InvoiceRow
     public string Description { get; set; }
     public string? AdminDescription { get; set; }
     
-    public GeneralAccountAmount? GeneralAccountAmount { get; set; }
+    public OrderAmount? GeneralAccountAmount { get; set; }
     public long? GeneralAccountAmountId { get; set; }
 }

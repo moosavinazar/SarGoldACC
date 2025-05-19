@@ -20,7 +20,7 @@ public class DocumentService : IDocumentService
     private readonly IDocumentRepository _documentRepository;
     private readonly IInvoiceRepository _invoiceRepository;
     private readonly IInvoiceRowRepository _invoiceRowRepository;
-    private readonly IGeneralAccountAmountRepository _generalAccountAmountRepository;
+    private readonly IGeneralAccountAmountRepository _orderAmountRepository;
     private readonly IMapper _mapper;
 
     public DocumentService(
@@ -29,7 +29,7 @@ public class DocumentService : IDocumentService
         IDocumentRepository documentRepository,
         IInvoiceRepository invoiceRepository,
         IInvoiceRowRepository invoiceRowRepository,
-        IGeneralAccountAmountRepository generalAccountAmountRepository,
+        IGeneralAccountAmountRepository orderAmountRepository,
         IMapper mapper)
     {
         _dbContext = dbContext;
@@ -37,7 +37,7 @@ public class DocumentService : IDocumentService
         _documentRepository = documentRepository;
         _invoiceRepository = invoiceRepository;
         _invoiceRowRepository = invoiceRowRepository;
-        _generalAccountAmountRepository = generalAccountAmountRepository;
+        _orderAmountRepository = orderAmountRepository;
         _mapper = mapper;
     }
 
@@ -46,7 +46,7 @@ public class DocumentService : IDocumentService
         var openingEntryCounterparty = await _counterpartyService.GetByIdAndBranchIdAsync(1, openingEntry.branchId);
         try
         {
-            var generalAccountAmount = new GeneralAccountAmount
+            var orderAmount = new OrderAmount
             {
                 Description = "سند افتتاحیه",
                 RiyalBed = openingEntry.RiyalBed,
@@ -57,9 +57,9 @@ public class DocumentService : IDocumentService
             var invoiceRow = new InvoiceRow
             {
                 Description = "سند افتتاحیه",
-                GeneralAccountAmount = generalAccountAmount
+                GeneralAccountAmount = orderAmount
             };
-            var openingEntryGeneralAccountAmount = new GeneralAccountAmount
+            var openingEntryGeneralAccountAmount = new OrderAmount
             {
                 Description = "سند افتتاحیه",
                 RiyalBed = openingEntry.RiyalBes,
@@ -89,6 +89,7 @@ public class DocumentService : IDocumentService
             var document = new Document()
             {
                 Date = DateTime.Now,
+                Type = DocumentType.FINAL,
                 Description = "سند افتتاحیه",
                 Invoices = new List<Invoice>()
             };
@@ -108,37 +109,91 @@ public class DocumentService : IDocumentService
         }
     }
     
-    public async Task<ResultDto> AddOrderEntry(DocumentItemListDto documentItemList)
+    public async Task<ResultDto> AddOrderEntry(DocumentItemListDto documentItemList, DocumentType type)
     {
-        var groupedLists = documentItemList.DocumentItems
-            .GroupBy(item => item.CounterpartySideTwoId);
-        var document = new Document();
-        foreach (var group in groupedLists)
+        try
         {
-            var invoice = new Invoice();
-            foreach (var item in group)
+            var document = new Document()
             {
-                switch (item.Type)
+                Date = DateTime.Now,
+                Type = type,
+                Description = documentItemList.Description,
+                Invoices = new List<Invoice>()
+            };
+            var invoiceSideOne = new Invoice
+            {
+                CounterpartyId = documentItemList.CounterpartySideOneId,
+                Number = "1",
+                InvoiceRows = new List<InvoiceRow>()
+            };
+            foreach (var documentItem in documentItemList.DocumentItems)
+            {
+                switch (documentItem.Type)
                 {
                     case DocumentItemType.ORDER:
-                        var generalAccountAmount = new GeneralAccountAmount
+                        var orderAmount = new OrderAmount
                         {
-                            Description = item.Description,
-                            RiyalBed = item.RiyalBed,
-                            RiyalBes = item.RiyalBes,
-                            WeightBed = item.WeightBed,
-                            WeightBes = item.WeightBes,
+                            Description = documentItem.Description,
+                            RiyalBed = documentItem.RiyalBed,
+                            RiyalBes = documentItem.RiyalBes,
+                            WeightBed = documentItem.WeightBed,
+                            WeightBes = documentItem.WeightBes,
                         };
                         var invoiceRow = new InvoiceRow
                         {
-                            Description = item.Description,
-                            GeneralAccountAmount = generalAccountAmount
+                            Description = documentItem.Description,
+                            GeneralAccountAmount = orderAmount
                         };
-                        invoice.InvoiceRows.Add(invoiceRow);
+                        invoiceSideOne.InvoiceRows.Add(invoiceRow);
                         break;
                 }
             }
-            document.Invoices.Add(invoice);
+            document.Invoices.Add(invoiceSideOne);
+            
+            var groupedLists = documentItemList.DocumentItems
+                .GroupBy(item => item.CounterpartySideTwoId);
+            foreach (var group in groupedLists)
+            {
+                var invoice = new Invoice
+                {
+                    CounterpartyId = group.Key,
+                    Number = "2",
+                    InvoiceRows = new List<InvoiceRow>()
+                };
+                foreach (var item in group)
+                {
+                    switch (item.Type)
+                    {
+                        case DocumentItemType.ORDER:
+                            var orderAmount = new OrderAmount
+                            {
+                                Description = item.Description,
+                                RiyalBed = item.RiyalBes,
+                                RiyalBes = item.RiyalBed,
+                                WeightBed = item.WeightBes,
+                                WeightBes = item.WeightBed,
+                            };
+                            var invoiceRow = new InvoiceRow
+                            {
+                                Description = item.Description,
+                                GeneralAccountAmount = orderAmount
+                            }; 
+                            invoice.InvoiceRows.Add(invoiceRow);
+                            break;
+                    }
+                }
+                document.Invoices.Add(invoice);
+            }
+            await _documentRepository.AddAsync(document);
+            return new ResultDto
+            {
+                Success = true,
+                Message = "Document added."
+            };
+        } 
+        catch (Exception ex)
+        {
+            throw new Exception("خطا در ثبت سند: " + ex.Message, ex);
         }
     }
 }

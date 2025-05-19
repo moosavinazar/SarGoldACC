@@ -1,6 +1,6 @@
 ﻿namespace SarGoldACC.Core.Models;
 
-public class GeneralAccountAmount
+public class OrderAmount
 {
     public long Id { get; set; }
     public string Description {get; set;}

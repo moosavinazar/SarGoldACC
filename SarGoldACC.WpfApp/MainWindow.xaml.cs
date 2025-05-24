@@ -289,4 +289,16 @@ public partial class MainWindow : RibbonWindow
         costWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
+    private void OpenDocumentWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenDocumentWindow();
+    }
+
+    private void OpenDocumentWindow()
+    {
+        var documentWindow = _serviceProvider.GetRequiredService<Document>();
+        documentWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        documentWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
 }

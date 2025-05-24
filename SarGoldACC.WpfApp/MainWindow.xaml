@@ -39,7 +39,8 @@
                 <Fluent:RibbonGroupBox Header="عملیات" >
                     <Fluent:Button Header="صدور سند"
                                    Icon="pack://application:,,,/Resources/Icons/NewDocument.png"
-                                   LargeIcon="pack://application:,,,/Resources/Icons/NewDocumentLarge.png" />
+                                   LargeIcon="pack://application:,,,/Resources/Icons/NewDocumentLarge.png"
+                                   Click="OpenDocumentWindowButton_Click"/>
                     <Fluent:Button Header="شرطی به قطعی"
                                    Icon="pack://application:,,,/Resources/Icons/ConditionalCertainty.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/ConditionalCertaintyLarge.png" />

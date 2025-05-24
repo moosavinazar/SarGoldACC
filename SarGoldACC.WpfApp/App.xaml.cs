@@ -134,6 +134,10 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<Income>();
             services.AddTransient<CostViewModel>();
             services.AddTransient<Cost>();
+            services.AddTransient<DocumentViewModel>();
+            services.AddTransient<Document>();
+            services.AddTransient<PayOrderViewModel>();
+            services.AddTransient<PayOrder>();
 
             ServiceProvider = services.BuildServiceProvider();
             

@@ -1,0 +1,252 @@
+﻿<Window x:Class="SarGoldACC.WpfApp.Views.Document"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
+        xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        xmlns:PersianDateControlsPlus="clr-namespace:PersianDateControlsPlus;assembly=PersianDateControlsPlus"
+        mc:Ignorable="d"
+        Title="سند" 
+        Height="768" 
+        Width="1024"
+        KeyDown="DocumentWindow_KeyDown"
+        Focusable="True"
+        Loaded="Window_Loaded"
+        FlowDirection="RightToLeft"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen">
+    
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Ellipse Width="60" Height="60" Stroke="#000000" StrokeThickness="2" />
+                <Ellipse Width="60" Height="60">
+                    <Ellipse.Fill>
+                        <ImageBrush ImageSource="pack://application:,,,/Resources/Icons/UserLarge.png" />
+                    </Ellipse.Fill>
+                </Ellipse>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="مشتری"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <ComboBox x:Name="BankComboBox" Grid.Column="1"
+                              Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                              ItemsSource="{Binding Customers}"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="Id"
+                              SelectedValue="{Binding CustomerId, Mode=TwoWay}"
+                              Margin="0,0,0,0"/>
+                    <Button Grid.Column="2" x:Name="AddCustomerButton"
+                            Content="+"
+                            Style="{StaticResource SuccessBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickAddCustomer"
+                            Padding="10,5"/>
+                    <TextBlock Text="اعتبار"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="3"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="0"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="4"
+                               FontWeight="Regular"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="تاریخ"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="5"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <PersianDateControlsPlus:PersianDatePicker x:Name="BirthDate" 
+                                                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                               Grid.Column="6"
+                                                               Margin="0 5 0 0"
+                                                               SelectedDate="{Binding PersianDate, Mode=TwoWay}" />
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="2*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="تاریخ آخرین معامله"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="0"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="1"
+                               FontWeight="Regular"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="تعداد سند"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="0"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="3"
+                               FontWeight="Regular"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="ریسک ریالی"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="4"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="0"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="5"
+                               FontWeight="Regular"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="ریسک طلا"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="6"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="0"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="7"
+                               FontWeight="Regular"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="ریسک"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="8"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                    <TextBlock Text="0"
+                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="9"
+                               FontWeight="Regular"
+                               VerticalAlignment="Center"
+                               Margin="5,10,5,0"/>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" 
+                            Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button x:Name="TenDeal"
+                            Content="ده معامله آخر"
+                            Style="{StaticResource PrimaryBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickTenDeal"
+                            Padding="10,5"/>
+                </StackPanel>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" 
+                            Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button x:Name="ReportButton"
+                            Content="گزارشات"
+                            Style="{StaticResource PrimaryBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickReport"
+                            Padding="10,5"/>
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Button Grid.Row="0" x:Name="RcvOredrButton"
+                        Content="دریافت حواله"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickRcvOrder"
+                        Visibility="Visible"
+                        Padding="10,5"/>
+                <Button Grid.Row="0" x:Name="PayOredrButton"
+                        Content="پرداخت حواله"
+                        Style="{StaticResource DangerBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickPayOrder"
+                        Visibility="Hidden"
+                        Padding="10,5"/>
+            </Grid>
+            <Grid Grid.Column="1" Margin="10,0,0,0">
+                <DataGrid ItemsSource="{Binding DocumentItems}"
+                          AutoGenerateColumns="False"
+                          HeadersVisibility="Column"
+                          CanUserAddRows="False"
+                          CanUserDeleteRows="False"
+                          IsReadOnly="True"
+                          SelectionMode="Single"
+                          Margin="0,10,0,0">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="شناسه طرف حساب" Binding="{Binding CounterpartySideTwoId}" Width="100" />
+                        <DataGridTextColumn Header="نوع" Binding="{Binding Type}" Width="80" />
+                        <DataGridTextColumn Header="شرح" Binding="{Binding Description}" Width="*" />
+                        <DataGridTextColumn Header="وزن بدهکار" Binding="{Binding WeightBed}" Width="100" />
+                        <DataGridTextColumn Header="وزن بستانکار" Binding="{Binding WeightBes}" Width="100" />
+                        <DataGridTextColumn Header="ریال بدهکار" Binding="{Binding RiyalBed}" Width="130" />
+                        <DataGridTextColumn Header="ریال بستانکار" Binding="{Binding RiyalBes}" Width="130" />
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
+        </Grid>
+        
+    </Grid>
+</Window>

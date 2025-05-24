@@ -46,31 +46,47 @@ public class DocumentService : IDocumentService
         var openingEntryCounterparty = await _counterpartyService.GetByIdAndBranchIdAsync(1, openingEntry.branchId);
         try
         {
-            var orderAmount = new OrderAmount
+            InvoiceRowAccType typeRiyal;
+            InvoiceRowAccType typeWeight;
+            if (openingEntry.RiyalBed > 0)
+            {
+                typeRiyal = InvoiceRowAccType.BED;
+            }
+            else
+            {
+                typeRiyal = InvoiceRowAccType.BES;
+            }
+            if (openingEntry.WeightBed > 0)
+            {
+                typeWeight = InvoiceRowAccType.BED;
+            }
+            else
+            {
+                typeWeight = InvoiceRowAccType.BES;
+            }
+            var orderAmountRiyal = new OrderAmount
             {
                 Description = "سند افتتاحیه",
-                RiyalBed = openingEntry.RiyalBed,
-                RiyalBes = openingEntry.RiyalBes,
-                WeightBed = openingEntry.WeightBed,
-                WeightBes = openingEntry.WeightBes,
+                Riyal = openingEntry.RiyalBed > 0 ? openingEntry.RiyalBed : openingEntry.RiyalBes,
+                InvoiceRows = new List<InvoiceRow>()
             };
-            var invoiceRow = new InvoiceRow
+            var orderAmountWeight = new OrderAmount
             {
                 Description = "سند افتتاحیه",
-                GeneralAccountAmount = orderAmount
+                Weight = openingEntry.WeightBed > 0 ? openingEntry.WeightBed : openingEntry.WeightBes,
+                InvoiceRows = new List<InvoiceRow>()
             };
-            var openingEntryGeneralAccountAmount = new OrderAmount
+            var invoiceRowRiyal = new InvoiceRow
             {
+                AccType = typeRiyal,
                 Description = "سند افتتاحیه",
-                RiyalBed = openingEntry.RiyalBes,
-                RiyalBes = openingEntry.RiyalBed,
-                WeightBed = openingEntry.WeightBes,
-                WeightBes = openingEntry.WeightBed,
+                OrderAmount = orderAmountRiyal,
             };
-            var openingEntryInvoiceRow = new InvoiceRow
+            var invoiceRowWeight = new InvoiceRow
             {
+                AccType = typeWeight,
                 Description = "سند افتتاحیه",
-                GeneralAccountAmount = openingEntryGeneralAccountAmount
+                OrderAmount = orderAmountWeight
             };
             var openingEntryInvoice = new Invoice
             {
@@ -78,14 +94,30 @@ public class DocumentService : IDocumentService
                 Number = "2",
                 InvoiceRows = new List<InvoiceRow>()
             };
-            openingEntryInvoice.InvoiceRows.Add(invoiceRow);
+            openingEntryInvoice.InvoiceRows.Add(invoiceRowRiyal);
+            openingEntryInvoice.InvoiceRows.Add(invoiceRowWeight);
+            
+            var openingEntryInvoiceRowRiyal = new InvoiceRow
+            {
+                AccType = typeRiyal == InvoiceRowAccType.BED ? InvoiceRowAccType.BES : InvoiceRowAccType.BED,
+                Description = "سند افتتاحیه",
+                OrderAmount = orderAmountRiyal,
+            };
+            var openingEntryInvoiceRowWeight = new InvoiceRow
+            {
+                AccType = typeWeight == InvoiceRowAccType.BED ? InvoiceRowAccType.BES : InvoiceRowAccType.BED,
+                Description = "سند افتتاحیه",
+                OrderAmount = orderAmountWeight
+            };
             var invoice = new Invoice
             {
                 CounterpartyId = openingEntry.counterpartyId,
                 Number = "1",
                 InvoiceRows = new List<InvoiceRow>()
             };
-            invoice.InvoiceRows.Add(openingEntryInvoiceRow);
+            invoice.InvoiceRows.Add(openingEntryInvoiceRowRiyal);
+            invoice.InvoiceRows.Add(openingEntryInvoiceRowWeight);
+            
             var document = new Document()
             {
                 Date = DateTime.Now,
@@ -126,29 +158,6 @@ public class DocumentService : IDocumentService
                 Number = "1",
                 InvoiceRows = new List<InvoiceRow>()
             };
-            foreach (var documentItem in documentItemList.DocumentItems)
-            {
-                switch (documentItem.Type)
-                {
-                    case DocumentItemType.ORDER:
-                        var orderAmount = new OrderAmount
-                        {
-                            Description = documentItem.Description,
-                            RiyalBed = documentItem.RiyalBed,
-                            RiyalBes = documentItem.RiyalBes,
-                            WeightBed = documentItem.WeightBed,
-                            WeightBes = documentItem.WeightBes,
-                        };
-                        var invoiceRow = new InvoiceRow
-                        {
-                            Description = documentItem.Description,
-                            GeneralAccountAmount = orderAmount
-                        };
-                        invoiceSideOne.InvoiceRows.Add(invoiceRow);
-                        break;
-                }
-            }
-            document.Invoices.Add(invoiceSideOne);
             
             var groupedLists = documentItemList.DocumentItems
                 .GroupBy(item => item.CounterpartySideTwoId);
@@ -165,24 +174,76 @@ public class DocumentService : IDocumentService
                     switch (item.Type)
                     {
                         case DocumentItemType.ORDER:
-                            var orderAmount = new OrderAmount
+                            
+                            if (item.RiyalBed > 0 || item.WeightBed > 0)
                             {
-                                Description = item.Description,
-                                RiyalBed = item.RiyalBes,
-                                RiyalBes = item.RiyalBed,
-                                WeightBed = item.WeightBes,
-                                WeightBes = item.WeightBed,
-                            };
-                            var invoiceRow = new InvoiceRow
+                                InvoiceRowAccType typeRiyal;
+                                if (item.RiyalBed > 0)
+                                {
+                                    typeRiyal = InvoiceRowAccType.BED;
+                                }
+                                else
+                                {
+                                    typeRiyal = InvoiceRowAccType.BES;
+                                }
+                                var orderAmountRiyal = new OrderAmount
+                                {
+                                    Description = item.Description,
+                                    Riyal = item.RiyalBed > 0 ? item.RiyalBed : item.RiyalBes,
+                                    InvoiceRows = new List<InvoiceRow>()
+                                };
+                                var invoiceRowRiyalSideOne = new InvoiceRow
+                                {
+                                    AccType = typeRiyal,
+                                    Description = item.Description,
+                                    OrderAmount = orderAmountRiyal,
+                                };
+                                var invoiceRowRiyal = new InvoiceRow
+                                {
+                                    AccType = typeRiyal == InvoiceRowAccType.BED ? InvoiceRowAccType.BES : InvoiceRowAccType.BED,
+                                    Description = item.Description,
+                                    OrderAmount = orderAmountRiyal,
+                                };
+                                invoice.InvoiceRows.Add(invoiceRowRiyal);
+                                invoiceSideOne.InvoiceRows.Add(invoiceRowRiyalSideOne);
+                            }
+                            if (item.WeightBed > 0 || item.WeightBes > 0)
                             {
-                                Description = item.Description,
-                                GeneralAccountAmount = orderAmount
-                            }; 
-                            invoice.InvoiceRows.Add(invoiceRow);
+                                InvoiceRowAccType typeWeight;
+                                if (item.WeightBed > 0)
+                                {
+                                    typeWeight = InvoiceRowAccType.BED;
+                                }
+                                else
+                                {
+                                    typeWeight = InvoiceRowAccType.BES;
+                                }
+                                var orderAmountWeight = new OrderAmount
+                                {
+                                    Description = item.Description,
+                                    Weight = item.WeightBed > 0 ? item.WeightBed : item.WeightBes,
+                                    InvoiceRows = new List<InvoiceRow>()
+                                };
+                                var invoiceRowWeightSideOne = new InvoiceRow
+                                {
+                                    AccType = typeWeight == InvoiceRowAccType.BED ? InvoiceRowAccType.BES : InvoiceRowAccType.BED,
+                                    Description = item.Description,
+                                    OrderAmount = orderAmountWeight,
+                                };
+                                var invoiceRowWeight = new InvoiceRow
+                                {
+                                    AccType = typeWeight == InvoiceRowAccType.BED ? InvoiceRowAccType.BES : InvoiceRowAccType.BED,
+                                    Description = item.Description,
+                                    OrderAmount = orderAmountWeight,
+                                };
+                                invoice.InvoiceRows.Add(invoiceRowWeight);
+                                invoiceSideOne.InvoiceRows.Add(invoiceRowWeightSideOne);
+                            }
                             break;
                     }
                 }
                 document.Invoices.Add(invoice);
+                document.Invoices.Add(invoiceSideOne);
             }
             await _documentRepository.AddAsync(document);
             return new ResultDto

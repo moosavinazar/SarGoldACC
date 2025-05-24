@@ -82,12 +82,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey(r => r.InvoiceId)
             .OnDelete(DeleteBehavior.Cascade);
         
-        modelBuilder.Entity<OrderAmount>()
-            .HasOne(g => g.InvoiceRow)
-            .WithOne(i => i.GeneralAccountAmount)
-            .HasForeignKey<InvoiceRow>(i => i.GeneralAccountAmountId)
+        modelBuilder.Entity<InvoiceRow>()
+            .HasOne(ir => ir.OrderAmount)
+            .WithMany(o => o.InvoiceRows)
+            .HasForeignKey(ir => ir.OrderAmountId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.Restrict);
+            .OnDelete(DeleteBehavior.Cascade);
         
         modelBuilder.Entity<Counterparty>()
             .HasOne(c => c.GeneralAccount)

@@ -1,4 +1,6 @@
-﻿namespace SarGoldACC.Core.Models;
+﻿using SarGoldACC.Core.Enums;
+
+namespace SarGoldACC.Core.Models;
 
 public class InvoiceRow
 {
@@ -7,7 +9,7 @@ public class InvoiceRow
     public Invoice Invoice { get; set; }
     public string Description { get; set; }
     public string? AdminDescription { get; set; }
-    
-    public OrderAmount? GeneralAccountAmount { get; set; }
-    public long? GeneralAccountAmountId { get; set; }
+    public InvoiceRowAccType AccType { get; set; }
+    public OrderAmount? OrderAmount { get; set; }
+    public long? OrderAmountId { get; set; }
 }

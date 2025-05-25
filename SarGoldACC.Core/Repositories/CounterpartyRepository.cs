@@ -28,7 +28,16 @@ public class CounterpartyRepository : ICounterpartyRepository
 
     public async Task<List<Counterparty>> GetAllAsync()
     {
-        return await _context.Counterparties.ToListAsync();
+        return await _context.Counterparties
+            .Include(x => x.Customer)
+            .Include(x => x.Cash)
+            .Include(x => x.Bank)
+            .Include(x => x.Pos)
+            .Include(x => x.Laboratory)
+            .Include(x => x.Income)
+            .Include(x => x.Cost)
+            .Include(x => x.GeneralAccount)
+            .ToListAsync();
     }
 
     public async Task<Counterparty> AddAsync(Counterparty counterparty)

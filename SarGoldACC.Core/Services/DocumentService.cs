@@ -20,7 +20,7 @@ public class DocumentService : IDocumentService
     private readonly IDocumentRepository _documentRepository;
     private readonly IInvoiceRepository _invoiceRepository;
     private readonly IInvoiceRowRepository _invoiceRowRepository;
-    private readonly IGeneralAccountAmountRepository _orderAmountRepository;
+    private readonly IOrderAmountRepository _orderAmountRepository;
     private readonly IMapper _mapper;
 
     public DocumentService(
@@ -29,7 +29,7 @@ public class DocumentService : IDocumentService
         IDocumentRepository documentRepository,
         IInvoiceRepository invoiceRepository,
         IInvoiceRowRepository invoiceRowRepository,
-        IGeneralAccountAmountRepository orderAmountRepository,
+        IOrderAmountRepository orderAmountRepository,
         IMapper mapper)
     {
         _dbContext = dbContext;
@@ -175,7 +175,7 @@ public class DocumentService : IDocumentService
                     {
                         case DocumentItemType.ORDER:
                             
-                            if (item.RiyalBed > 0 || item.WeightBed > 0)
+                            if (item.RiyalBed > 0 || item.RiyalBes > 0)
                             {
                                 InvoiceRowAccType typeRiyal;
                                 if (item.RiyalBed > 0)
@@ -226,7 +226,7 @@ public class DocumentService : IDocumentService
                                 };
                                 var invoiceRowWeightSideOne = new InvoiceRow
                                 {
-                                    AccType = typeWeight == InvoiceRowAccType.BED ? InvoiceRowAccType.BES : InvoiceRowAccType.BED,
+                                    AccType = typeWeight,
                                     Description = item.Description,
                                     OrderAmount = orderAmountWeight,
                                 };
@@ -243,7 +243,11 @@ public class DocumentService : IDocumentService
                     }
                 }
                 document.Invoices.Add(invoice);
-                document.Invoices.Add(invoiceSideOne);
+            }
+            document.Invoices.Add(invoiceSideOne);
+            foreach (var invoice in document.Invoices)
+            {
+                Console.WriteLine(invoice.CounterpartyId);
             }
             await _documentRepository.AddAsync(document);
             return new ResultDto

@@ -42,7 +42,18 @@ public class MappingProfile : Profile
         CreateMap<CityDto, City>();
         CreateMap<GeneralAccount, GeneralAccountDto>();
         CreateMap<GeneralAccountDto, GeneralAccount>();
-        CreateMap<Counterparty, CounterpartyDto>();
+        CreateMap<Counterparty, CounterpartyDto>()
+            .ForMember(dest => dest.Name, opt => opt.MapFrom(src =>
+                src.Customer != null ? "مشتری " + src.Customer.Name :
+                src.Cash != null ? "صندوق " + src.Cash.Label :
+                src.Bank != null ? "بانک " + src.Bank.Name :
+                src.Pos != null ? "پوز " + src.Pos.Name :
+                src.Laboratory != null ? "ری گیری " + src.Laboratory.Name :
+                src.Income != null ? "درآمد " + src.Income.Label :
+                src.Cost != null ? "هزینه " + src.Cost.Label :
+                src.GeneralAccount != null ? "حساب عمومی " + src.GeneralAccount.Title :
+                "null"
+            ));
         CreateMap<CounterpartyDto, Counterparty>();
         CreateMap<Customer, CustomerDto>();
         CreateMap<CustomerDto, Customer>();

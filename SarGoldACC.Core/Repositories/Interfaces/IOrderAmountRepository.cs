@@ -2,7 +2,7 @@
 
 namespace SarGoldACC.Core.Repositories.Interfaces;
 
-public interface IGeneralAccountAmountRepository
+public interface IOrderAmountRepository
 {
     Task<OrderAmount> GetByIdAsync(long id);
     Task<List<OrderAmount>> GetAllAsync();

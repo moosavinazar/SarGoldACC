@@ -28,6 +28,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         
         <Grid Grid.Row="0">
@@ -67,10 +68,10 @@
                                Margin="5,10,5,0"/>
                     <ComboBox x:Name="BankComboBox" Grid.Column="1"
                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                              ItemsSource="{Binding Customers}"
+                              ItemsSource="{Binding Counterparties}"
                               DisplayMemberPath="Name"
                               SelectedValuePath="Id"
-                              SelectedValue="{Binding CustomerId, Mode=TwoWay}"
+                              SelectedValue="{Binding CounterpartyId, Mode=TwoWay}"
                               Margin="0,0,0,0"/>
                     <Button Grid.Column="2" x:Name="AddCustomerButton"
                             Content="+"
@@ -236,17 +237,34 @@
                           SelectionMode="Single"
                           Margin="0,10,0,0">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="شناسه طرف حساب" Binding="{Binding CounterpartySideTwoId}" Width="100" />
-                        <DataGridTextColumn Header="نوع" Binding="{Binding Type}" Width="80" />
-                        <DataGridTextColumn Header="شرح" Binding="{Binding Description}" Width="*" />
-                        <DataGridTextColumn Header="وزن بدهکار" Binding="{Binding WeightBed}" Width="100" />
-                        <DataGridTextColumn Header="وزن بستانکار" Binding="{Binding WeightBes}" Width="100" />
-                        <DataGridTextColumn Header="ریال بدهکار" Binding="{Binding RiyalBed}" Width="130" />
-                        <DataGridTextColumn Header="ریال بستانکار" Binding="{Binding RiyalBes}" Width="130" />
+                        <DataGridTextColumn Header="شناسه طرف حساب" Binding="{Binding CounterpartySideTwoId}"/>
+                        <DataGridTextColumn Header="نوع" Binding="{Binding Type}"/>
+                        <DataGridTextColumn Header="شرح" Binding="{Binding Description}"/>
+                        <DataGridTextColumn Header="وزن بدهکار" Binding="{Binding WeightBed}"/>
+                        <DataGridTextColumn Header="وزن بستانکار" Binding="{Binding WeightBes}"/>
+                        <DataGridTextColumn Header="ریال بدهکار" Binding="{Binding RiyalBed}"/>
+                        <DataGridTextColumn Header="ریال بستانکار" Binding="{Binding RiyalBes}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
         </Grid>
-        
+        <Grid Grid.Row="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Button Grid.Column="0" x:Name="SaveButton"
+                    Content="ذخیره سند"
+                    Style="{StaticResource SuccessBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickSaveDocument"
+                    Padding="10,5"/>
+            <Button Grid.Column="1" x:Name="SaveTemporaryButton"
+                    Content="ذخیره پیش نویس"
+                    Style="{StaticResource PrimaryBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickSaveTemporaryDocument"
+                    Padding="10,5"/>
+        </Grid>
     </Grid>
 </Window>

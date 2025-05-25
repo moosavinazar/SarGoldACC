@@ -5,17 +5,16 @@ using SarGoldACC.Core.Services.Interfaces;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class PayOrderViewModel : ViewModelBase
+public class RcvOrderViewModel : ViewModelBase
 {
     private readonly ICounterpartyService _counterpartyService;
     
     public long CounterpartyId { get; set; }
-    public double WeightBed { get; set; }
-    public long RiyalBed { get; set; }
+    public double WeightBes { get; set; }
+    public long RiyalBes { get; set; }
     public ObservableCollection<CounterpartyDto> Counterparties { get; }
-
-
-    public PayOrderViewModel(ICounterpartyService counterpartyService)
+    
+    public RcvOrderViewModel(ICounterpartyService counterpartyService)
     {
         _counterpartyService = counterpartyService;
         Counterparties = new ObservableCollection<CounterpartyDto>();

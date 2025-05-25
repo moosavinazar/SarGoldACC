@@ -1,6 +1,7 @@
 ﻿using System.Windows;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
+using SarGoldACC.Core.Enums;
 using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.ViewModels;
 
@@ -65,6 +66,18 @@ public partial class Document : Window
     
     private void OpenRcvOrderWindow()
     {
+        var rcvOrderWindow = _serviceProvider.GetRequiredService<RcvOrder>();
+        rcvOrderWindow.Owner = this;
+
+        bool? result = rcvOrderWindow.ShowDialog();
+        if (result == true && rcvOrderWindow.ResultItem != null)
+        {
+            _viewModel.DocumentItems.Add(rcvOrderWindow.ResultItem);
+        }
+    }
+    
+    private void ClickPayOrder(object sender, RoutedEventArgs e)
+    {
         var payOrderWindow = _serviceProvider.GetRequiredService<PayOrder>();
         payOrderWindow.Owner = this;
 
@@ -75,8 +88,13 @@ public partial class Document : Window
         }
     }
 
-
-    private void ClickPayOrder(object sender, RoutedEventArgs e)
+    private async void ClickSaveDocument(object sender, RoutedEventArgs e)
     {
+        await _viewModel.SaveDocument(DocumentType.FINAL);
+    }
+    
+    private async void ClickSaveTemporaryDocument(object sender, RoutedEventArgs e)
+    {
+        await _viewModel.SaveDocument(DocumentType.TEMPORARY);
     }
 }

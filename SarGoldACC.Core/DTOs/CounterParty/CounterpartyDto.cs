@@ -23,4 +23,6 @@ public class CounterpartyDto
     public Models.Income? Income { get; set; }
     public long? CostId{ get; set; }
     public Models.Cost? Cost { get; set; }
+    
+    public string? Name { get; set; }
 }

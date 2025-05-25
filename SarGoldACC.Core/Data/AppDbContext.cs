@@ -22,7 +22,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<GeneralAccount> GeneralAccounts { get; set; }
     public DbSet<Customer> Customers { get; set; }
     public DbSet<CustomerBank> CustomerBanks { get; set; }
-    public DbSet<OrderAmount> GeneralAccountAmounts { get; set; }
+    public DbSet<OrderAmount> OrderAmounts { get; set; }
     public DbSet<Cheque> Cheques { get; set; }
     public DbSet<Bank> Banks { get; set; }
     public DbSet<Currency> Currencies { get; set; }

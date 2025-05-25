@@ -1,24 +1,22 @@
-﻿<Window x:Class="SarGoldACC.WpfApp.Views.PayOrder"
+﻿<Window x:Class="SarGoldACC.WpfApp.Views.RcvOrder"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
-        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         mc:Ignorable="d"
         Title="حواله پرداخت" 
         Height="200" 
         Width="300"
-        KeyDown="PayOrderWindow_KeyDown"
+        KeyDown="RcvOrderWindow_KeyDown"
         Focusable="True"
         Loaded="Window_Loaded"
         FlowDirection="RightToLeft"
         ResizeMode="NoResize"
         WindowStyle="SingleBorderWindow"
         WindowStartupLocation="CenterScreen"
-        Background="Aqua">
-    
+        Background="Plum">
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
     </Window.Resources>
@@ -61,36 +59,36 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="بدهکاری طلا"
+            <TextBlock Text="بستانکاری طلا"
                        Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                        Grid.Column="0"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,5,5,0"/>
-            <TextBox x:Name="WeightBed" 
+            <TextBox x:Name="WeightBes" 
                      Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                      Grid.Column="1"
                      Margin="0 5 0 0"
                      Style="{StaticResource InputTextBox}"
-                     Text="{Binding WeightBed}"/>
+                     Text="{Binding WeightBes}"/>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="بدهکاری ریال"
+            <TextBlock Text="بستانکاری ریال"
                        Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                        Grid.Column="0"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,5,5,0"/>
-            <TextBox x:Name="RiyalBed" 
+            <TextBox x:Name="RiyalBes" 
                      Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                      Grid.Column="1"
                      Margin="0 5 0 0"
                      Style="{StaticResource InputTextBox}"
-                     Text="{Binding RiyalBed}"/>
+                     Text="{Binding RiyalBes}"/>
         </Grid>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" 
                     Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -98,7 +96,7 @@
                     Content="ذخیره"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
-                    Click="ClickSavePayOrder"
+                    Click="ClickSaveRcvOrder"
                     Padding="10,5"/>
         </StackPanel>
     </Grid>

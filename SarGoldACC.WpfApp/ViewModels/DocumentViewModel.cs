@@ -62,7 +62,7 @@ public class DocumentViewModel : ViewModelBase
         
         Task.Run(async () =>
         {
-            await LoadCustomersAsync();
+            await LoadCounterpartyAsync();
         }).GetAwaiter().GetResult();
     }
 
@@ -111,7 +111,7 @@ public class DocumentViewModel : ViewModelBase
         }
     }
     
-    private async Task LoadCustomersAsync()
+    private async Task LoadCounterpartyAsync()
     {
         Counterparties.Clear();
         var counterparties = await _counterpartyService.GetAllAsync();

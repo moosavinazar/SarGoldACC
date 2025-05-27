@@ -22,6 +22,7 @@ public class DocumentService : IDocumentService
     private readonly IInvoiceRowRepository _invoiceRowRepository;
     private readonly IOrderAmountRepository _orderAmountRepository;
     private readonly IMeltedRepository _meltedRepository;
+    private readonly ISubMeltedRepository _subMeltedRepository;
     private readonly IMapper _mapper;
 
     public DocumentService(
@@ -32,6 +33,7 @@ public class DocumentService : IDocumentService
         IInvoiceRowRepository invoiceRowRepository,
         IOrderAmountRepository orderAmountRepository,
         IMeltedRepository meltedRepository,
+        ISubMeltedRepository subMeltedRepository,
         IMapper mapper)
     {
         _dbContext = dbContext;
@@ -41,6 +43,7 @@ public class DocumentService : IDocumentService
         _invoiceRowRepository = invoiceRowRepository;
         _orderAmountRepository = orderAmountRepository;
         _meltedRepository = meltedRepository;
+        _subMeltedRepository = subMeltedRepository;
         _mapper = mapper;
     }
 
@@ -276,6 +279,19 @@ public class DocumentService : IDocumentService
                                 var invoiceRow = new InvoiceRow
                                 {
                                     AccType = InvoiceRowAccType.BES,
+                                    Description = item.Description,
+                                    SubMelted = subMelted
+                                };
+                                invoiceSideOne.InvoiceRows.Add(invoiceRow);
+                            }
+                            Console.WriteLine("WeightBed: " + item.WeightBed);
+                            if (item.WeightBed > 0)
+                            {
+                                var subMelted = await _subMeltedRepository.GetByIdAsync(item.SubMeltedId);
+                                Console.WriteLine("subMelted not found for ID: " + item.SubMeltedId);
+                                var invoiceRow = new InvoiceRow
+                                {
+                                    AccType = InvoiceRowAccType.BED,
                                     Description = item.Description,
                                     SubMelted = subMelted
                                 };

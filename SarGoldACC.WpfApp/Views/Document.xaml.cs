@@ -101,15 +101,19 @@ public partial class Document : Window
     
     private void ClickPayMelted(object sender, RoutedEventArgs e)
     {
-        /*var payMeltedWindow = _serviceProvider.GetRequiredService<PayMelted>();
+        var payMeltedWindow = _serviceProvider.GetRequiredService<PayMelted>();
         payMeltedWindow.Owner = this;
 
         bool? result = payMeltedWindow.ShowDialog();
-        if (result == true && payMeltedWindow.ResultItem != null)
+        if (result == true && payMeltedWindow.ResultItems != null && payMeltedWindow.ResultItems.Any())
         {
-            _viewModel.DocumentItems.Add(payMeltedWindow.ResultItem);
-        }*/
+            foreach (var item in payMeltedWindow.ResultItems)
+            {
+                _viewModel.DocumentItems.Add(item);
+            }
+        }
     }
+
 
     private async void ClickSaveDocument(object sender, RoutedEventArgs e)
     {

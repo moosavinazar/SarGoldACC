@@ -23,6 +23,16 @@ public class SubMeltedRepository : ISubMeltedRepository
     {
         return await _context.SubMelteds.ToListAsync();
     }
+    
+    public async Task<List<SubMelted>> GetAllWithDetailAsync()
+    {
+        return await _context.SubMelteds
+            .Include(s => s.Melted)
+            .ThenInclude(m => m.Laboratory)
+            .Include(s => s.Box)
+            .ToListAsync();
+    }
+
 
     public async Task<SubMelted> AddAsync(SubMelted subMelted)
     {

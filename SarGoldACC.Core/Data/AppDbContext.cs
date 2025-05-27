@@ -31,6 +31,9 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Laboratory> Laboratories { get; set; }
     public DbSet<Income> Incomes { get; set; }
     public DbSet<Cost> Costs { get; set; }
+    public DbSet<Melted> Melteds { get; set; }
+    public DbSet<SubMelted> SubMelteds { get; set; }
+    public DbSet<Box> Boxes { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -100,6 +103,30 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasOne(c => c.Branch)
             .WithMany(b => b.Counterparties)
             .HasForeignKey(c => c.BranchId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Box>()
+            .HasOne(b => b.Branch)
+            .WithMany(br => br.Boxes)
+            .HasForeignKey(b => b.BranchId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Melted>()
+            .HasOne(m => m.Laboratory)
+            .WithMany(l => l.Melteds)
+            .HasForeignKey(m => m.LaboratoryId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<SubMelted>()
+            .HasOne(s => s.Melted)
+            .WithMany(m => m.SubMelteds)
+            .HasForeignKey(s => s.MeltedId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<SubMelted>()
+            .HasOne(s => s.Box)
+            .WithMany(b => b.SubMelteds)
+            .HasForeignKey(s => s.BoxId)
             .OnDelete(DeleteBehavior.Cascade);
         
         /*modelBuilder.Entity<Customer>()

@@ -8,4 +8,5 @@ public class Branch
     public required string Name { get; set; }
     public ICollection<User> Users { get; set; }
     public ICollection<Counterparty> Counterparties { get; set; }
+    public ICollection<Box> Boxes { get; set; }
 }

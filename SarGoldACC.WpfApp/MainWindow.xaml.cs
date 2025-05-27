@@ -301,4 +301,16 @@ public partial class MainWindow : RibbonWindow
         documentWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
+    private void OpenBoxWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenBoxWindow();
+    }
+
+    private void OpenBoxWindow()
+    {
+        var boxWindow = _serviceProvider.GetRequiredService<Box>();
+        boxWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        boxWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
 }

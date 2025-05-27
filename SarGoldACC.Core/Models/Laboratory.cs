@@ -12,4 +12,5 @@ public class Laboratory
     public City City { get; set; }
     public long CityId { get; set; }
     public Counterparty Counterparty { get; set; }
+    public ICollection<Melted> Melteds { get; set; }
 }

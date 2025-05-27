@@ -3,6 +3,7 @@ using SarGoldACC.Core.DTOs.Auth;
 using SarGoldACC.Core.DTOs.Auth.Group;
 using SarGoldACC.Core.DTOs.Auth.User;
 using SarGoldACC.Core.DTOs.Bank;
+using SarGoldACC.Core.DTOs.Box;
 using SarGoldACC.Core.DTOs.Branch;
 using SarGoldACC.Core.DTOs.Cash;
 using SarGoldACC.Core.DTOs.City;
@@ -103,5 +104,9 @@ public class MappingProfile : Profile
         CreateMap<Cost, CostCreateDto>();
         CreateMap<CostUpdateDto, Cost>();
         CreateMap<Cost, CostUpdateDto>();
+        CreateMap<Box, BoxDto>();
+        CreateMap<BoxDto, Box>();
+        CreateMap<BoxCreateDto, Box>();
+        CreateMap<Box, BoxCreateDto>();
     }
 }

@@ -47,3 +47,7 @@
 46,Cost.Create,ایجاد هزینه
 47,Cost.Edit,ویرایش هزینه
 48,Cost.Delete,حذف هزینه
+49,Box.View,مشاهده هزینه ها
+50,Box.Create,ایجاد هزینه
+51,Box.Edit,ویرایش هزینه
+52,Box.Delete,حذف هزینه

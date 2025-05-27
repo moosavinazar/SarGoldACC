@@ -12,4 +12,6 @@ public class InvoiceRow
     public InvoiceRowAccType AccType { get; set; }
     public OrderAmount? OrderAmount { get; set; }
     public long? OrderAmountId { get; set; }
+    public SubMelted? SubMelted { get; set; }
+    public long? SubMeltedId { get; set; }
 }

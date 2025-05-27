@@ -90,7 +90,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany(o => o.InvoiceRows)
             .HasForeignKey(ir => ir.OrderAmountId)
             .IsRequired(false)
-            .OnDelete(DeleteBehavior.Cascade);
+            .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<InvoiceRow>()
+            .HasOne(ir => ir.SubMelted)
+            .WithMany(s => s.InvoiceRows)
+            .HasForeignKey(ir => ir.SubMeltedId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
         
         modelBuilder.Entity<Counterparty>()
             .HasOne(c => c.GeneralAccount)

@@ -21,6 +21,7 @@ public class DocumentService : IDocumentService
     private readonly IInvoiceRepository _invoiceRepository;
     private readonly IInvoiceRowRepository _invoiceRowRepository;
     private readonly IOrderAmountRepository _orderAmountRepository;
+    private readonly IMeltedRepository _meltedRepository;
     private readonly IMapper _mapper;
 
     public DocumentService(
@@ -30,6 +31,7 @@ public class DocumentService : IDocumentService
         IInvoiceRepository invoiceRepository,
         IInvoiceRowRepository invoiceRowRepository,
         IOrderAmountRepository orderAmountRepository,
+        IMeltedRepository meltedRepository,
         IMapper mapper)
     {
         _dbContext = dbContext;
@@ -38,6 +40,7 @@ public class DocumentService : IDocumentService
         _invoiceRepository = invoiceRepository;
         _invoiceRowRepository = invoiceRowRepository;
         _orderAmountRepository = orderAmountRepository;
+        _meltedRepository = meltedRepository;
         _mapper = mapper;
     }
 
@@ -174,7 +177,7 @@ public class DocumentService : IDocumentService
                     switch (item.Type)
                     {
                         case DocumentItemType.ORDER:
-                            
+                        {
                             if (item.RiyalBed > 0 || item.RiyalBes > 0)
                             {
                                 InvoiceRowAccType typeRiyal;
@@ -186,6 +189,7 @@ public class DocumentService : IDocumentService
                                 {
                                     typeRiyal = InvoiceRowAccType.BES;
                                 }
+
                                 var orderAmountRiyal = new OrderAmount
                                 {
                                     Description = item.Description,
@@ -200,13 +204,16 @@ public class DocumentService : IDocumentService
                                 };
                                 var invoiceRowRiyal = new InvoiceRow
                                 {
-                                    AccType = typeRiyal == InvoiceRowAccType.BED ? InvoiceRowAccType.BES : InvoiceRowAccType.BED,
+                                    AccType = typeRiyal == InvoiceRowAccType.BED
+                                        ? InvoiceRowAccType.BES
+                                        : InvoiceRowAccType.BED,
                                     Description = item.Description,
                                     OrderAmount = orderAmountRiyal,
                                 };
                                 invoice.InvoiceRows.Add(invoiceRowRiyal);
                                 invoiceSideOne.InvoiceRows.Add(invoiceRowRiyalSideOne);
                             }
+
                             if (item.WeightBed > 0 || item.WeightBes > 0)
                             {
                                 InvoiceRowAccType typeWeight;
@@ -218,6 +225,7 @@ public class DocumentService : IDocumentService
                                 {
                                     typeWeight = InvoiceRowAccType.BES;
                                 }
+
                                 var orderAmountWeight = new OrderAmount
                                 {
                                     Description = item.Description,
@@ -232,17 +240,51 @@ public class DocumentService : IDocumentService
                                 };
                                 var invoiceRowWeight = new InvoiceRow
                                 {
-                                    AccType = typeWeight == InvoiceRowAccType.BED ? InvoiceRowAccType.BES : InvoiceRowAccType.BED,
+                                    AccType = typeWeight == InvoiceRowAccType.BED
+                                        ? InvoiceRowAccType.BES
+                                        : InvoiceRowAccType.BED,
                                     Description = item.Description,
                                     OrderAmount = orderAmountWeight,
                                 };
                                 invoice.InvoiceRows.Add(invoiceRowWeight);
                                 invoiceSideOne.InvoiceRows.Add(invoiceRowWeightSideOne);
                             }
+                            document.Invoices.Add(invoice);
                             break;
+                        }
+                        case DocumentItemType.MELTED:
+                        {
+                            if (item.WeightBes > 0)
+                            {
+                                var melted =
+                                    await _meltedRepository.GetByAngAndLaboratoryIdAsync(item.Ang, item.LaboratoryId) ??
+                                    new Melted
+                                    {
+                                        Ang = item.Ang,
+                                        Ayar = item.Ayar,
+                                        Certain = item.Certain,
+                                        LaboratoryId = item.LaboratoryId,
+                                        SubMelteds = new List<SubMelted>()
+                                    };
+                                var subMelted = new SubMelted
+                                {
+                                    Weight = item.WeightBes,
+                                    BoxId = item.BoxId,
+                                    Melted = melted,
+                                    InvoiceRows = new List<InvoiceRow>()
+                                };
+                                var invoiceRow = new InvoiceRow
+                                {
+                                    AccType = InvoiceRowAccType.BES,
+                                    Description = item.Description,
+                                    SubMelted = subMelted
+                                };
+                                invoiceSideOne.InvoiceRows.Add(invoiceRow);
+                            }
+                            break;
+                        }
                     }
                 }
-                document.Invoices.Add(invoice);
             }
             document.Invoices.Add(invoiceSideOne);
             foreach (var invoice in document.Invoices)

@@ -211,6 +211,7 @@
             <Grid Grid.Column="0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" x:Name="RcvOredrButton"
                         Content="دریافت حواله"
@@ -224,6 +225,20 @@
                         Style="{StaticResource DangerBtn}"
                         HorizontalAlignment="Center"
                         Click="ClickPayOrder"
+                        Visibility="Hidden"
+                        Padding="10,5"/>
+                <Button Grid.Row="1" x:Name="RcvMeltedButton"
+                        Content="دریافت آبشده"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickRcvMelted"
+                        Visibility="Visible"
+                        Padding="10,5"/>
+                <Button Grid.Row="1" x:Name="PayMeltedButton"
+                        Content="پرداخت آبشده"
+                        Style="{StaticResource DangerBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickPayMelted"
                         Visibility="Hidden"
                         Padding="10,5"/>
             </Grid>
@@ -244,6 +259,11 @@
                         <DataGridTextColumn Header="وزن بستانکار" Binding="{Binding WeightBes}"/>
                         <DataGridTextColumn Header="ریال بدهکار" Binding="{Binding RiyalBed}"/>
                         <DataGridTextColumn Header="ریال بستانکار" Binding="{Binding RiyalBes}"/>
+                        <DataGridTextColumn Header="عیار" Binding="{Binding Ayar}"/>
+                        <DataGridTextColumn Header="شرطی" Binding="{Binding Certain}"/>
+                        <DataGridTextColumn Header="انگ" Binding="{Binding Ang}"/>
+                        <DataGridTextColumn Header="شناسه کارگاه" Binding="{Binding LaboratoryId}"/>
+                        <DataGridTextColumn Header="شناسه جعبه" Binding="{Binding BoxId}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

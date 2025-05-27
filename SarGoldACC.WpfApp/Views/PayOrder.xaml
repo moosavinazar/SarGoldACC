@@ -5,14 +5,14 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
-        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         mc:Ignorable="d"
         Title="حواله پرداخت" 
-        Height="200" 
+        Height="250" 
         Width="300"
         KeyDown="PayOrderWindow_KeyDown"
         Focusable="True"
         Loaded="Window_Loaded"
+        Activated="Window_Activated"
         FlowDirection="RightToLeft"
         ResizeMode="NoResize"
         WindowStyle="SingleBorderWindow"
@@ -29,6 +29,7 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
@@ -37,19 +38,18 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="مشتری"
-                       Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                        Grid.Column="0"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="5,10,5,0"/>
-            <ComboBox x:Name="BankComboBox" Grid.Column="1"
-                      Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+            <ComboBox x:Name="CustomerComboBox" Grid.Column="1"
                       ItemsSource="{Binding Counterparties}"
-                      DisplayMemberPath="Id"
+                      DisplayMemberPath="Name"
                       SelectedValuePath="Id"
                       SelectedValue="{Binding CounterpartyId, Mode=TwoWay}"
                       Margin="0,0,0,0"/>
             <Button Grid.Column="2" x:Name="AddCustomerButton"
+                    Visibility="{Binding CanAccessCustomerButton, Converter={StaticResource BoolToVisibilityConverter}}"
                     Content="+"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
@@ -62,13 +62,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="بدهکاری طلا"
-                       Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                        Grid.Column="0"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,5,5,0"/>
             <TextBox x:Name="WeightBed" 
-                     Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                      Grid.Column="1"
                      Margin="0 5 0 0"
                      Style="{StaticResource InputTextBox}"
@@ -80,20 +78,33 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <TextBlock Text="بدهکاری ریال"
-                       Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                        Grid.Column="0"
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,5,5,0"/>
             <TextBox x:Name="RiyalBed" 
-                     Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                      Grid.Column="1"
                      Margin="0 5 0 0"
                      Style="{StaticResource InputTextBox}"
                      Text="{Binding RiyalBed}"/>
         </Grid>
-        <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center" 
-                    Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="توضیحات"
+                       Grid.Column="0"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="0,5,5,0"/>
+            <TextBox x:Name="Description" 
+                     Grid.Column="1"
+                     Margin="0 5 0 0"
+                     Style="{StaticResource InputTextBox}"
+                     Text="{Binding Description}"/>
+        </Grid>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="SaveButton"
                     Content="ذخیره"
                     Style="{StaticResource SuccessBtn}"

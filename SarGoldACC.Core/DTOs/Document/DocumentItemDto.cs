@@ -12,5 +12,10 @@ public class DocumentItemDto
     public double WeightBes { get; set; }
     public long RiyalBed { get; set; }
     public long RiyalBes { get; set; }
+    public int Ayar { get; set; }
+    public bool Certain { get; set; }
+    public string Ang { get; set; }
+    public long LaboratoryId { get; set; }
+    public long BoxId { get; set; }
     
 }

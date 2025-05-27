@@ -38,12 +38,16 @@ public partial class Document : Window
         {
             RcvOredrButton.Visibility = Visibility.Visible;
             PayOredrButton.Visibility = Visibility.Hidden;
+            RcvMeltedButton.Visibility = Visibility.Visible;
+            PayMeltedButton.Visibility = Visibility.Hidden;
         }
         
         if (e.Key == Key.OemMinus)
         {
             RcvOredrButton.Visibility = Visibility.Hidden;
             PayOredrButton.Visibility = Visibility.Visible;
+            RcvMeltedButton.Visibility = Visibility.Hidden;
+            PayMeltedButton.Visibility = Visibility.Visible;
         }
     }
 
@@ -60,11 +64,6 @@ public partial class Document : Window
     }
     
     private void ClickRcvOrder(object sender, RoutedEventArgs e)
-    {
-        OpenRcvOrderWindow();
-    }
-    
-    private void OpenRcvOrderWindow()
     {
         var rcvOrderWindow = _serviceProvider.GetRequiredService<RcvOrder>();
         rcvOrderWindow.Owner = this;
@@ -86,6 +85,30 @@ public partial class Document : Window
         {
             _viewModel.DocumentItems.Add(payOrderWindow.ResultItem);
         }
+    }
+    
+    private void ClickRcvMelted(object sender, RoutedEventArgs e)
+    {
+        var rcvMeltedWindow = _serviceProvider.GetRequiredService<RcvMelted>();
+        rcvMeltedWindow.Owner = this;
+
+        bool? result = rcvMeltedWindow.ShowDialog();
+        if (result == true && rcvMeltedWindow.ResultItem != null)
+        {
+            _viewModel.DocumentItems.Add(rcvMeltedWindow.ResultItem);
+        }
+    }
+    
+    private void ClickPayMelted(object sender, RoutedEventArgs e)
+    {
+        /*var payMeltedWindow = _serviceProvider.GetRequiredService<PayMelted>();
+        payMeltedWindow.Owner = this;
+
+        bool? result = payMeltedWindow.ShowDialog();
+        if (result == true && payMeltedWindow.ResultItem != null)
+        {
+            _viewModel.DocumentItems.Add(payMeltedWindow.ResultItem);
+        }*/
     }
 
     private async void ClickSaveDocument(object sender, RoutedEventArgs e)

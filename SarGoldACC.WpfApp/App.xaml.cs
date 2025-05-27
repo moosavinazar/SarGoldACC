@@ -94,13 +94,14 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<ICostRepository, CostRepository>();
             services.AddScoped<ICostService, CostService>();
             
-            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
-            
-            services.AddScoped<IInvoiceRowRepository, InvoiceRowRepository>();
-            services.AddScoped<IOrderAmountRepository, OrderAmountRepository>();
-            
             services.AddScoped<IBoxRepository, BoxRepository>();
             services.AddScoped<IBoxService, BoxService>();
+            
+            services.AddScoped<IInvoiceRepository, InvoiceRepository>();
+            services.AddScoped<IInvoiceRowRepository, InvoiceRowRepository>();
+            services.AddScoped<IOrderAmountRepository, OrderAmountRepository>();
+            services.AddScoped<IMeltedRepository, MeltedRepository>();
+            services.AddScoped<ISubMeltedRepository, SubMeltedRepository>();
             
             services.AddSingleton<NavigationStore>();
             // services.AddSingleton<MainViewModel>();
@@ -145,6 +146,8 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<RcvOrder>();
             services.AddTransient<BoxViewModel>();
             services.AddTransient<Box>();
+            services.AddTransient<RcvMeltedViewModel>();
+            services.AddTransient<RcvMelted>();
 
             ServiceProvider = services.BuildServiceProvider();
             

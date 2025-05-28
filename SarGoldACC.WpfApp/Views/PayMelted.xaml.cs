@@ -43,6 +43,7 @@ public partial class PayMelted : Window
             {
                 SubMeltedId = item.Id,
                 WeightBed = item.Weight,
+                Weight750 = item.Weight750,
                 Ang = item.Ang,
                 Ayar = item.Ayar,
                 Certain = item.Certain,

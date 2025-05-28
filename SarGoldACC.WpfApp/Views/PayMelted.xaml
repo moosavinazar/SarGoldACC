@@ -41,6 +41,7 @@
                     <DataGridTextColumn Header="شرطی" Binding="{Binding Certain}"/>
                     <DataGridTextColumn Header="عیار" Binding="{Binding Ayar}"/>
                     <DataGridTextColumn Header="وزن" Binding="{Binding Weight}"/>
+                    <DataGridTextColumn Header="750" Binding="{Binding Weight750}"/>
                     <DataGridTextColumn Header="کارگاه" Binding="{Binding LaboratoryName}"/>
                     <DataGridTextColumn Header="جعبه" Binding="{Binding BoxName}"/>
                 </DataGrid.Columns>

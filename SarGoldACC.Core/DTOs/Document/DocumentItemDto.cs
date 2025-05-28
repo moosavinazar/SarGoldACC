@@ -10,6 +10,7 @@ public class DocumentItemDto
     public string Description { get; set; }
     public double WeightBed { get; set; }
     public double WeightBes { get; set; }
+    public double? Weight750 { get; set; }
     public long RiyalBed { get; set; }
     public long RiyalBes { get; set; }
     public int? Ayar { get; set; }

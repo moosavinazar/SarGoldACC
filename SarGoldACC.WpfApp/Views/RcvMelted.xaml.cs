@@ -67,6 +67,7 @@ public partial class RcvMelted : Window
         ResultItem = new DocumentItemDto
         {
             WeightBes = (DataContext as RcvMeltedViewModel).Weight,
+            Weight750 = (DataContext as RcvMeltedViewModel).Weight750,
             Ayar = (DataContext as RcvMeltedViewModel).Ayar,
             Certain = (DataContext as RcvMeltedViewModel).Certain,
             Ang = (DataContext as RcvMeltedViewModel).Ang,

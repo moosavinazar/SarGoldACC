@@ -9,6 +9,7 @@ public class SubMeltedPayDataGridDto
     public bool Certain { get; set; }
     public int? Ayar { get; set; }
     public double Weight { get; set; }
+    public double? Weight750 { get; set; }
     public long LaboratoryId { get; set; }
     public string LaboratoryName { get; set; }
     public long BoxId { get; set; }

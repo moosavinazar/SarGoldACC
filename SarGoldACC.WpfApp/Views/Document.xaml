@@ -257,6 +257,7 @@
                         <DataGridTextColumn Header="شرح" Binding="{Binding Description}"/>
                         <DataGridTextColumn Header="وزن بدهکار" Binding="{Binding WeightBed}"/>
                         <DataGridTextColumn Header="وزن بستانکار" Binding="{Binding WeightBes}"/>
+                        <DataGridTextColumn Header="وزن 750" Binding="{Binding Weight750}"/>
                         <DataGridTextColumn Header="ریال بدهکار" Binding="{Binding RiyalBed}"/>
                         <DataGridTextColumn Header="ریال بستانکار" Binding="{Binding RiyalBes}"/>
                         <DataGridTextColumn Header="عیار" Binding="{Binding Ayar}"/>

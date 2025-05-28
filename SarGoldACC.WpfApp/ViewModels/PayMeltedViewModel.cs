@@ -34,6 +34,7 @@ public class PayMeltedViewModel : ViewModelBase
                 Certain = s.Melted.Certain,
                 Ayar = s.Melted.Ayar,
                 Weight = s.Weight,
+                Weight750 = s.Weight750,
                 LaboratoryId = s.Melted.Laboratory.Id,
                 LaboratoryName = s.Melted.Laboratory.Name,
                 BoxId = s.Box.Id,

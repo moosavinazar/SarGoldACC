@@ -102,6 +102,7 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<IOrderAmountRepository, OrderAmountRepository>();
             services.AddScoped<IMeltedRepository, MeltedRepository>();
             services.AddScoped<ISubMeltedRepository, SubMeltedRepository>();
+            services.AddScoped<IMiscRepository, MiscRepository>();
             
             services.AddSingleton<NavigationStore>();
             // services.AddSingleton<MainViewModel>();
@@ -150,6 +151,8 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<RcvMelted>();
             services.AddTransient<PayMeltedViewModel>();
             services.AddTransient<PayMelted>();
+            services.AddTransient<RcvMiscViewModel>();
+            services.AddTransient<RcvMisc>();
 
             ServiceProvider = services.BuildServiceProvider();
             

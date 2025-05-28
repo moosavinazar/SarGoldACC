@@ -14,4 +14,6 @@ public class InvoiceRow
     public long? OrderAmountId { get; set; }
     public SubMelted? SubMelted { get; set; }
     public long? SubMeltedId { get; set; }
+    public Misc? Misc { get; set; }
+    public long? MiscId { get; set; }
 }

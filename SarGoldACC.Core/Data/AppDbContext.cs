@@ -34,6 +34,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Melted> Melteds { get; set; }
     public DbSet<SubMelted> SubMelteds { get; set; }
     public DbSet<Box> Boxes { get; set; }
+    public DbSet<Misc> Miscs { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -99,6 +100,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
         
+        modelBuilder.Entity<InvoiceRow>()
+            .HasOne(ir => ir.Misc)
+            .WithMany(m => m.InvoiceRows)
+            .HasForeignKey(ir => ir.MiscId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         modelBuilder.Entity<Counterparty>()
             .HasOne(c => c.GeneralAccount)
             .WithMany(g => g.Counterparties)
@@ -134,6 +142,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasOne(s => s.Box)
             .WithMany(b => b.SubMelteds)
             .HasForeignKey(s => s.BoxId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Misc>()
+            .HasOne(m => m.Box)
+            .WithMany(b => b.Miscs)
+            .HasForeignKey(m => m.BoxId)
             .OnDelete(DeleteBehavior.Cascade);
         
         /*modelBuilder.Entity<Customer>()

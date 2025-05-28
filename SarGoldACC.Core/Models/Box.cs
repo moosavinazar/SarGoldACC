@@ -11,4 +11,5 @@ public class Box
     public double Weight { get; set; }
     public BoxType Type { get; set; }
     public ICollection<SubMelted> SubMelteds { get; set; }
+    public ICollection<Misc> Miscs { get; set; }
 }

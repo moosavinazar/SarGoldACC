@@ -272,6 +272,7 @@ public class DocumentService : IDocumentService
                                 var subMelted = new SubMelted
                                 {
                                     Weight = item.WeightBes,
+                                    Weight750 = item.Weight750,
                                     BoxId = item.BoxId,
                                     Melted = melted,
                                     InvoiceRows = new List<InvoiceRow>()

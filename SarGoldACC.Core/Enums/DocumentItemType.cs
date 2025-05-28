@@ -4,5 +4,6 @@ public enum DocumentItemType
 {
     ORDER = 5, //حواله
     MELTED = 6, //آبشده
+    MISC = 3, //آبشده
     
 }

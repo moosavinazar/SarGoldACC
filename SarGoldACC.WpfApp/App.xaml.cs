@@ -151,8 +151,9 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<RcvMelted>();
             services.AddTransient<PayMeltedViewModel>();
             services.AddTransient<PayMelted>();
-            services.AddTransient<RcvMiscViewModel>();
+            services.AddTransient<MiscViewModel>();
             services.AddTransient<RcvMisc>();
+            services.AddTransient<PayMisc>();
 
             ServiceProvider = services.BuildServiceProvider();
             

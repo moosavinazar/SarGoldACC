@@ -15,7 +15,7 @@ public class DocumentItemDto
     public long RiyalBes { get; set; }
     public int? Ayar { get; set; }
     public bool Certain { get; set; }
-    public string Ang { get; set; }
+    public string? Ang { get; set; }
     public long LaboratoryId { get; set; }
     public long BoxId { get; set; }
     public long SubMeltedId { get; set; }

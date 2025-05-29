@@ -132,6 +132,14 @@ public partial class Document : Window
 
     private void ClickPayMisc(object sender, RoutedEventArgs e)
     {
+        var payMiscWindow = _serviceProvider.GetRequiredService<PayMisc>();
+        payMiscWindow.Owner = this;
+
+        bool? result = payMiscWindow.ShowDialog();
+        if (result == true && payMiscWindow.ResultItem != null)
+        {
+            _viewModel.DocumentItems.Add(payMiscWindow.ResultItem);
+        }
     }
 
     private async void ClickSaveDocument(object sender, RoutedEventArgs e)

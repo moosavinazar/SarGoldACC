@@ -285,16 +285,56 @@ public class DocumentService : IDocumentService
                                 };
                                 invoiceSideOne.InvoiceRows.Add(invoiceRow);
                             }
-                            Console.WriteLine("WeightBed: " + item.WeightBed);
                             if (item.WeightBed > 0)
                             {
                                 var subMelted = await _subMeltedRepository.GetByIdAsync(item.SubMeltedId);
-                                Console.WriteLine("subMelted not found for ID: " + item.SubMeltedId);
                                 var invoiceRow = new InvoiceRow
                                 {
                                     AccType = InvoiceRowAccType.BED,
                                     Description = item.Description,
                                     SubMelted = subMelted
+                                };
+                                invoiceSideOne.InvoiceRows.Add(invoiceRow);
+                            }
+                            break;
+                        }
+                        case DocumentItemType.MISC:
+                        {
+                            if (item.WeightBes > 0)
+                            {
+                                var misc = new Misc
+                                {
+                                    Certain = item.Certain,
+                                    Ayar = item.Ayar,
+                                    Weight = item.WeightBes,
+                                    Weight750 = item.Weight750,
+                                    BoxId = item.BoxId,
+                                    InvoiceRows = new List<InvoiceRow>()
+                                };
+                                var invoiceRow = new InvoiceRow
+                                {
+                                    AccType = InvoiceRowAccType.BES,
+                                    Description = item.Description,
+                                    Misc = misc
+                                };
+                                invoiceSideOne.InvoiceRows.Add(invoiceRow);
+                            }
+                            if (item.WeightBed > 0)
+                            {
+                                var misc = new Misc
+                                {
+                                    Certain = item.Certain,
+                                    Ayar = item.Ayar,
+                                    Weight = item.WeightBed,
+                                    Weight750 = item.Weight750,
+                                    BoxId = item.BoxId,
+                                    InvoiceRows = new List<InvoiceRow>()
+                                };
+                                var invoiceRow = new InvoiceRow
+                                {
+                                    AccType = InvoiceRowAccType.BED,
+                                    Description = item.Description,
+                                    Misc = misc
                                 };
                                 invoiceSideOne.InvoiceRows.Add(invoiceRow);
                             }

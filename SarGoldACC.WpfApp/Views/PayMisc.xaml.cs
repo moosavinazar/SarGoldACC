@@ -7,13 +7,13 @@ using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp.Views;
 
-public partial class RcvMisc : Window
+public partial class PayMisc : Window
 {
     private readonly MiscViewModel _viewModel;
     private readonly IServiceProvider _serviceProvider;
     public DocumentItemDto ResultItem { get; private set; }
     
-    public RcvMisc(MiscViewModel viewModel, IServiceProvider serviceProvide)
+    public PayMisc(MiscViewModel viewModel, IServiceProvider serviceProvide)
     {
         InitializeComponent();
         _viewModel = viewModel;
@@ -47,7 +47,6 @@ public partial class RcvMisc : Window
     {
         await _viewModel.ReloadAllAsync();
     }
-    
     private async void ClickAddBox(object sender, RoutedEventArgs e)
     {
         var boxWindow = _serviceProvider.GetRequiredService<Box>();
@@ -59,7 +58,7 @@ public partial class RcvMisc : Window
     {
         ResultItem = new DocumentItemDto
         {
-            WeightBes = (DataContext as MiscViewModel).Weight,
+            WeightBed = (DataContext as MiscViewModel).Weight,
             Weight750 = (DataContext as MiscViewModel).Weight750,
             Ayar = (DataContext as MiscViewModel).Ayar,
             Certain = (DataContext as MiscViewModel).Certain,
@@ -68,7 +67,6 @@ public partial class RcvMisc : Window
             Type = DocumentItemType.MISC
             // مقداردهی بقیه فیلدهای لازم
         };
-
         this.DialogResult = true;
         this.Close();
     }

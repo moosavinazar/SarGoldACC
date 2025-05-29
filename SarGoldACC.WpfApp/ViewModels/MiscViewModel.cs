@@ -4,7 +4,7 @@ using SarGoldACC.Core.Services.Interfaces;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class RcvMiscViewModel
+public class MiscViewModel
 {
     private readonly IBoxService _boxService;
     private readonly IAuthorizationService _authorizationService;
@@ -19,7 +19,7 @@ public class RcvMiscViewModel
                                       _authorizationService.HasPermission("Box.Create") ||
                                       _authorizationService.HasPermission("Box.Edit") ||
                                       _authorizationService.HasPermission("Box.Delete");
-    public RcvMiscViewModel(IBoxService boxService, IAuthorizationService authorizationService)
+    public MiscViewModel(IBoxService boxService, IAuthorizationService authorizationService)
     {
         _boxService = boxService;
         _authorizationService = authorizationService;

@@ -1,0 +1,84 @@
+﻿<Window x:Class="SarGoldACC.WpfApp.Views.MadeSubCategory"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
+        xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        mc:Ignorable="d"
+        Title="دسته بندی ساخته" 
+        Height="600" 
+        Width="800"
+        KeyDown="Window_KeyDown"
+        Focusable="True"
+        Loaded="Window_Loaded"
+        FlowDirection="RightToLeft"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <TextBlock Grid.Column="0" Text="نام"
+                       Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="0,0,5,0"/>
+            <TextBox Grid.Column="1" 
+                     x:Name="MadeSubCategoryNameBox" 
+                     Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                     Margin="0 0 10 0"
+                     Style="{StaticResource InputTextBox}"
+                     Text="{Binding Name}"/>
+            <TextBlock Text="دسته بندی اصلی"
+                       Grid.Column="2"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="5,10,5,0"/>
+            <ComboBox x:Name="MadeCategoryComboBox" Grid.Column="3"
+                      Visibility="{Binding CanAccessMadeCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"
+                      ItemsSource="{Binding MadeCategories}"
+                      DisplayMemberPath="Name"
+                      SelectedValuePath="Id"
+                      SelectedValue="{Binding MadeCategoryId, Mode=TwoWay}"
+                      Margin="0,5,0,0"/>
+            <Button Grid.Column="4" x:Name="AddMadeCategoryButton"
+                    Content="+"
+                    Style="{StaticResource PrimaryBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickAddMadeCategory"
+                    Padding="10,5"/>
+            <Button Grid.Column="5" 
+                    x:Name="SaveButton"
+                    Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                    Content="ذخیره"
+                    Style="{StaticResource SuccessBtn}"
+                    HorizontalAlignment="Center"
+                    Margin="10,10"
+                    Click="ClickSaveMadeSubCategory"
+                    Padding="10,5"/>
+        </Grid>
+        <controls:CustomizableDataGrid Grid.Row="1" x:Name="MadeSubCategoryDataGrid"
+                                       ItemsSource="{Binding AllMadeSubCategories}"
+                                       Loaded="MadeSubCategoryDataGrid_Loaded"
+                                       Visibility="{Binding CanAccessMadeSubCategoryView, Converter={StaticResource BoolToVisibilityConverter}}"/>
+    </Grid>
+</Window>

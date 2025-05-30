@@ -78,6 +78,11 @@ public class MainViewModel : ViewModelBase
                                        _authorizationService.HasPermission("Box.Create") ||
                                        _authorizationService.HasPermission("Box.Edit") ||
                                        _authorizationService.HasPermission("Box.Delete");
+    
+    public bool CanAccessMadeSubCategoryButton => _authorizationService.HasPermission("MadeSubCategory.View") ||
+                                              _authorizationService.HasPermission("MadeSubCategory.Create") ||
+                                              _authorizationService.HasPermission("MadeSubCategory.Edit") ||
+                                              _authorizationService.HasPermission("MadeSubCategory.Delete");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 
@@ -113,6 +118,7 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanAccessIncomeButton));
             OnPropertyChanged(nameof(CanAccessCostButton));
             OnPropertyChanged(nameof(CanAccessBoxButton));
+            OnPropertyChanged(nameof(CanAccessMadeSubCategoryButton));
         }
     }
 }

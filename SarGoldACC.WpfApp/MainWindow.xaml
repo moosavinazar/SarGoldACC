@@ -82,6 +82,11 @@
                                    LargeIcon="pack://application:,,,/Resources/Icons/BoxLarge.png"
                                    Click="OpenBoxWindowButton_Click"
                                    Visibility="{Binding CanAccessBoxButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Fluent:Button x:Name="MadeSubCategory" Header="دستا بندی ساخته"
+                                   Icon="pack://application:,,,/Resources/Icons/Category.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/CategoryLarge.png"
+                                   Click="OpenMadeSubCategoryWindowButton_Click"
+                                   Visibility="{Binding CanAccessMadeSubCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <Fluent:Button x:Name="Currency" Header="واحد پولی"
                                    Icon="pack://application:,,,/Resources/Icons/Currency.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/CurrencyLarge.png"

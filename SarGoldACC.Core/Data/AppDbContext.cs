@@ -35,6 +35,8 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<SubMelted> SubMelteds { get; set; }
     public DbSet<Box> Boxes { get; set; }
     public DbSet<Misc> Miscs { get; set; }
+    public DbSet<MadeCategory> MadeCategories { get; set; }
+    public DbSet<MadeSubCategory> MadeSubCategories { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -253,6 +255,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .WithMany(b => b.Pos)
             .HasForeignKey(b => b.BankId)
             .OnDelete(DeleteBehavior.Restrict);
+        
+        modelBuilder.Entity<MadeSubCategory>()
+            .HasOne(sc => sc.MadeCategory)
+            .WithMany(c => c.MadeSubCategories)
+            .HasForeignKey(sc => sc.MadeCategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
         
         // خواندن داده‌ها از فایل‌های CSV
         // Branch

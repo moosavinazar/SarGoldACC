@@ -61,6 +61,12 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<ICityRepository, CityRepository>();
             services.AddScoped<ICityService, CityService>();
             
+            services.AddScoped<IMadeCategoryService, MadeCategoryService>();
+            services.AddScoped<IMadeCategoryRepository, MadeCategoryRepository>();
+            
+            services.AddScoped<IMadeSubCategoryRepository, MadeSubCategoryRepository>();
+            services.AddScoped<IMadeSubCategoryService, MadeSubCategoryService>();
+            
             services.AddScoped<ICounterpartyRepository, CounterpartyRepository>();
             services.AddScoped<ICounterpartyService, CounterpartyService>();
             
@@ -154,6 +160,10 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<MiscViewModel>();
             services.AddTransient<RcvMisc>();
             services.AddTransient<PayMisc>();
+            services.AddTransient<MadeCategoryViewModel>();
+            services.AddTransient<MadeCategory>();
+            services.AddTransient<MadeSubCategoryViewModel>();
+            services.AddTransient<MadeSubCategory>();
 
             ServiceProvider = services.BuildServiceProvider();
             

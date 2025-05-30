@@ -119,6 +119,10 @@
       <Resource Include="Resources\Icons\Box.png" />
       <None Remove="Resources\Icons\BoxLarge.png" />
       <Resource Include="Resources\Icons\BoxLarge.png" />
+      <None Remove="Resources\Icons\Category.png" />
+      <Resource Include="Resources\Icons\Category.png" />
+      <None Remove="Resources\Icons\CategoryLarge.png" />
+      <Resource Include="Resources\Icons\CategoryLarge.png" />
     </ItemGroup>
 
 </Project>

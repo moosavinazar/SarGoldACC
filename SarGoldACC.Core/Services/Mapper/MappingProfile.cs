@@ -15,6 +15,7 @@ using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.DTOs.GeneralAccountDto;
 using SarGoldACC.Core.DTOs.Income;
 using SarGoldACC.Core.DTOs.Laboratory;
+using SarGoldACC.Core.DTOs.MadeCategory;
 using SarGoldACC.Core.DTOs.Pos;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Models.Auth;
@@ -108,5 +109,11 @@ public class MappingProfile : Profile
         CreateMap<BoxDto, Box>();
         CreateMap<BoxCreateDto, Box>();
         CreateMap<Box, BoxCreateDto>();
+        CreateMap<MadeCategory, MadeCategoryDto>();
+        CreateMap<MadeCategoryDto, MadeCategory>();
+        CreateMap<MadeCategory, MadeCategoryCreateDto>();
+        CreateMap<MadeCategoryCreateDto, MadeCategory>();
+        CreateMap<MadeSubCategory, MadeSubCategoryDto>();
+        CreateMap<MadeSubCategoryDto, MadeSubCategory>();
     }
 }

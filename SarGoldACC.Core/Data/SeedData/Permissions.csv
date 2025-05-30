@@ -51,3 +51,11 @@
 50,Box.Create,ایجاد هزینه
 51,Box.Edit,ویرایش هزینه
 52,Box.Delete,حذف هزینه
+53,MadeCategory.View,مشاهده دسته بندی ها
+54,MadeCategory.Create,ایجاد دسته بندی
+55,MadeCategory.Edit,ویرایش دسته بندی
+56,MadeCategory.Delete,حذف دسته بندی
+57,MadeSubCategory.View,مشاهده زیر دسته بندی ها
+58,MadeSubCategory.Create,ایجاد زیر دسته بندی
+59,MadeSubCategory.Edit,ویرایش زیر دسته بندی
+60,MadeSubCategory.Delete,حذف زیر دسته بندی

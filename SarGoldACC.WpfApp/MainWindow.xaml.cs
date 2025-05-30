@@ -313,4 +313,16 @@ public partial class MainWindow : RibbonWindow
         boxWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
+    private void OpenMadeSubCategoryWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenMadeSubCategoryWindow();
+    }
+
+    private void OpenMadeSubCategoryWindow()
+    {
+        var madeSubCategoryWindow = _serviceProvider.GetRequiredService<MadeSubCategory>();
+        madeSubCategoryWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        madeSubCategoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
 }

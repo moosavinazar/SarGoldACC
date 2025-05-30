@@ -16,8 +16,14 @@ public class DocumentItemDto
     public int? Ayar { get; set; }
     public bool Certain { get; set; }
     public string? Ang { get; set; }
+    public string? Barcode { get; set; }
+    public string? Photo { get; set; }
+    public long? OjratR { get; set; }
+    public double? OjratP { get; set; }
+    public string Name { get; set; }
     public long LaboratoryId { get; set; }
     public long BoxId { get; set; }
     public long SubMeltedId { get; set; }
+    public long MadeSubCategoryId { get; set; }
     
 }

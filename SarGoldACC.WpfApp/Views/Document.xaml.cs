@@ -42,6 +42,8 @@ public partial class Document : Window
             PayMeltedButton.Visibility = Visibility.Hidden;
             RcvMiscButton.Visibility = Visibility.Visible;
             PayMiscButton.Visibility = Visibility.Hidden;
+            RcvMadeButton.Visibility = Visibility.Visible;
+            PayMadeButton.Visibility = Visibility.Hidden;
         }
         
         if (e.Key == Key.OemMinus)
@@ -52,6 +54,8 @@ public partial class Document : Window
             PayMeltedButton.Visibility = Visibility.Visible;
             RcvMiscButton.Visibility = Visibility.Hidden;
             PayMiscButton.Visibility = Visibility.Visible;
+            RcvMadeButton.Visibility = Visibility.Hidden;
+            PayMadeButton.Visibility = Visibility.Visible;
         }
     }
 
@@ -140,6 +144,22 @@ public partial class Document : Window
         {
             _viewModel.DocumentItems.Add(payMiscWindow.ResultItem);
         }
+    }
+    
+    private void ClickRcvMade(object sender, RoutedEventArgs e)
+    {
+        var rcvMiscWindow = _serviceProvider.GetRequiredService<RcvMade>();
+        rcvMiscWindow.Owner = this;
+
+        bool? result = rcvMiscWindow.ShowDialog();
+        if (result == true && rcvMiscWindow.ResultItem != null)
+        {
+            _viewModel.DocumentItems.Add(rcvMiscWindow.ResultItem);
+        }
+    }
+    
+    private void ClickPayMade(object sender, RoutedEventArgs e)
+    {
     }
 
     private async void ClickSaveDocument(object sender, RoutedEventArgs e)

@@ -340,6 +340,37 @@ public class DocumentService : IDocumentService
                             }
                             break;
                         }
+                        case DocumentItemType.MADE:
+                        {
+                            if (item.WeightBes > 0)
+                            {
+                                var made = new Made
+                                {
+                                    Name = item.Name,
+                                    Ayar = item.Ayar,
+                                    Weight = item.WeightBes,
+                                    Weight750 = item.Weight750,
+                                    Barcode = item.Barcode,
+                                    Photo = item.Photo,
+                                    OjratP = item.OjratP,
+                                    OjratR = item.OjratR,
+                                    MadeSubCategoryId = item.MadeSubCategoryId,
+                                    BoxId = item.BoxId,
+                                    InvoiceRows = new List<InvoiceRow>()
+                                };
+                                var invoiceRow = new InvoiceRow
+                                {
+                                    AccType = InvoiceRowAccType.BES,
+                                    Description = item.Description,
+                                    Made = made
+                                };
+                                invoiceSideOne.InvoiceRows.Add(invoiceRow);
+                            }
+                            if (item.WeightBed > 0)
+                            {
+                            }
+                            break;
+                        }
                     }
                 }
             }

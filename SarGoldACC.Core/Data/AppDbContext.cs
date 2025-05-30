@@ -37,6 +37,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Misc> Miscs { get; set; }
     public DbSet<MadeCategory> MadeCategories { get; set; }
     public DbSet<MadeSubCategory> MadeSubCategories { get; set; }
+    public DbSet<Made> Mades { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -109,6 +110,13 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .IsRequired(false)
             .OnDelete(DeleteBehavior.Restrict);
         
+        modelBuilder.Entity<InvoiceRow>()
+            .HasOne(ir => ir.Made)
+            .WithMany(m => m.InvoiceRows)
+            .HasForeignKey(ir => ir.MadeId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Restrict);
+        
         modelBuilder.Entity<Counterparty>()
             .HasOne(c => c.GeneralAccount)
             .WithMany(g => g.Counterparties)
@@ -134,6 +142,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
             .HasForeignKey(m => m.LaboratoryId)
             .OnDelete(DeleteBehavior.Cascade);
         
+        modelBuilder.Entity<Made>()
+            .HasOne(m => m.MadeSubCategory)
+            .WithMany(s => s.Mades)
+            .HasForeignKey(m => m.MadeSubCategoryId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
         modelBuilder.Entity<SubMelted>()
             .HasOne(s => s.Melted)
             .WithMany(m => m.SubMelteds)
@@ -149,6 +163,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
         modelBuilder.Entity<Misc>()
             .HasOne(m => m.Box)
             .WithMany(b => b.Miscs)
+            .HasForeignKey(m => m.BoxId)
+            .OnDelete(DeleteBehavior.Cascade);
+        
+        modelBuilder.Entity<Made>()
+            .HasOne(m => m.Box)
+            .WithMany(b => b.Mades)
             .HasForeignKey(m => m.BoxId)
             .OnDelete(DeleteBehavior.Cascade);
         

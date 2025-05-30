@@ -16,4 +16,6 @@ public class InvoiceRow
     public long? SubMeltedId { get; set; }
     public Misc? Misc { get; set; }
     public long? MiscId { get; set; }
+    public Made? Made { get; set; }
+    public long? MadeId { get; set; }
 }

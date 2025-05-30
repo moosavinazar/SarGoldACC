@@ -164,6 +164,8 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<MadeCategory>();
             services.AddTransient<MadeSubCategoryViewModel>();
             services.AddTransient<MadeSubCategory>();
+            services.AddTransient<RcvMadeViewModel>();
+            services.AddTransient<RcvMade>();
 
             ServiceProvider = services.BuildServiceProvider();
             

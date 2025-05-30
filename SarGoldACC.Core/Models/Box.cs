@@ -12,4 +12,5 @@ public class Box
     public BoxType Type { get; set; }
     public ICollection<SubMelted> SubMelteds { get; set; }
     public ICollection<Misc> Miscs { get; set; }
+    public ICollection<Made> Mades { get; set; }
 }

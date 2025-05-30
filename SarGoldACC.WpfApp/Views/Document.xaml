@@ -10,7 +10,7 @@
         mc:Ignorable="d"
         Title="سند" 
         Height="768" 
-        Width="1024"
+        Width="1300"
         KeyDown="DocumentWindow_KeyDown"
         Focusable="True"
         Loaded="Window_Loaded"
@@ -213,6 +213,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" x:Name="RcvOredrButton"
                         Content="دریافت حواله"
@@ -256,6 +257,20 @@
                         Click="ClickPayMisc"
                         Visibility="Hidden"
                         Padding="10,5"/>
+                <Button Grid.Row="3" x:Name="RcvMadeButton"
+                        Content="دریافت ساخته"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickRcvMade"
+                        Visibility="Visible"
+                        Padding="10,5"/>
+                <Button Grid.Row="3" x:Name="PayMadeButton"
+                        Content="پرداخت ساخته"
+                        Style="{StaticResource DangerBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickPayMade"
+                        Visibility="Hidden"
+                        Padding="10,5"/>
             </Grid>
             <Grid Grid.Column="1" Margin="10,0,0,0">
                 <DataGrid ItemsSource="{Binding DocumentItems}"
@@ -278,6 +293,10 @@
                         <DataGridTextColumn Header="عیار" Binding="{Binding Ayar}"/>
                         <DataGridTextColumn Header="شرطی" Binding="{Binding Certain}"/>
                         <DataGridTextColumn Header="انگ" Binding="{Binding Ang}"/>
+                        <DataGridTextColumn Header="عنوان" Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="بارکد" Binding="{Binding Barcode}"/>
+                        <DataGridTextColumn Header="اجرت ریالی" Binding="{Binding OjratR}"/>
+                        <DataGridTextColumn Header="درصد اجرت" Binding="{Binding OjratP}"/>
                         <DataGridTextColumn Header="شناسه کارگاه" Binding="{Binding LaboratoryId}"/>
                         <DataGridTextColumn Header="شناسه جعبه" Binding="{Binding BoxId}"/>
                     </DataGrid.Columns>

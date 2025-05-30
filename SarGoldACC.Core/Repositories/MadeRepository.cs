@@ -23,6 +23,15 @@ public class MadeRepository : IMadeRepository
     {
         return await _context.Mades.ToListAsync();
     }
+    
+    public async Task<List<Made>> GetAllWithDetailAsync()
+    {
+        return await _context.Mades
+            .Include(m => m.MadeSubCategory)
+            .ThenInclude(sc => sc.MadeCategory)
+            .Include(m => m.Box)
+            .ToListAsync();
+    }
 
     public async Task<Made> AddAsync(Made made)
     {

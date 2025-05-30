@@ -160,6 +160,17 @@ public partial class Document : Window
     
     private void ClickPayMade(object sender, RoutedEventArgs e)
     {
+        var payMadeWindow = _serviceProvider.GetRequiredService<PayMade>();
+        payMadeWindow.Owner = this;
+
+        bool? result = payMadeWindow.ShowDialog();
+        if (result == true && payMadeWindow.ResultItems != null && payMadeWindow.ResultItems.Any())
+        {
+            foreach (var item in payMadeWindow.ResultItems)
+            {
+                _viewModel.DocumentItems.Add(item);
+            }
+        }
     }
 
     private async void ClickSaveDocument(object sender, RoutedEventArgs e)

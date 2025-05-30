@@ -23,6 +23,7 @@ public class DocumentService : IDocumentService
     private readonly IOrderAmountRepository _orderAmountRepository;
     private readonly IMeltedRepository _meltedRepository;
     private readonly ISubMeltedRepository _subMeltedRepository;
+    private readonly IMadeRepository _madeRepository;
     private readonly IMapper _mapper;
 
     public DocumentService(
@@ -34,6 +35,7 @@ public class DocumentService : IDocumentService
         IOrderAmountRepository orderAmountRepository,
         IMeltedRepository meltedRepository,
         ISubMeltedRepository subMeltedRepository,
+        IMadeRepository madeRepository,
         IMapper mapper)
     {
         _dbContext = dbContext;
@@ -44,6 +46,7 @@ public class DocumentService : IDocumentService
         _orderAmountRepository = orderAmountRepository;
         _meltedRepository = meltedRepository;
         _subMeltedRepository = subMeltedRepository;
+        _madeRepository = madeRepository;
         _mapper = mapper;
     }
 
@@ -368,6 +371,14 @@ public class DocumentService : IDocumentService
                             }
                             if (item.WeightBed > 0)
                             {
+                                var made = await _madeRepository.GetByIdAsync(item.MadeId);
+                                var invoiceRow = new InvoiceRow
+                                {
+                                    AccType = InvoiceRowAccType.BED,
+                                    Description = item.Description,
+                                    Made = made
+                                };
+                                invoiceSideOne.InvoiceRows.Add(invoiceRow);
                             }
                             break;
                         }

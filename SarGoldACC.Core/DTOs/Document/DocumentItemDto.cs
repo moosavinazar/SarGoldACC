@@ -24,6 +24,7 @@ public class DocumentItemDto
     public long LaboratoryId { get; set; }
     public long BoxId { get; set; }
     public long SubMeltedId { get; set; }
+    public long MadeId { get; set; }
     public long MadeSubCategoryId { get; set; }
     
 }

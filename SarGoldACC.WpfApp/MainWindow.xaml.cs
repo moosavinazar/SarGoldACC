@@ -325,4 +325,16 @@ public partial class MainWindow : RibbonWindow
         madeSubCategoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
+    private void OpenCoinCategoryWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenCoinCategoryWindow();
+    }
+
+    private void OpenCoinCategoryWindow()
+    {
+        var coinCategoryWindow = _serviceProvider.GetRequiredService<CoinCategory>();
+        coinCategoryWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        coinCategoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
 }

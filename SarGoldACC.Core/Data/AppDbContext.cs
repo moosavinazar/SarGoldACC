@@ -38,6 +38,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<MadeCategory> MadeCategories { get; set; }
     public DbSet<MadeSubCategory> MadeSubCategories { get; set; }
     public DbSet<Made> Mades { get; set; }
+    public DbSet<CoinCategory> CoinCategories { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {

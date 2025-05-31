@@ -123,6 +123,10 @@
       <Resource Include="Resources\Icons\Category.png" />
       <None Remove="Resources\Icons\CategoryLarge.png" />
       <Resource Include="Resources\Icons\CategoryLarge.png" />
+      <None Remove="Resources\Icons\CoinLarge.png" />
+      <Resource Include="Resources\Icons\CoinLarge.png" />
+      <None Remove="Resources\Icons\Coin.png" />
+      <Resource Include="Resources\Icons\Coin.png" />
     </ItemGroup>
 
 </Project>

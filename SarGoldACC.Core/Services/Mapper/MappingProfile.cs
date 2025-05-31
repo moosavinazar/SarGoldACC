@@ -7,6 +7,7 @@ using SarGoldACC.Core.DTOs.Box;
 using SarGoldACC.Core.DTOs.Branch;
 using SarGoldACC.Core.DTOs.Cash;
 using SarGoldACC.Core.DTOs.City;
+using SarGoldACC.Core.DTOs.CoinCategory;
 using SarGoldACC.Core.DTOs.Cost;
 using SarGoldACC.Core.DTOs.CounterParty;
 using SarGoldACC.Core.DTOs.Currency;
@@ -115,5 +116,11 @@ public class MappingProfile : Profile
         CreateMap<MadeCategoryCreateDto, MadeCategory>();
         CreateMap<MadeSubCategory, MadeSubCategoryDto>();
         CreateMap<MadeSubCategoryDto, MadeSubCategory>();
+        CreateMap<MadeSubCategory, MadeSubCategoryCreateDto>();
+        CreateMap<MadeSubCategoryCreateDto, MadeSubCategory>();
+        CreateMap<CoinCategory, CoinCategoryDto>();
+        CreateMap<CoinCategoryDto, CoinCategory>();
+        CreateMap<CoinCategory, CoinCategoryCreateDto>();
+        CreateMap<CoinCategoryCreateDto, CoinCategory>();
     }
 }

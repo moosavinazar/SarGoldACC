@@ -87,6 +87,11 @@
                                    LargeIcon="pack://application:,,,/Resources/Icons/CategoryLarge.png"
                                    Click="OpenMadeSubCategoryWindowButton_Click"
                                    Visibility="{Binding CanAccessMadeSubCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Fluent:Button x:Name="CoinCategory" Header="دسته بندی سکه"
+                                   Icon="pack://application:,,,/Resources/Icons/Coin.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/CoinLarge.png"
+                                   Click="OpenCoinCategoryWindowButton_Click"
+                                   Visibility="{Binding CanAccessCoinCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <Fluent:Button x:Name="Currency" Header="واحد پولی"
                                    Icon="pack://application:,,,/Resources/Icons/Currency.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/CurrencyLarge.png"

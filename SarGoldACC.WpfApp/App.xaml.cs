@@ -103,6 +103,9 @@ namespace SarGoldACC.WpfApp
             services.AddScoped<IBoxRepository, BoxRepository>();
             services.AddScoped<IBoxService, BoxService>();
             
+            services.AddScoped<ICoinCategoryRepository, CoinCategoryRepository>();
+            services.AddScoped<ICoinCategoryService, CoinCategoryService>();
+            
             services.AddScoped<IInvoiceRepository, InvoiceRepository>();
             services.AddScoped<IInvoiceRowRepository, InvoiceRowRepository>();
             services.AddScoped<IOrderAmountRepository, OrderAmountRepository>();
@@ -169,6 +172,8 @@ namespace SarGoldACC.WpfApp
             services.AddTransient<RcvMade>();
             services.AddTransient<PayMadeViewModel>();
             services.AddTransient<PayMade>();
+            services.AddTransient<CoinCategoryViewModel>();
+            services.AddTransient<CoinCategory>();
 
             ServiceProvider = services.BuildServiceProvider();
             

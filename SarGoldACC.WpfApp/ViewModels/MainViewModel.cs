@@ -83,6 +83,11 @@ public class MainViewModel : ViewModelBase
                                               _authorizationService.HasPermission("MadeSubCategory.Create") ||
                                               _authorizationService.HasPermission("MadeSubCategory.Edit") ||
                                               _authorizationService.HasPermission("MadeSubCategory.Delete");
+    
+    public bool CanAccessCoinCategoryButton => _authorizationService.HasPermission("CoinCategory.View") ||
+                                                  _authorizationService.HasPermission("CoinCategory.Create") ||
+                                                  _authorizationService.HasPermission("CoinCategory.Edit") ||
+                                                  _authorizationService.HasPermission("CoinCategory.Delete");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 
@@ -119,6 +124,7 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanAccessCostButton));
             OnPropertyChanged(nameof(CanAccessBoxButton));
             OnPropertyChanged(nameof(CanAccessMadeSubCategoryButton));
+            OnPropertyChanged(nameof(CanAccessCoinCategoryButton));
         }
     }
 }

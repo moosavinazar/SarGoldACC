@@ -59,3 +59,7 @@
 58,MadeSubCategory.Create,ایجاد زیر دسته بندی
 59,MadeSubCategory.Edit,ویرایش زیر دسته بندی
 60,MadeSubCategory.Delete,حذف زیر دسته بندی
+61,CoinCategory.View,مشاهده دسته بندی سکه ها
+62,CoinCategory.Create,ایجاد دسته بندی سکه
+63,CoinCategory.Edit,ویرایش دسته بندی سکه
+64,CoinCategory.Delete,حذف دسته بندی سکه

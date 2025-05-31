@@ -26,5 +26,6 @@ public class DocumentItemDto
     public long SubMeltedId { get; set; }
     public long MadeId { get; set; }
     public long MadeSubCategoryId { get; set; }
+    public long CoinCategoryId { get; set; }
     
 }

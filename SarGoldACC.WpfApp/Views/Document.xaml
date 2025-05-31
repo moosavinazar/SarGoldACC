@@ -214,6 +214,7 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Button Grid.Row="0" x:Name="RcvOredrButton"
                         Content="دریافت حواله"
@@ -269,6 +270,20 @@
                         Style="{StaticResource DangerBtn}"
                         HorizontalAlignment="Center"
                         Click="ClickPayMade"
+                        Visibility="Hidden"
+                        Padding="10,5"/>
+                <Button Grid.Row="4" x:Name="RcvCoinButton"
+                        Content="دریافت سکه"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickRcvCoin"
+                        Visibility="Visible"
+                        Padding="10,5"/>
+                <Button Grid.Row="4" x:Name="PayCoinButton"
+                        Content="پرداخت سکه"
+                        Style="{StaticResource DangerBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickPayCoin"
                         Visibility="Hidden"
                         Padding="10,5"/>
             </Grid>

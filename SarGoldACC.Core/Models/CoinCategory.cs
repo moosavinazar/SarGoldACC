@@ -7,4 +7,5 @@ public class CoinCategory
     public double Weight { get; set; }
     public double Weight750 { get; set; }
     public int Ayar { get; set; }
+    public ICollection<Coin> Coins { get; set; }
 }

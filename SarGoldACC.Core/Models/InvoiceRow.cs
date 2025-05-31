@@ -18,4 +18,6 @@ public class InvoiceRow
     public long? MiscId { get; set; }
     public Made? Made { get; set; }
     public long? MadeId { get; set; }
+    public Coin? Coin { get; set; }
+    public long? CoinId { get; set; }
 }

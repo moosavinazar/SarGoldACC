@@ -382,6 +382,54 @@ public class DocumentService : IDocumentService
                             }
                             break;
                         }
+                        case DocumentItemType.COIN:
+                        {
+                            if (item.WeightBes > 0)
+                            {
+                                var coin = new Coin
+                                {
+                                    Name = item.Name,
+                                    Ayar = item.Ayar,
+                                    Weight = item.WeightBes,
+                                    Weight750 = item.Weight750,
+                                    OjratP = item.OjratP,
+                                    OjratR = item.OjratR,
+                                    CoinCategoryId = item.CoinCategoryId,
+                                    BoxId = item.BoxId,
+                                    InvoiceRows = new List<InvoiceRow>()
+                                };
+                                var invoiceRow = new InvoiceRow
+                                {
+                                    AccType = InvoiceRowAccType.BES,
+                                    Description = item.Description,
+                                    Coin = coin
+                                };
+                                invoiceSideOne.InvoiceRows.Add(invoiceRow);
+                            }
+                            if (item.WeightBed > 0)
+                            {
+                                var coin = new Coin
+                                {
+                                    Name = item.Name,
+                                    Ayar = item.Ayar,
+                                    Weight = item.WeightBes,
+                                    Weight750 = item.Weight750,
+                                    OjratP = item.OjratP,
+                                    OjratR = item.OjratR,
+                                    CoinCategoryId = item.CoinCategoryId,
+                                    BoxId = item.BoxId,
+                                    InvoiceRows = new List<InvoiceRow>()
+                                };
+                                var invoiceRow = new InvoiceRow
+                                {
+                                    AccType = InvoiceRowAccType.BED,
+                                    Description = item.Description,
+                                    Coin = coin
+                                };
+                                invoiceSideOne.InvoiceRows.Add(invoiceRow);
+                            }
+                            break;
+                        }
                     }
                 }
             }

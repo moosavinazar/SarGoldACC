@@ -8,14 +8,12 @@ namespace SarGoldACC.WpfApp.ViewModels;
 public class PayMadeViewModel : ViewModelBase
 {
     private readonly IMadeRepository _madeRepository;
-    private readonly AppDbContext _dbContext;
     public string Description { get; set; }
     public ObservableCollection<MadePayDataGridDto> MadeItems { get; set; } = new();
 
-    public PayMadeViewModel(IMadeRepository madeRepository, AppDbContext dbContext)
+    public PayMadeViewModel(IMadeRepository madeRepository)
     {
         _madeRepository = madeRepository;
-        _dbContext = dbContext;
         Task.Run(async () =>
         {
             await LoadMadeAsync();

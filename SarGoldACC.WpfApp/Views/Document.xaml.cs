@@ -44,6 +44,8 @@ public partial class Document : Window
             PayMiscButton.Visibility = Visibility.Hidden;
             RcvMadeButton.Visibility = Visibility.Visible;
             PayMadeButton.Visibility = Visibility.Hidden;
+            RcvCoinButton.Visibility = Visibility.Visible;
+            PayCoinButton.Visibility = Visibility.Hidden;
         }
         
         if (e.Key == Key.OemMinus)
@@ -56,6 +58,8 @@ public partial class Document : Window
             PayMiscButton.Visibility = Visibility.Visible;
             RcvMadeButton.Visibility = Visibility.Hidden;
             PayMadeButton.Visibility = Visibility.Visible;
+            RcvCoinButton.Visibility = Visibility.Hidden;
+            PayCoinButton.Visibility = Visibility.Visible;
         }
     }
 
@@ -170,6 +174,30 @@ public partial class Document : Window
             {
                 _viewModel.DocumentItems.Add(item);
             }
+        }
+    }
+    
+    private void ClickRcvCoin(object sender, RoutedEventArgs e)
+    {
+        var rcvCoinWindow = _serviceProvider.GetRequiredService<RcvCoin>();
+        rcvCoinWindow.Owner = this;
+
+        bool? result = rcvCoinWindow.ShowDialog();
+        if (result == true && rcvCoinWindow.ResultItem != null)
+        {
+            _viewModel.DocumentItems.Add(rcvCoinWindow.ResultItem);
+        }
+    }
+    
+    private void ClickPayCoin(object sender, RoutedEventArgs e)
+    {
+        var payCoinWindow = _serviceProvider.GetRequiredService<PayCoin>();
+        payCoinWindow.Owner = this;
+
+        bool? result = payCoinWindow.ShowDialog();
+        if (result == true && payCoinWindow.ResultItem != null)
+        {
+            _viewModel.DocumentItems.Add(payCoinWindow.ResultItem);
         }
     }
 

@@ -6,5 +6,6 @@ public enum DocumentItemType
     MELTED = 6, //آبشده
     MISC = 3, //آبشده
     MADE = 4, //ساخته
+    COIN =9, //سکه
     
 }

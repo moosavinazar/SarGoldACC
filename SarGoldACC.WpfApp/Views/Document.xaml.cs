@@ -25,6 +25,17 @@ public partial class Document : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        // گرفتن رزولوشن صفحه اصلی
+        var screenWidth = SystemParameters.PrimaryScreenWidth;
+        var screenHeight = SystemParameters.PrimaryScreenHeight;
+
+        // محاسبه عرض و ارتفاع مورد نظر (مثلاً 80% عرض و 80% ارتفاع)
+        this.Width = screenWidth * 0.8;
+        this.Height = screenHeight * 0.8;
+
+        // مرکز کردن پنجره (اگر لازم بود دستی)
+        this.Left = (screenWidth - this.Width) / 2;
+        this.Top = (screenHeight - this.Height) / 2;
     }
 
     private void DocumentWindow_KeyDown(object sender, KeyEventArgs e)
@@ -65,6 +76,9 @@ public partial class Document : Window
 
     private async void ClickAddCustomer(object sender, RoutedEventArgs e)
     {
+        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
+        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
 
     private async void ClickReport(object sender, RoutedEventArgs e)

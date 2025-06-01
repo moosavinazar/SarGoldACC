@@ -9,8 +9,6 @@
         xmlns:PersianDateControlsPlus="clr-namespace:PersianDateControlsPlus;assembly=PersianDateControlsPlus"
         mc:Ignorable="d"
         Title="سند" 
-        Height="768" 
-        Width="1300"
         KeyDown="DocumentWindow_KeyDown"
         Focusable="True"
         Loaded="Window_Loaded"

@@ -1,4 +1,6 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -14,6 +16,12 @@ public partial class Document : Window
     private readonly IAuthorizationService _authorizationService;
     private readonly IServiceProvider _serviceProvider;
     
+    [DllImport("user32.dll")]
+    static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
+
+    [DllImport("user32.dll")]
+    static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
+    
     public Document(DocumentViewModel viewModel, IAuthorizationService authorizationService, IServiceProvider serviceProvider)
     {
         InitializeComponent();
@@ -25,7 +33,6 @@ public partial class Document : Window
     
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
-        Keyboard.Focus(this);
         // گرفتن رزولوشن صفحه اصلی
         var screenWidth = SystemParameters.PrimaryScreenWidth;
         var screenHeight = SystemParameters.PrimaryScreenHeight;
@@ -37,6 +44,23 @@ public partial class Document : Window
         // مرکز کردن پنجره (اگر لازم بود دستی)
         this.Left = (screenWidth - this.Width) / 2;
         this.Top = (screenHeight - this.Height) / 2;
+        
+        // تمرکز روی بخش متنی ComboBox
+        await Task.Delay(100); // صبر کوتاه برای اطمینان از آماده بودن UI
+
+        CounterpartyComboBox.Focus();
+        if (CounterpartyComboBox.IsEditable)
+        {
+            var textBox = (TextBox)CounterpartyComboBox.Template.FindName("PART_EditableTextBox", CounterpartyComboBox);
+            if (textBox != null)
+            {
+                Keyboard.Focus(textBox);
+                textBox.SelectAll();
+                // تنظیم زبان فارسی
+                LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
+                InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
+            }
+        }
     }
 
     private void DocumentWindow_KeyDown(object sender, KeyEventArgs e)
@@ -77,9 +101,7 @@ public partial class Document : Window
 
     private async void ClickAddCustomer(object sender, RoutedEventArgs e)
     {
-        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
-        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+        OpenAddCustomerWindow();
     }
 
     private async void ClickReport(object sender, RoutedEventArgs e)
@@ -226,13 +248,29 @@ public partial class Document : Window
         await _viewModel.SaveDocument(DocumentType.TEMPORARY);
     }
     
-    private void BankComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    private void CounterpartyComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         var comboBox = sender as ComboBox;
         if (comboBox != null)
         {
             comboBox.IsDropDownOpen = true;
         }
+    }
+
+    private void CounterpartyComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Insert)
+        {
+            OpenAddCustomerWindow();
+        }
+    }
+
+
+    private async void OpenAddCustomerWindow()
+    {
+        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
+        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
 
 }

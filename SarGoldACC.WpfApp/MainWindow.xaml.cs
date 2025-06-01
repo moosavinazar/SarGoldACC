@@ -65,6 +65,11 @@ public partial class MainWindow : RibbonWindow
                     OpenUserWindow();
                     break;
                 }
+                if (MainRibbon.SelectedTabItem == TabMain && Document.Visibility == Visibility.Visible)
+                {
+                    OpenDocumentWindow();
+                    break;
+                }
                 MainRibbon.IsMinimized = false;
                 MainRibbon.SelectedTabItem = TabMain;
                 break;

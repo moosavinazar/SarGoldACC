@@ -15,6 +15,10 @@ public class MainViewModel : ViewModelBase
     
     public bool IsRibbonVisible => !(CurrentViewModel is LoginViewModel);
 
+    public bool CanAccessDocumentButton => _authorizationService.HasPermission("Document.View") ||
+                                        _authorizationService.HasPermission("Document.Create") ||
+                                        _authorizationService.HasPermission("Document.Edit") ||
+                                        _authorizationService.HasPermission("Document.Delete");
     public bool CanAccessGroupButton => _authorizationService.HasPermission("Group.View") ||
                                         _authorizationService.HasPermission("Group.Create") ||
                                         _authorizationService.HasPermission("Group.Edit") ||
@@ -125,6 +129,7 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanAccessBoxButton));
             OnPropertyChanged(nameof(CanAccessMadeSubCategoryButton));
             OnPropertyChanged(nameof(CanAccessCoinCategoryButton));
+            OnPropertyChanged(nameof(CanAccessDocumentButton));
         }
     }
 }

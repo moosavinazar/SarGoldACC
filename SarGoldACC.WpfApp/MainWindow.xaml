@@ -37,10 +37,12 @@
             <!--Tabs-->
             <Fluent:RibbonTabItem x:Name="TabMain" ToolTip="کلید میانبر (1)" Header="عملیات اصلی" Style="{StaticResource CustomTabStyle}">
                 <Fluent:RibbonGroupBox Header="عملیات" >
-                    <Fluent:Button Header="صدور سند"
+                    <Fluent:Button x:Name="Document" Header="صدور سند"
+                                   ToolTip="کلید میانبر (1)"
                                    Icon="pack://application:,,,/Resources/Icons/NewDocument.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/NewDocumentLarge.png"
-                                   Click="OpenDocumentWindowButton_Click"/>
+                                   Click="OpenDocumentWindowButton_Click"
+                                   Visibility="{Binding CanAccessDocumentButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <Fluent:Button Header="شرطی به قطعی"
                                    Icon="pack://application:,,,/Resources/Icons/ConditionalCertainty.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/ConditionalCertaintyLarge.png" />

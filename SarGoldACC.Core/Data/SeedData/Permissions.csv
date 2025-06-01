@@ -63,3 +63,7 @@
 62,CoinCategory.Create,ایجاد دسته بندی سکه
 63,CoinCategory.Edit,ویرایش دسته بندی سکه
 64,CoinCategory.Delete,حذف دسته بندی سکه
+65,Document.View,مشاهده سندها
+66,Document.Create,ایجاد سند
+67,Document.Edit,ویرایش سند
+68,Document.Delete,حذف سند

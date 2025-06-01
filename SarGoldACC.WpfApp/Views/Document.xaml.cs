@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.Enums;
@@ -224,4 +225,14 @@ public partial class Document : Window
     {
         await _viewModel.SaveDocument(DocumentType.TEMPORARY);
     }
+    
+    private void BankComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        var comboBox = sender as ComboBox;
+        if (comboBox != null)
+        {
+            comboBox.IsDropDownOpen = true;
+        }
+    }
+
 }

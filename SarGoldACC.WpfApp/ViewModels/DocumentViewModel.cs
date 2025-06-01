@@ -18,8 +18,28 @@ public class DocumentViewModel : ViewModelBase
     private readonly ICounterpartyService _counterpartyService;
     private readonly IDocumentService _documentService;
     private readonly AppDbContext _dbContext;
-    
-    public ObservableCollection<CounterpartyDto> Counterparties { get; }
+
+    private  ObservableCollection<CounterpartyDto> _counterparties;
+    public ObservableCollection<CounterpartyDto> Counterparties
+    {
+        get => _counterparties;
+        set
+        {
+            _counterparties = value;
+            OnPropertyChanged();
+            FilterCounterparties();
+        }
+    }
+    private ObservableCollection<CounterpartyDto> _filteredCounterparties;
+    public ObservableCollection<CounterpartyDto> FilteredCounterparties
+    {
+        get => _filteredCounterparties;
+        set
+        {
+            _filteredCounterparties = value;
+            OnPropertyChanged();
+        }
+    }
     public ObservableCollection<DocumentItemDto> DocumentItems { get; set; } = new();
     private DateTime _date;
     private PersianDate _persianDate = PersianDate.Today;
@@ -51,6 +71,21 @@ public class DocumentViewModel : ViewModelBase
         get => _counterpartyId;
         set => SetProperty(ref _counterpartyId, value);
     }
+    private string _searchText;
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            if (_searchText != value)
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                FilterCounterparties();
+            }
+        }
+    }
+    
     public DocumentViewModel(IAuthorizationService authorizationService, AppDbContext appDbContext,
         ICounterpartyService counterpartyService, IDocumentService documentService)
     {
@@ -59,11 +94,11 @@ public class DocumentViewModel : ViewModelBase
         _counterpartyService = counterpartyService;
         _documentService = documentService;
         Counterparties = new ObservableCollection<CounterpartyDto>();
-        
         Task.Run(async () =>
         {
             await LoadCounterpartyAsync();
         }).GetAwaiter().GetResult();
+        FilteredCounterparties = new ObservableCollection<CounterpartyDto>(Counterparties);
     }
 
     public async Task<ResultDto> SaveDocument(DocumentType type)
@@ -113,11 +148,24 @@ public class DocumentViewModel : ViewModelBase
     
     private async Task LoadCounterpartyAsync()
     {
-        Counterparties.Clear();
         var counterparties = await _counterpartyService.GetAllAsync();
-        foreach (var c in counterparties)
+        Counterparties = new ObservableCollection<CounterpartyDto>(counterparties); // باعث اجرای FilterCounterparties میشه
+    }
+
+    
+    private void FilterCounterparties()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
         {
-            Counterparties.Add(c);
+            FilteredCounterparties = new ObservableCollection<CounterpartyDto>(Counterparties);
+        }
+        else
+        {
+            var filtered = Counterparties
+                .Where(c => c.Name != null && c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            FilteredCounterparties = new ObservableCollection<CounterpartyDto>(filtered);
         }
     }
     

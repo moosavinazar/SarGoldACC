@@ -70,7 +70,7 @@ public partial class Document : Window
             this.Close();
         }
 
-        if (e.Key == Key.OemPlus)
+        if (e.Key is Key.OemPlus or Key.Add)
         {
             RcvOredrButton.Visibility = Visibility.Visible;
             PayOredrButton.Visibility = Visibility.Hidden;
@@ -84,7 +84,7 @@ public partial class Document : Window
             PayCoinButton.Visibility = Visibility.Hidden;
         }
         
-        if (e.Key == Key.OemMinus)
+        if (e.Key is Key.OemMinus or Key.Subtract)
         {
             RcvOredrButton.Visibility = Visibility.Hidden;
             PayOredrButton.Visibility = Visibility.Visible;
@@ -259,6 +259,12 @@ public partial class Document : Window
 
     private void CounterpartyComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
     {
+        // جلوگیری از وارد شدن از طریق کلیدهای فیزیکی + و -
+        if (e.Key == Key.OemPlus || e.Key == Key.Add || e.Key == Key.OemMinus || e.Key == Key.Subtract)
+        {
+            e.Handled = true;
+            DocumentWindow_KeyDown(sender, e);
+        }
         if (e.Key == Key.Insert)
         {
             OpenAddCustomerWindow();

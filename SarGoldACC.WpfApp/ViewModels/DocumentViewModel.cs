@@ -65,11 +65,20 @@ public class DocumentViewModel : ViewModelBase
             }
         }
     }
+    public bool IsCounterpartySelected => CounterpartyId != 0;
     private long _counterpartyId;
     public long CounterpartyId
     {
         get => _counterpartyId;
-        set => SetProperty(ref _counterpartyId, value);
+        set
+        {
+            if (_counterpartyId != value)
+            {
+                _counterpartyId = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(IsCounterpartySelected));
+            }
+        }
     }
     private string _searchText;
     public string SearchText
@@ -157,6 +166,7 @@ public class DocumentViewModel : ViewModelBase
     {
         if (string.IsNullOrWhiteSpace(SearchText))
         {
+            CounterpartyId = 0;
             FilteredCounterparties = new ObservableCollection<CounterpartyDto>(Counterparties);
         }
         else

@@ -105,6 +105,7 @@
                                                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                                                Grid.Column="6"
                                                                Margin="0 5 0 0"
+                                                               IsEnabled="{Binding IsCounterpartySelected}"
                                                                SelectedDate="{Binding PersianDate, Mode=TwoWay}" />
                 </Grid>
                 <Grid Grid.Row="1">
@@ -194,6 +195,7 @@
                             Style="{StaticResource PrimaryBtn}"
                             HorizontalAlignment="Center"
                             Click="ClickTenDeal"
+                            IsEnabled="{Binding IsCounterpartySelected}"
                             Padding="10,5"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" 
@@ -203,6 +205,7 @@
                             Style="{StaticResource PrimaryBtn}"
                             HorizontalAlignment="Center"
                             Click="ClickReport"
+                            IsEnabled="{Binding IsCounterpartySelected}"
                             Padding="10,5"/>
                 </StackPanel>
             </Grid>
@@ -226,6 +229,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickRcvOrder"
                         Visibility="Visible"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="0" x:Name="PayOredrButton"
                         Content="پرداخت حواله"
@@ -233,6 +237,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickPayOrder"
                         Visibility="Hidden"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="1" x:Name="RcvMeltedButton"
                         Content="دریافت آبشده"
@@ -240,6 +245,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickRcvMelted"
                         Visibility="Visible"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="1" x:Name="PayMeltedButton"
                         Content="پرداخت آبشده"
@@ -247,6 +253,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickPayMelted"
                         Visibility="Hidden"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="2" x:Name="RcvMiscButton"
                         Content="دریافت متفرقه"
@@ -254,6 +261,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickRcvMisc"
                         Visibility="Visible"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="2" x:Name="PayMiscButton"
                         Content="پرداخت متفرقه"
@@ -261,6 +269,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickPayMisc"
                         Visibility="Hidden"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="3" x:Name="RcvMadeButton"
                         Content="دریافت ساخته"
@@ -268,6 +277,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickRcvMade"
                         Visibility="Visible"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="3" x:Name="PayMadeButton"
                         Content="پرداخت ساخته"
@@ -275,6 +285,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickPayMade"
                         Visibility="Hidden"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="4" x:Name="RcvCoinButton"
                         Content="دریافت سکه"
@@ -282,6 +293,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickRcvCoin"
                         Visibility="Visible"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
                 <Button Grid.Row="4" x:Name="PayCoinButton"
                         Content="پرداخت سکه"
@@ -289,6 +301,7 @@
                         HorizontalAlignment="Center"
                         Click="ClickPayCoin"
                         Visibility="Hidden"
+                        IsEnabled="{Binding IsCounterpartySelected}"
                         Padding="10,5"/>
             </Grid>
             <Grid Grid.Column="1" Margin="10,0,0,0">
@@ -299,6 +312,7 @@
                           CanUserDeleteRows="False"
                           IsReadOnly="True"
                           SelectionMode="Single"
+                          IsEnabled="{Binding IsCounterpartySelected}"
                           Margin="0,10,0,0">
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="شناسه طرف حساب" Binding="{Binding CounterpartySideTwoId}"/>
@@ -332,12 +346,14 @@
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
                     Click="ClickSaveDocument"
+                    IsEnabled="{Binding IsCounterpartySelected}"
                     Padding="10,5"/>
             <Button Grid.Column="1" x:Name="SaveTemporaryButton"
                     Content="ذخیره پیش نویس"
                     Style="{StaticResource PrimaryBtn}"
                     HorizontalAlignment="Center"
                     Click="ClickSaveTemporaryDocument"
+                    IsEnabled="{Binding IsCounterpartySelected}"
                     Padding="10,5"/>
         </Grid>
     </Grid>

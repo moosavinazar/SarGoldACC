@@ -4,6 +4,7 @@ using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
+using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.DTOs.Customer;
 using SarGoldACC.Core.Services;
 using SarGoldACC.Core.Services.Interfaces;
@@ -15,13 +16,15 @@ public partial class Customer : Window
 {
     private readonly CustomerViewModel _viewModel;
     private readonly IAuthorizationService _authorizationService;
+    private readonly IServiceProvider _serviceProvider;
     
-    public Customer(CustomerViewModel viewModel, IAuthorizationService authorizationService)
+    public Customer(CustomerViewModel viewModel, IAuthorizationService authorizationService, IServiceProvider serviceProvider)
     {
         InitializeComponent();
         _viewModel = viewModel;
         DataContext = _viewModel;
         _authorizationService = authorizationService;
+        _serviceProvider = serviceProvider;
     }
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -220,7 +223,32 @@ public partial class Customer : Window
             }
         }
     }
-
+    private void CityComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        var comboBox = sender as ComboBox;
+        if (comboBox != null)
+        {
+            comboBox.IsDropDownOpen = true;
+        }
+    }
+    private void CityComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Insert)
+        {
+            OpenAddCityWindow();
+        }
+    }
+    private async void ClickAddCity(object sender, RoutedEventArgs e)
+    {
+        OpenAddCityWindow();
+    }
+    
+    private async void OpenAddCityWindow()
+    {
+        var cityWindow = _serviceProvider.GetRequiredService<City>();
+        cityWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        cityWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
 
     private void CustomerDataGrid_Loaded(object sender, RoutedEventArgs e)
     {

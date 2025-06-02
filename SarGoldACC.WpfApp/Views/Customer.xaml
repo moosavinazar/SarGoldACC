@@ -52,6 +52,7 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="نام"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -80,19 +81,30 @@
                              Style="{StaticResource InputTextBox}"
                              Text="{Binding CellPhone}"/>
                     <TextBlock Text="شهر"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="4"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,5,5,0"/>
                     <ComboBox x:Name="CityComboBox" Grid.Column="5"
-                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                              ItemsSource="{Binding Cities}"
+                              IsEditable="True"
+                              IsTextSearchEnabled="False"
+                              ItemsSource="{Binding FilteredCities}"
                               DisplayMemberPath="Name"
                               SelectedValuePath="Id"
                               SelectedValue="{Binding CityId, Mode=TwoWay}"
-                              Margin="0,5,0,0">
-                    </ComboBox>
+                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                              PreviewTextInput="CityComboBox_PreviewTextInput"
+                              PreviewKeyDown="CityComboBox_PreviewKeyDown"
+                              Margin="0,0,0,0"/>
+                    <Button Grid.Column="6" x:Name="AddCityButton"
+                            Visibility="{Binding CanAccessCityButton, Converter={StaticResource BoolToVisibilityConverter}}"
+                            Content="+"
+                            Style="{StaticResource AddCounterpartyButton}"
+                            HorizontalAlignment="Center"
+                            Click="ClickAddCity"
+                            Padding="10,5"
+                            Margin="0"/>
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>

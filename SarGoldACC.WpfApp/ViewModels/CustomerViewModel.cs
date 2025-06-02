@@ -48,9 +48,41 @@ public class CustomerViewModel : ViewModelBase
     private long _branchId;
     private long _cityId;
     private ObservableCollection<CustomerDto> _allCustomers = new();
-    public ObservableCollection<CityDto> Cities { get; }
-    
-    
+    private ObservableCollection<CityDto> _cities;
+    public ObservableCollection<CityDto> Cities
+    {
+        get => _cities;
+        set
+        {
+            _cities = value;
+            OnPropertyChanged();
+            FilterCities();
+        }
+    }
+    private ObservableCollection<CityDto> _filteredCities;
+    public ObservableCollection<CityDto> FilteredCities
+    {
+        get => _filteredCities;
+        set
+        {
+            _filteredCities = value;
+            OnPropertyChanged();
+        }
+    }
+    private string _searchText;
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            if (_searchText != value)
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                FilterCities();
+            }
+        }
+    }
     public bool CanAccessCustomerView => _authorizationService.HasPermission("Customer.View");
     public bool CanAccessCustomerCreate => _authorizationService.HasPermission("Customer.Create");
     public bool CanAccessCustomerEdit => _authorizationService.HasPermission("Customer.Edit");
@@ -58,6 +90,10 @@ public class CustomerViewModel : ViewModelBase
     
     public bool CanAccessCustomerCreateOrEdit => _authorizationService.HasPermission("Customer.Create") ||
                                              _authorizationService.HasPermission("Customer.Edit");
+    public bool CanAccessCityButton => _authorizationService.HasPermission("City.View") ||
+                                           _authorizationService.HasPermission("City.Create") ||
+                                           _authorizationService.HasPermission("City.Edit") ||
+                                           _authorizationService.HasPermission("City.Delete");
 
     public CustomerViewModel(
         IAuthorizationService authorizationService, 
@@ -342,11 +378,24 @@ public class CustomerViewModel : ViewModelBase
     }
     private async Task LoadCitiesAsync()
     {
-        Cities.Clear();
         var cities = await _cityService.GetAllAsync();
-        foreach (var c in cities)
+        Cities = new ObservableCollection<CityDto>(cities); // باعث اجرای FilterCities میشه
+    }
+    
+    private void FilterCities()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
         {
-            Cities.Add(c);
+            CityId = 0;
+            FilteredCities = new ObservableCollection<CityDto>(Cities);
+        }
+        else
+        {
+            var filtered = Cities
+                .Where(c => c.Name != null && c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            FilteredCities = new ObservableCollection<CityDto>(filtered);
         }
     }
 }

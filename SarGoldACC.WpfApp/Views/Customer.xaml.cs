@@ -1,7 +1,9 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using SarGoldACC.Core.DTOs.Customer;
 using SarGoldACC.Core.Services;
 using SarGoldACC.Core.Services.Interfaces;
@@ -181,6 +183,44 @@ public partial class Customer : Window
         Address.Text = "";
         Description.Text = "";
     }
+    
+    private void ChoosePhotoButton_Click(object sender, RoutedEventArgs e)
+    {
+        var openFileDialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = "تصاویر (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png"
+        };
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            string selectedFilePath = openFileDialog.FileName;
+
+            // نمایش پیش‌نمایش
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = new Uri(selectedFilePath);
+            bitmap.EndInit();
+            CustomerImagePreview.Source = bitmap;
+
+            // کپی به مسیر موردنظر برنامه
+            string imagesDir = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images");
+            Directory.CreateDirectory(imagesDir); // اگر وجود نداشت، ایجاد شود
+
+            string fileName = Guid.NewGuid().ToString() + Path.GetExtension(selectedFilePath);
+            string destPath = Path.Combine(imagesDir, fileName);
+
+            File.Copy(selectedFilePath, destPath, overwrite: true);
+
+            // ذخیره مسیر در ViewModel یا جایی که هنگام ذخیره مشتری استفاده می‌شود
+            if (DataContext is CustomerViewModel vm)
+            {
+                vm.Photo = destPath;
+                vm.PhotoPreview = bitmap;
+            }
+        }
+    }
+
 
     private void CustomerDataGrid_Loaded(object sender, RoutedEventArgs e)
     {

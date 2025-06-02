@@ -27,266 +27,292 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
         <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="نام"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+                    <TextBox x:Name="NameBox" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="1"
+                             KeyDown="NameBox_KeyDown"
+                             Margin="0 0 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding Name}"/>
+                    <TextBlock Text="موبایل"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,0,5,0"/>
+                    <TextBox x:Name="CellPhone" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="3"
+                             KeyDown="CellPhoneBox_KeyDown"
+                             Margin="0 0 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding CellPhone}"/>
+                    <TextBlock Text="شهر"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="4"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="5,5,5,0"/>
+                    <ComboBox x:Name="CityComboBox" Grid.Column="5"
+                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                              ItemsSource="{Binding Cities}"
+                              DisplayMemberPath="Name"
+                              SelectedValuePath="Id"
+                              SelectedValue="{Binding CityId, Mode=TwoWay}"
+                              Margin="0,5,0,0">
+                    </ComboBox>
+                </Grid>
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="تلفن"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="Phone" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="1"
+                             KeyDown="PhoneBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding Phone}"/>
+                    <TextBlock Text="تاریخ تولد"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <PersianDateControlsPlus:PersianDatePicker x:Name="BirthDate" 
+                                                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                                                               Grid.Column="3"
+                                                               KeyDown="BirthDateBox_KeyDown"
+                                                               Margin="0 5 0 0"
+                                                               SelectedDate="{Binding PersianDate, Mode=TwoWay}" />
+                    <TextBlock Text="کد ملی"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="4"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="IdCode" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="5"
+                             KeyDown="IdCodeBox_KeyDown"
+                             Margin="0 5 5 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding IdCode}"/>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="نام فروشگاه"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="StoreName" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="1"
+                             KeyDown="StoreNameBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding StoreName}"/>
+                    <TextBlock Text="محدودیت وزن"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="WeightLimit" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="3"
+                             KeyDown="WeightLimitBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding WeightLimit}"/>
+                    <TextBlock Text="محدودیت ریال"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="4"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="RiyalLimit" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="5"
+                             KeyDown="RiyalLimitBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding RiyalLimit}"/>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="معرف"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="Moaref" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="1"
+                             KeyDown="MoarefBox_KeyDown"
+                             Margin="0 5 5 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding Moaref}"/>
+                    <TextBlock Text="ایمیل"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="Email" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="3"
+                             KeyDown="EmailBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding Email}"/>
+                </Grid>
+                <Grid Grid.Row="4">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="بدهکاری طلا"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="WeightBed" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="1"
+                             KeyDown="WeightBedBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding WeightBed}"/>
+                    <TextBlock Text="بستانکاری طلا"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="WeightBes" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="3"
+                             KeyDown="WeightBesBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding WeightBes}"/>
+                </Grid>
+                <Grid Grid.Row="5">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="بدهکاری ریال"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="0"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="RiyalBed" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="1"
+                             KeyDown="RiyalBedBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding RiyalBed}"/>
+                    <TextBlock Text="بستانکاری ریال"
+                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Grid.Column="2"
+                               FontWeight="Bold"
+                               VerticalAlignment="Center"
+                               Margin="0,5,5,0"/>
+                    <TextBox x:Name="RiyalBes" 
+                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                             Grid.Column="3"
+                             KeyDown="RiyalBesBox_KeyDown"
+                             Margin="0 5 0 0"
+                             Style="{StaticResource InputTextBox}"
+                             Text="{Binding RiyalBes}"/>
+                </Grid>
+            </Grid>
+            <Grid Grid.Column="1">
+                <StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Image x:Name="CustomerImagePreview"
+                           Width="150" Height="150"
+                           Stretch="UniformToFill"
+                           Margin="0,0,0,10"
+                           Source="{Binding PhotoPreview, Mode=OneWay}" />
+                    <Button Content="انتخاب عکس"
+                            Click="ChoosePhotoButton_Click"
+                            Style="{StaticResource PrimaryBtn}" />
+                </StackPanel>
+            </Grid>
+        </Grid>
+        <Grid Grid.Row="1">
             <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="نام"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="NameBox" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         KeyDown="NameBox_KeyDown"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Name}"/>
-                <TextBlock Text="موبایل"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="CellPhone" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         KeyDown="CellPhoneBox_KeyDown"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding CellPhone}"/>
-                <TextBlock Text="شهر"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="5,10,5,0"/>
-                <ComboBox x:Name="CityComboBox" Grid.Column="5"
-                          Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                          ItemsSource="{Binding Cities}"
-                          DisplayMemberPath="Name"
-                          SelectedValuePath="Id"
-                          SelectedValue="{Binding CityId, Mode=TwoWay}"
-                          Margin="0,0,0,0">
-                </ComboBox>
-                <TextBlock Text="تلفن"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="6"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="Phone" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="7"
-                         KeyDown="PhoneBox_KeyDown"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Phone}"/>
-            </Grid>
-            <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="بدهکاری طلا"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="WeightBed" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         KeyDown="WeightBedBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding WeightBed}"/>
-                <TextBlock Text="بستانکاری طلا"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="WeightBes" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         KeyDown="WeightBesBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding WeightBes}"/>
-                <TextBlock Text="بدهکاری ریال"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalBed" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="5"
-                         KeyDown="RiyalBedBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalBed}"/>
-                <TextBlock Text="بستانکاری ریال"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="6"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalBes" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="7"
-                         KeyDown="RiyalBesBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalBes}"/>
-            </Grid>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="تاریخ تولد"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <PersianDateControlsPlus:PersianDatePicker x:Name="BirthDate" 
-                                                       Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                       Grid.Column="1"
-                                                       KeyDown="BirthDateBox_KeyDown"
-                                                       Margin="0 5 0 0"
-                                                       SelectedDate="{Binding PersianDate, Mode=TwoWay}" />
-                <!--<DatePicker x:Name="BirthDate" 
-                            Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                            Grid.Column="1"
-                            KeyDown="BirthDateBox_KeyDown"
-                            Margin="0 5 0 0"
-                            SelectedDate="{Binding BirthDate, Mode=TwoWay}" />-->
-                <TextBlock Text="نام فروشگاه"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="StoreName" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         KeyDown="StoreNameBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding StoreName}"/>
-                <TextBlock Text="محدودیت وزن"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="WeightLimit" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="5"
-                         KeyDown="WeightLimitBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding WeightLimit}"/>
-                <TextBlock Text="محدودیت ریال"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="6"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalLimit" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="7"
-                         KeyDown="RiyalLimitBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalLimit}"/>
-            </Grid>
-            <Grid Grid.Row="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="کد ملی"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="IdCode" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         KeyDown="IdCodeBox_KeyDown"
-                         Margin="0 5 5 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding IdCode}"/>
-                <TextBlock Text="معرف"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="Moaref" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         KeyDown="MoarefBox_KeyDown"
-                         Margin="0 5 5 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Moaref}"/>
-                <TextBlock Text="ایمیل"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="Email" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="5"
-                         KeyDown="EmailBox_KeyDown"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Email}"/>
-            </Grid>
-            <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -305,7 +331,7 @@
                          Style="{StaticResource InputTextBox}"
                          Text="{Binding Address}"/>
             </Grid>
-            <Grid Grid.Row="5">
+            <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -325,7 +351,7 @@
                          Text="{Binding Description}"/>
             </Grid>
         </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" 
                     Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
             <Button x:Name="SaveButton"
                     Content="ذخیره"
@@ -334,7 +360,7 @@
                     Click="ClickSaveCustomer"
                     Padding="10,5"/>
         </StackPanel>
-        <controls:CustomizableDataGrid Grid.Row="2" x:Name="CustomerDataGrid"
+        <controls:CustomizableDataGrid Grid.Row="3" x:Name="CustomerDataGrid"
                                        ItemsSource="{Binding AllCustomers}"
                                        Loaded="CustomerDataGrid_Loaded"
                                        Visibility="{Binding CanAccessCustomerView, Converter={StaticResource BoolToVisibilityConverter}}"/>

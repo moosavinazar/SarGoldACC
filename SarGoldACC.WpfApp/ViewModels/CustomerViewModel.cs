@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Windows.Media.Imaging;
 using PersianDateControlsPlus.PersianDate;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.City;
@@ -22,9 +23,17 @@ public class CustomerViewModel : ViewModelBase
     private string _cellPhone;
     private string _address;
     private string _photo;
+    private BitmapImage _photoPreview;
+    public BitmapImage PhotoPreview
+    {
+        get => _photoPreview;
+        set
+        {
+            _photoPreview = value;
+            OnPropertyChanged(nameof(PhotoPreview));
+        }
+    }
     private string _moaref;
-    // private DateTime? _birthDate = DateTime.Now;
-    // private PersianDate? _persianBirthDate = new PersianDate(DateTime.Now);
     private DateTime? _birthDate;
     private PersianDate? _persianBirthDate;
     private string _email;

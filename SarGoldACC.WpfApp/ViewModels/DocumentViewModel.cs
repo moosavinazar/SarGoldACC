@@ -95,6 +95,24 @@ public class DocumentViewModel : ViewModelBase
         }
     }
     
+    public bool CanAccessCustomerButton => _authorizationService.HasPermission("Customer.View") ||
+                                           _authorizationService.HasPermission("Customer.Create") ||
+                                           _authorizationService.HasPermission("Customer.Edit") ||
+                                           _authorizationService.HasPermission("Customer.Delete");
+    public bool CanAccessDocumentCredit => _authorizationService.HasPermission("Document.Credit");
+    public bool CanAccessDocumentDate => _authorizationService.HasPermission("Document.Date");
+    public bool CanAccessDocumentGoldRisk => _authorizationService.HasPermission("Document.GoldRisk");
+    public bool CanAccessDocumentRialRusk => _authorizationService.HasPermission("Document.RialRisk");
+    public bool CanAccessDocumentLastTenDeal=> _authorizationService.HasPermission("Document.LastTenDeal");
+    public bool CanAccessDocumentReport=> _authorizationService.HasPermission("Document.Report");
+    public bool CanAccessDocumentOrder=> _authorizationService.HasPermission("Document.Order");
+    public bool CanAccessDocumentMelted=> _authorizationService.HasPermission("Document.Melted");
+    public bool CanAccessDocumentMisc=> _authorizationService.HasPermission("Document.Misc");
+    public bool CanAccessDocumentMade=> _authorizationService.HasPermission("Document.Made");
+    public bool CanAccessDocumentCoin=> _authorizationService.HasPermission("Document.Coin");
+    public bool CanAccessDocumentSave=> _authorizationService.HasPermission("Document.Save");
+    public bool CanAccessDocumentSaveTemporary=> _authorizationService.HasPermission("Document.SaveTemporary");
+    
     public DocumentViewModel(IAuthorizationService authorizationService, AppDbContext appDbContext,
         ICounterpartyService counterpartyService, IDocumentService documentService)
     {

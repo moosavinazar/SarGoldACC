@@ -15,10 +15,11 @@ public class MainViewModel : ViewModelBase
     
     public bool IsRibbonVisible => !(CurrentViewModel is LoginViewModel);
 
-    public bool CanAccessDocumentButton => _authorizationService.HasPermission("Document.View") ||
-                                        _authorizationService.HasPermission("Document.Create") ||
-                                        _authorizationService.HasPermission("Document.Edit") ||
-                                        _authorizationService.HasPermission("Document.Delete");
+    public bool CanAccessDocumentButton => _authorizationService.HasPermission("Document.Order") ||
+                                           _authorizationService.HasPermission("Document.Melted") ||
+                                           _authorizationService.HasPermission("Document.Misc") ||
+                                           _authorizationService.HasPermission("Document.Made") ||
+                                           _authorizationService.HasPermission("Document.Coin");
     public bool CanAccessGroupButton => _authorizationService.HasPermission("Group.View") ||
                                         _authorizationService.HasPermission("Group.Create") ||
                                         _authorizationService.HasPermission("Group.Edit") ||

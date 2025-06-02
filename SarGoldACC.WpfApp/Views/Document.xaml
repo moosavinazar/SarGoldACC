@@ -59,13 +59,11 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="مشتری"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="0"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <ComboBox x:Name="CounterpartyComboBox" Grid.Column="1"
-                              Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                               IsEditable="True"
                               IsTextSearchEnabled="False"
                               ItemsSource="{Binding FilteredCounterparties}"
@@ -77,6 +75,7 @@
                               PreviewKeyDown="CounterpartyComboBox_PreviewKeyDown"
                               Margin="0,0,0,0"/>
                     <Button Grid.Column="2" x:Name="AddCustomerButton"
+                            Visibility="{Binding CanAccessCustomerButton, Converter={StaticResource BoolToVisibilityConverter}}"
                             Content="+"
                             Style="{StaticResource AddCounterpartyButton}"
                             HorizontalAlignment="Center"
@@ -84,28 +83,26 @@
                             Padding="10,5"
                             Margin="0"/>
                     <TextBlock Text="اعتبار"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Visibility="{Binding CanAccessDocumentCredit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="3"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="0"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Visibility="{Binding CanAccessDocumentCredit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="4"
                                FontWeight="Regular"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="تاریخ"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="5"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
-                    <PersianDateControlsPlus:PersianDatePicker x:Name="BirthDate" 
-                                                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                    <PersianDateControlsPlus:PersianDatePicker x:Name="DocumentDate" 
                                                                Grid.Column="6"
                                                                Margin="0 5 0 0"
-                                                               IsEnabled="{Binding IsCounterpartySelected}"
+                                                               IsEnabled="{Binding CanAccessDocumentDate}"
                                                                SelectedDate="{Binding PersianDate, Mode=TwoWay}" />
                 </Grid>
                 <Grid Grid.Row="1">
@@ -118,66 +115,48 @@
                         <ColumnDefinition Width="2*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="2*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="2*"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="تاریخ آخرین معامله"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="0"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="0"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="1"
                                FontWeight="Regular"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="تعداد سند"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="0"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="3"
                                FontWeight="Regular"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="ریسک ریالی"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Visibility="{Binding CanAccessDocumentRialRisk, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="4"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="0"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Visibility="{Binding CanAccessDocumentRialRisk, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="5"
                                FontWeight="Regular"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="ریسک طلا"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Visibility="{Binding CanAccessDocumentGoldRisk, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="6"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
                     <TextBlock Text="0"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                               Visibility="{Binding CanAccessDocumentGoldRisk, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="7"
-                               FontWeight="Regular"
-                               VerticalAlignment="Center"
-                               Margin="5,10,5,0"/>
-                    <TextBlock Text="ریسک"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="8"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="5,10,5,0"/>
-                    <TextBlock Text="0"
-                               Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="9"
                                FontWeight="Regular"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
@@ -189,7 +168,7 @@
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
                 <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Center" 
-                            Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                            Visibility="{Binding CanAccessDocumentLastTenDeal, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button x:Name="TenDeal"
                             Content="ده معامله آخر"
                             Style="{StaticResource PrimaryBtn}"
@@ -199,7 +178,7 @@
                             Padding="10,5"/>
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" 
-                            Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                            Visibility="{Binding CanAccessDocumentReport, Converter={StaticResource BoolToVisibilityConverter}}">
                     <Button x:Name="ReportButton"
                             Content="گزارشات"
                             Style="{StaticResource PrimaryBtn}"
@@ -223,86 +202,96 @@
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Button Grid.Row="0" x:Name="RcvOredrButton"
-                        Content="دریافت حواله"
-                        Style="{StaticResource PrimaryBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickRcvOrder"
-                        Visibility="Visible"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="0" x:Name="PayOredrButton"
-                        Content="پرداخت حواله"
-                        Style="{StaticResource DangerBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickPayOrder"
-                        Visibility="Hidden"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="1" x:Name="RcvMeltedButton"
-                        Content="دریافت آبشده"
-                        Style="{StaticResource PrimaryBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickRcvMelted"
-                        Visibility="Visible"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="1" x:Name="PayMeltedButton"
-                        Content="پرداخت آبشده"
-                        Style="{StaticResource DangerBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickPayMelted"
-                        Visibility="Hidden"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="2" x:Name="RcvMiscButton"
-                        Content="دریافت متفرقه"
-                        Style="{StaticResource PrimaryBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickRcvMisc"
-                        Visibility="Visible"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="2" x:Name="PayMiscButton"
-                        Content="پرداخت متفرقه"
-                        Style="{StaticResource DangerBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickPayMisc"
-                        Visibility="Hidden"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="3" x:Name="RcvMadeButton"
-                        Content="دریافت ساخته"
-                        Style="{StaticResource PrimaryBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickRcvMade"
-                        Visibility="Visible"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="3" x:Name="PayMadeButton"
-                        Content="پرداخت ساخته"
-                        Style="{StaticResource DangerBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickPayMade"
-                        Visibility="Hidden"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="4" x:Name="RcvCoinButton"
-                        Content="دریافت سکه"
-                        Style="{StaticResource PrimaryBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickRcvCoin"
-                        Visibility="Visible"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
-                <Button Grid.Row="4" x:Name="PayCoinButton"
-                        Content="پرداخت سکه"
-                        Style="{StaticResource DangerBtn}"
-                        HorizontalAlignment="Center"
-                        Click="ClickPayCoin"
-                        Visibility="Hidden"
-                        IsEnabled="{Binding IsCounterpartySelected}"
-                        Padding="10,5"/>
+                <Grid Grid.Row="0" Visibility="{Binding CanAccessDocumentOrder, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button x:Name="RcvOredrButton"
+                            Content="دریافت حواله"
+                            Style="{StaticResource PrimaryBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickRcvOrder"
+                            Visibility="Visible"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                    <Button x:Name="PayOredrButton"
+                            Content="پرداخت حواله"
+                            Style="{StaticResource DangerBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickPayOrder"
+                            Visibility="Hidden"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                </Grid>
+                <Grid Grid.Row="1" Visibility="{Binding CanAccessDocumentMelted, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button x:Name="RcvMeltedButton"
+                            Content="دریافت آبشده"
+                            Style="{StaticResource PrimaryBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickRcvMelted"
+                            Visibility="Visible"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                    <Button x:Name="PayMeltedButton"
+                            Content="پرداخت آبشده"
+                            Style="{StaticResource DangerBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickPayMelted"
+                            Visibility="Hidden"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                </Grid>
+                <Grid Grid.Row="2" Visibility="{Binding CanAccessDocumentMisc, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button x:Name="RcvMiscButton"
+                            Content="دریافت متفرقه"
+                            Style="{StaticResource PrimaryBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickRcvMisc"
+                            Visibility="Visible"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                    <Button x:Name="PayMiscButton"
+                            Content="پرداخت متفرقه"
+                            Style="{StaticResource DangerBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickPayMisc"
+                            Visibility="Hidden"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                </Grid>
+                <Grid Grid.Row="3" Visibility="{Binding CanAccessDocumentMade, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button x:Name="RcvMadeButton"
+                            Content="دریافت ساخته"
+                            Style="{StaticResource PrimaryBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickRcvMade"
+                            Visibility="Visible"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                    <Button x:Name="PayMadeButton"
+                            Content="پرداخت ساخته"
+                            Style="{StaticResource DangerBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickPayMade"
+                            Visibility="Hidden"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                </Grid>
+                <Grid Grid.Row="4" Visibility="{Binding CanAccessDocumentCoin, Converter={StaticResource BoolToVisibilityConverter}}">
+                    <Button x:Name="RcvCoinButton"
+                            Content="دریافت سکه"
+                            Style="{StaticResource PrimaryBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickRcvCoin"
+                            Visibility="Visible"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                    <Button x:Name="PayCoinButton"
+                            Content="پرداخت سکه"
+                            Style="{StaticResource DangerBtn}"
+                            HorizontalAlignment="Center"
+                            Click="ClickPayCoin"
+                            Visibility="Hidden"
+                            IsEnabled="{Binding IsCounterpartySelected}"
+                            Padding="10,5"/>
+                </Grid>
             </Grid>
             <Grid Grid.Column="1" Margin="10,0,0,0">
                 <DataGrid ItemsSource="{Binding DocumentItems}"
@@ -342,6 +331,7 @@
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             <Button Grid.Column="0" x:Name="SaveButton"
+                    Visibility="{Binding CanAccessDocumentSave, Converter={StaticResource BoolToVisibilityConverter}}"
                     Content="ذخیره سند"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
@@ -349,6 +339,7 @@
                     IsEnabled="{Binding IsCounterpartySelected}"
                     Padding="10,5"/>
             <Button Grid.Column="1" x:Name="SaveTemporaryButton"
+                    Visibility="{Binding CanAccessDocumentSaveTemporary, Converter={StaticResource BoolToVisibilityConverter}}"
                     Content="ذخیره پیش نویس"
                     Style="{StaticResource PrimaryBtn}"
                     HorizontalAlignment="Center"

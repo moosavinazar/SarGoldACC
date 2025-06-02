@@ -63,7 +63,16 @@
 62,CoinCategory.Create,ایجاد دسته بندی سکه
 63,CoinCategory.Edit,ویرایش دسته بندی سکه
 64,CoinCategory.Delete,حذف دسته بندی سکه
-65,Document.View,مشاهده سندها
-66,Document.Create,ایجاد سند
-67,Document.Edit,ویرایش سند
-68,Document.Delete,حذف سند
+65,Document.Credit,مشاهده اعتبار مشتری در ایجاد سند
+66,Document.Date,ویرایش تاریخ سند
+67,Document.GoldRisk,مشاهده ریسک طلای مشتری
+68,Document.RialRisk,مشاهده ریسک ریال مشتری
+69,Document.LastTenDeal,مشاهده ده معامله آخر مشتری
+70,Document.Report,مشاهده گزارشات
+71,Document.Order,دریافت و پرداخت حواله
+72,Document.Meted,دریافت و پرداخت آبشده
+73,Document.Misc,دریافت و پرداخت متفرقه
+74,Document.Made,دریافت و پرداخت ساخته
+75,Document.Coin,دریافت و پرداخت سکه
+76,Document.Save,ذخیره سند
+77,Document.SaveTemporary,ذخیره پیش نویس سند

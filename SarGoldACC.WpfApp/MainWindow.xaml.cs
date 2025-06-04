@@ -342,4 +342,16 @@ public partial class MainWindow : RibbonWindow
         coinCategoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     
+    private void OpenSettingWindowButton_Click(object sender, RoutedEventArgs e)
+    {
+        OpenSettingWindow();
+    }
+
+    private void OpenSettingWindow()
+    {
+        var setingWindow = _serviceProvider.GetRequiredService<Setting>();
+        setingWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        setingWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+    }
+    
 }

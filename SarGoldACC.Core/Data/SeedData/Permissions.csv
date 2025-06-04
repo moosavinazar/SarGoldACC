@@ -76,3 +76,5 @@
 75,Document.Coin,دریافت و پرداخت سکه
 76,Document.Save,ذخیره سند
 77,Document.SaveTemporary,ذخیره پیش نویس سند
+78,Setting.View,تنظیمات
+79,Setting.CustomerUrl,تغییر مسیر ذخیره تصاویر مشتری

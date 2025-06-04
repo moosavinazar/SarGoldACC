@@ -1,0 +1,63 @@
+﻿<Window x:Class="SarGoldACC.WpfApp.Views.Setting"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
+        xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
+        mc:Ignorable="d"
+        Title="تنظیمات" 
+        Height="400" 
+        Width="400"
+        KeyDown="Window_KeyDown"
+        Focusable="True"
+        FlowDirection="RightToLeft"
+        ResizeMode="NoResize"
+        WindowStyle="SingleBorderWindow"
+        WindowStartupLocation="CenterScreen">
+    <Window.Resources>
+        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+    </Window.Resources>
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <TextBlock Text="مسیر ذخیره تصاویر"
+                       Grid.Column="0"
+                       FontWeight="Bold"
+                       VerticalAlignment="Center"
+                       Margin="0,5,5,0"/>
+            <TextBox x:Name="CustomerImageUrl" 
+                     IsEnabled="{Binding CanChangeCustomerUrl}"
+                     Grid.Column="1"
+                     Margin="0 5 0 0"
+                     Style="{StaticResource InputTextBox}"
+                     Text="{Binding CustomerImageUrl, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+            <Button Grid.Column="2"
+                    IsEnabled="{Binding CanChangeCustomerUrl}"
+                    x:Name="Browse"
+                    Content="..."
+                    Width="30"
+                    Height="25"
+                    Margin="0,5,0,0"
+                    Style="{StaticResource AddCounterpartyButton}"
+                    Command="{Binding BrowseFolderCommand}"/>
+        </Grid>
+        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center">
+            <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanAccessSaveButton}"
+                    Content="ذخیره"
+                    Style="{StaticResource SuccessBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickSave"
+                    Padding="10,5"/>
+        </StackPanel>
+    </Grid>
+</Window>

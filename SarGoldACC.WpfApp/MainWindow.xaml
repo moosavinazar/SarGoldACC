@@ -49,7 +49,18 @@
                 </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabProducts" ToolTip="کلید میانبر (2)" Header="کالاها" Style="{StaticResource CustomTabStyle}">
-                
+                <Fluent:RibbonGroupBox Header="دسته بندی ها" >
+                    <Fluent:Button x:Name="MadeSubCategory" Header="دستا بندی ساخته"
+                                   Icon="pack://application:,,,/Resources/Icons/Category.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/CategoryLarge.png"
+                                   Click="OpenMadeSubCategoryWindowButton_Click"
+                                   Visibility="{Binding CanAccessMadeSubCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                    <Fluent:Button x:Name="CoinCategory" Header="دسته بندی سکه"
+                                   Icon="pack://application:,,,/Resources/Icons/Coin.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/CoinLarge.png"
+                                   Click="OpenCoinCategoryWindowButton_Click"
+                                   Visibility="{Binding CanAccessCoinCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabBaseInfo" ToolTip="کلید میانبر (3)" Header="اطلاعات پایه" Style="{StaticResource CustomTabStyle}">
                 <Fluent:RibbonGroupBox Header="کاربری">
@@ -84,16 +95,6 @@
                                    LargeIcon="pack://application:,,,/Resources/Icons/BoxLarge.png"
                                    Click="OpenBoxWindowButton_Click"
                                    Visibility="{Binding CanAccessBoxButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Fluent:Button x:Name="MadeSubCategory" Header="دستا بندی ساخته"
-                                   Icon="pack://application:,,,/Resources/Icons/Category.png"
-                                   LargeIcon="pack://application:,,,/Resources/Icons/CategoryLarge.png"
-                                   Click="OpenMadeSubCategoryWindowButton_Click"
-                                   Visibility="{Binding CanAccessMadeSubCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
-                    <Fluent:Button x:Name="CoinCategory" Header="دسته بندی سکه"
-                                   Icon="pack://application:,,,/Resources/Icons/Coin.png"
-                                   LargeIcon="pack://application:,,,/Resources/Icons/CoinLarge.png"
-                                   Click="OpenCoinCategoryWindowButton_Click"
-                                   Visibility="{Binding CanAccessCoinCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
                     <Fluent:Button x:Name="Currency" Header="واحد پولی"
                                    Icon="pack://application:,,,/Resources/Icons/Currency.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/CurrencyLarge.png"
@@ -148,7 +149,13 @@
                 
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabSetting" ToolTip="کلید میانبر (5)" Header="تنظیمات سیستم" Style="{StaticResource CustomTabStyle}">
-                
+                <Fluent:RibbonGroupBox Header="نظیمات">
+                    <Fluent:Button x:Name="Setting" Header="تنظیمات"
+                                   Icon="pack://application:,,,/Resources/Icons/Setting.png"
+                                   LargeIcon="pack://application:,,,/Resources/Icons/SettingLarge.png"
+                                   Click="OpenSettingWindowButton_Click"
+                                   Visibility="{Binding CanAccessSettingButton, Converter={StaticResource BoolToVisibilityConverter}}"/>
+                </Fluent:RibbonGroupBox>
             </Fluent:RibbonTabItem>
         </Fluent:Ribbon>
         

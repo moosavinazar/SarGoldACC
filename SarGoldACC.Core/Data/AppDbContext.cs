@@ -40,6 +40,7 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
     public DbSet<Made> Mades { get; set; }
     public DbSet<CoinCategory> CoinCategories { get; set; }
     public DbSet<Coin> Coins { get; set; }
+    public DbSet<Setting> Settings { get; set; }
     
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -435,6 +436,17 @@ public class AppDbContext(DbContextOptions<AppDbContext> options) : DbContext(op
                     Label = c.Label,
                     CurrencyId = c.CurrencyId,
                     Description = c.Description
+                }).ToArray()
+        );
+        
+        // Setting
+        var setting = CsvDataReader.ReadSetting();
+        modelBuilder.Entity<Setting>().HasData(
+            setting.Select(c => 
+                new Setting
+                {
+                    Id = c.Id,
+                    CustomerImageUrl = c.CustomerImageUrl
                 }).ToArray()
         );
     }

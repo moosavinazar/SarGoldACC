@@ -31,7 +31,11 @@
       <Folder Include="Navigation\" />
     </ItemGroup>
 
-    <ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+
+  <ItemGroup>
       <Page Update="Views\HomeView.xaml">
         <Generator>MSBuild:Compile</Generator>
         <XamlRuntime>Wpf</XamlRuntime>
@@ -127,6 +131,10 @@
       <Resource Include="Resources\Icons\CoinLarge.png" />
       <None Remove="Resources\Icons\Coin.png" />
       <Resource Include="Resources\Icons\Coin.png" />
+      <None Remove="Resources\Icons\Setting.png" />
+      <Resource Include="Resources\Icons\Setting.png" />
+      <None Remove="Resources\Icons\SettingLarge.png" />
+      <Resource Include="Resources\Icons\SettingLarge.png" />
     </ItemGroup>
 
 </Project>

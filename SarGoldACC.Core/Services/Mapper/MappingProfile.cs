@@ -18,6 +18,7 @@ using SarGoldACC.Core.DTOs.Income;
 using SarGoldACC.Core.DTOs.Laboratory;
 using SarGoldACC.Core.DTOs.MadeCategory;
 using SarGoldACC.Core.DTOs.Pos;
+using SarGoldACC.Core.DTOs.Setting;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Models.Auth;
 
@@ -122,5 +123,9 @@ public class MappingProfile : Profile
         CreateMap<CoinCategoryDto, CoinCategory>();
         CreateMap<CoinCategory, CoinCategoryCreateDto>();
         CreateMap<CoinCategoryCreateDto, CoinCategory>();
+        CreateMap<Setting, SettingCreateDto>();
+        CreateMap<SettingCreateDto, Setting>();
+        CreateMap<Setting, SettingDto>();
+        CreateMap<SettingDto, Setting>();
     }
 }

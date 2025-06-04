@@ -93,6 +93,8 @@ public class MainViewModel : ViewModelBase
                                                   _authorizationService.HasPermission("CoinCategory.Create") ||
                                                   _authorizationService.HasPermission("CoinCategory.Edit") ||
                                                   _authorizationService.HasPermission("CoinCategory.Delete");
+    
+    public bool CanAccessSettingButton => _authorizationService.HasPermission("Setting.View");
 
     public MainViewModel(NavigationStore navigationStore, 
         IAuthenticationService authenticationService, 
@@ -131,6 +133,7 @@ public class MainViewModel : ViewModelBase
             OnPropertyChanged(nameof(CanAccessMadeSubCategoryButton));
             OnPropertyChanged(nameof(CanAccessCoinCategoryButton));
             OnPropertyChanged(nameof(CanAccessDocumentButton));
+            OnPropertyChanged(nameof(CanAccessSettingButton));
         }
     }
 }

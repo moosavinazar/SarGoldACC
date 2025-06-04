@@ -50,8 +50,6 @@ public class MadeSubCategoryService : IMadeSubCategoryService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex.Message);
-            Console.WriteLine(ex);
             return new ResultDto
             {
                 Success = false,

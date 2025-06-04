@@ -54,28 +54,18 @@ public class PosService : IPosService
     public async Task<ResultDto> AddAsync(PosCreateDto posCreate)
     {
         await using IDbContextTransaction transaction = await _dbContext.Database.BeginTransactionAsync();
-        Console.WriteLine(posCreate.BankId);
         var bankDto = await _bankService.GetByIdAsync(posCreate.BankId);
         try
         {
             var pos = _mapper.Map<Pos>(posCreate);
-            Console.WriteLine("Adding pos");
-            Console.WriteLine(pos.Name);
-            Console.WriteLine(bankDto.Counterparty.BranchId);
             var counterparty = new CounterpartyDto()
             {
                 Pos = pos,
                 BranchId = bankDto.Counterparty.BranchId
             };
-            Console.WriteLine(counterparty.Pos.Id);
-            Console.WriteLine(counterparty.Id);
             var entry = _dbContext.Entry(pos);
-            Console.WriteLine(entry.State); // باید Detached باشد
             var addedCounterparty = await _counterpartyService.AddAsync(counterparty);
-            Console.WriteLine(addedCounterparty.Success);
             var counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
-            Console.WriteLine(counterpartyDto);
-            Console.WriteLine(counterpartyDto.Id);
             var counterpartyOpeningEntry = new OrderDto()
             {
                 counterpartyId = counterpartyDto.Id,
@@ -97,7 +87,6 @@ public class PosService : IPosService
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            Console.WriteLine(ex);
             return new ResultDto
             {
                 Success = false,

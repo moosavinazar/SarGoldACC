@@ -87,7 +87,6 @@ public class BankService : IBankService
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            Console.WriteLine(ex);
             return new ResultDto
             {
                 Success = false,

@@ -51,7 +51,6 @@ public class CounterpartyService : ICounterpartyService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
             return new ResultDto
             {
                 Success = false,

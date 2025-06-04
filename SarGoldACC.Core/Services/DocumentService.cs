@@ -145,7 +145,6 @@ public class DocumentService : IDocumentService
         }
         catch (Exception ex)
         {
-            Console.WriteLine(ex);
             throw new Exception("خطا در ثبت سند افتتاحیه: " + ex.Message, ex);
         }
     }
@@ -434,10 +433,6 @@ public class DocumentService : IDocumentService
                 }
             }
             document.Invoices.Add(invoiceSideOne);
-            foreach (var invoice in document.Invoices)
-            {
-                Console.WriteLine(invoice.CounterpartyId);
-            }
             await _documentRepository.AddAsync(document);
             return new ResultDto
             {

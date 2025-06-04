@@ -11,7 +11,6 @@ public partial class LoginView : UserControl
     {
         InitializeComponent();
         UsernameBox.Focus();
-        // Console.WriteLine("LoginView Initialized ..e.d");
 
     }
     

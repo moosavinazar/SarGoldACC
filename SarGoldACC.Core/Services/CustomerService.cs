@@ -77,9 +77,6 @@ public class CustomerService : ICustomerService
                 RiyalBed = customerCreate.RiyalBed ?? 0,
                 RiyalBes = customerCreate.RiyalBes ?? 0
             };
-            Console.WriteLine("TEST");
-            Console.WriteLine(customerCreate.PhotoBytes);
-            Console.WriteLine(customerCreate.PhotoBytes != null);
             if (customerCreate.PhotoBytes != null)
             {
                 var setting = await _settingService.GetSetting();
@@ -93,7 +90,6 @@ public class CustomerService : ICustomerService
                 // ذخیره مسیر در مدل EF برای ذخیره در DB
                 customer.Photo = filePath;
             }
-            Console.WriteLine(customer.Photo);
             await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
             await transaction.CommitAsync();
             return new ResultDto
@@ -106,7 +102,6 @@ public class CustomerService : ICustomerService
         catch (Exception ex)
         {
             await transaction.RollbackAsync();
-            Console.WriteLine(ex);
             return new ResultDto
             {
                 Success = false,
@@ -123,9 +118,7 @@ public class CustomerService : ICustomerService
 
         _mapper.Map(customerUpdate, customer);
         await _customerRepository.UpdateAsync(customer);
-        Console.WriteLine("TEST");
         if (customerUpdate.PhotoBytes != null)
-            Console.WriteLine("TEST2");
         {
             string imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "CustomerImages");
             if (!Directory.Exists(imagesFolder))
@@ -139,7 +132,6 @@ public class CustomerService : ICustomerService
             // ذخیره مسیر در مدل EF برای ذخیره در DB
             customer.Photo = filePath;
         }
-        Console.WriteLine(customer.Photo);
         return new ResultDto
         {
             Success = true,

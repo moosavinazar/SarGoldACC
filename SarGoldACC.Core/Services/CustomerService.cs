@@ -19,6 +19,7 @@ public class CustomerService : ICustomerService
     private readonly IAuthorizationService _authorizationService;
     private readonly ICounterpartyService _counterpartyService;
     private readonly IDocumentService _documentService;
+    private readonly ISettingService _settingService;
 
     public CustomerService(
         ICustomerRepository customerRepository, 
@@ -26,7 +27,8 @@ public class CustomerService : ICustomerService
         AppDbContext appDbContext,
         IAuthorizationService authorizationService,
         ICounterpartyService counterpartyService,
-        IDocumentService documentService)
+        IDocumentService documentService,
+        ISettingService settingService)
     {
         _customerRepository = customerRepository;
         _mapper = mapper;
@@ -34,6 +36,7 @@ public class CustomerService : ICustomerService
         _authorizationService = authorizationService;
         _counterpartyService = counterpartyService;
         _documentService = documentService;
+        _settingService = settingService;
     }
 
     public async Task<CustomerDto> GetByIdAsync(long id)
@@ -58,22 +61,13 @@ public class CustomerService : ICustomerService
         try
         {
             var customer = _mapper.Map<Customer>(customerCreate);
-            Console.WriteLine("Adding customer");
-            Console.WriteLine(customer.Id);
             var counterparty = new CounterpartyDto
             {
                 Customer = customer,
                 BranchId = customerCreate.BranchId
             };
-            Console.WriteLine(counterparty.Customer.Id);
-            Console.WriteLine(counterparty.Id);
-            var entry = _dbContext.Entry(customer);
-            Console.WriteLine(entry.State); // باید Detached باشد
             var addedCounterparty = await _counterpartyService.AddAsync(counterparty);
-            Console.WriteLine(addedCounterparty.Success);
             var counterpartyDto = _mapper.Map<CounterpartyDto>(addedCounterparty.Data);
-            Console.WriteLine(counterpartyDto);
-            Console.WriteLine(counterpartyDto.Id);
             var counterpartyOpeningEntry = new OrderDto
             {
                 counterpartyId = counterpartyDto.Id,
@@ -83,6 +77,23 @@ public class CustomerService : ICustomerService
                 RiyalBed = customerCreate.RiyalBed ?? 0,
                 RiyalBes = customerCreate.RiyalBes ?? 0
             };
+            Console.WriteLine("TEST");
+            Console.WriteLine(customerCreate.PhotoBytes);
+            Console.WriteLine(customerCreate.PhotoBytes != null);
+            if (customerCreate.PhotoBytes != null)
+            {
+                var setting = await _settingService.GetSetting();
+                if (!Directory.Exists(setting.CustomerImageUrl))
+                    Directory.CreateDirectory(setting.CustomerImageUrl);
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(customerCreate.PhotoFileName);
+                string filePath = Path.Combine(setting.CustomerImageUrl, uniqueFileName);
+
+                await File.WriteAllBytesAsync(filePath, customerCreate.PhotoBytes);
+
+                // ذخیره مسیر در مدل EF برای ذخیره در DB
+                customer.Photo = filePath;
+            }
+            Console.WriteLine(customer.Photo);
             await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
             await transaction.CommitAsync();
             return new ResultDto
@@ -112,6 +123,23 @@ public class CustomerService : ICustomerService
 
         _mapper.Map(customerUpdate, customer);
         await _customerRepository.UpdateAsync(customer);
+        Console.WriteLine("TEST");
+        if (customerUpdate.PhotoBytes != null)
+            Console.WriteLine("TEST2");
+        {
+            string imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "CustomerImages");
+            if (!Directory.Exists(imagesFolder))
+                Directory.CreateDirectory(imagesFolder);
+            var setting = await _settingService.GetSetting();
+            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(setting.CustomerImageUrl);
+            string filePath = Path.Combine(imagesFolder, uniqueFileName);
+
+            await File.WriteAllBytesAsync(filePath, customerUpdate.PhotoBytes);
+
+            // ذخیره مسیر در مدل EF برای ذخیره در DB
+            customer.Photo = filePath;
+        }
+        Console.WriteLine(customer.Photo);
         return new ResultDto
         {
             Success = true,

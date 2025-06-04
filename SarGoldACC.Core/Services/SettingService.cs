@@ -24,6 +24,12 @@ public class SettingService : ISettingService
         var setting = await _settingRepository.GetByIdAsync(id);
         return _mapper.Map<SettingDto>(setting);
     }
+    
+    public async Task<SettingDto> GetSetting()
+    {
+        var setting = await _settingRepository.GetByIdAsync(1);
+        return _mapper.Map<SettingDto>(setting);
+    }
 
     public async Task<List<SettingDto>> GetAllAsync()
     {

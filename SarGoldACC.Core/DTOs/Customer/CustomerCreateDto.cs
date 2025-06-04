@@ -21,4 +21,6 @@ public class CustomerCreateDto
     public long? RiyalBed { get; set; }
     public long? RiyalBes { get; set; }
     public long CityId { get; set; }
+    public byte[]? PhotoBytes { get; set; } // فایل عکس به صورت آرایه بایت
+    public string PhotoFileName { get; set; }
 }

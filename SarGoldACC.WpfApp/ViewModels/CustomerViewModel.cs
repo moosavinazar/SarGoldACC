@@ -24,6 +24,8 @@ public class CustomerViewModel : ViewModelBase
     private string _address;
     private string _photo;
     private BitmapImage _photoPreview;
+    public byte[] PhotoBytes { get; set; }
+    public string PhotoFileName { get; set; }
     public BitmapImage PhotoPreview
     {
         get => _photoPreview;
@@ -291,7 +293,9 @@ public class CustomerViewModel : ViewModelBase
                 WeightLimit = WeightLimit,
                 RiyalLimit = RiyalLimit,
                 Description = Description,
-                CityId = CityId
+                CityId = CityId,
+                PhotoBytes = PhotoBytes,
+                PhotoFileName = PhotoFileName
             };
             
             result = await _customerService.UpdateAsync(dto);
@@ -326,7 +330,9 @@ public class CustomerViewModel : ViewModelBase
                 WeightBes = WeightBes,
                 RiyalBed = RiyalBed,
                 RiyalBes = RiyalBes,
-                CityId = CityId
+                CityId = CityId,
+                PhotoBytes = PhotoBytes,
+                PhotoFileName = PhotoFileName
             };
             result = await _customerService.AddAsync(customerDto);
             if (result.Success)

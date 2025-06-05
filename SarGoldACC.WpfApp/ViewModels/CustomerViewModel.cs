@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
 using System.Windows.Media.Imaging;
 using PersianDateControlsPlus.PersianDate;
 using SarGoldACC.Core.DTOs;
@@ -23,7 +24,7 @@ public class CustomerViewModel : ViewModelBase
     private string _cellPhone;
     private string _address;
     private string _photo;
-    private BitmapImage _photoPreview;
+    private BitmapImage? _photoPreview;
     public byte[] PhotoBytes { get; set; }
     public string PhotoFileName { get; set; }
     public BitmapImage PhotoPreview
@@ -358,12 +359,28 @@ public class CustomerViewModel : ViewModelBase
         Address = customerDto.Address;
         Photo = customerDto.Photo;
         Moaref = customerDto.Moaref;
-        BirthDate = (DateTime)customerDto.BirthDate;
+        BirthDate = customerDto.BirthDate;
         Email = customerDto.Email;
         StoreName = customerDto.StoreName;
         WeightLimit = customerDto.WeightLimit;
         RiyalLimit = customerDto.RiyalLimit;
         Description = customerDto.Description;
+        // بارگذاری تصویر
+        if (!string.IsNullOrEmpty(Photo) && File.Exists(Photo))
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = new Uri(Photo, UriKind.Absolute);
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            PhotoPreview = bitmap;
+        }
+        else
+        {
+            PhotoPreview = null;
+        }
     }
     
     public async Task DeleteAsync(long userId)

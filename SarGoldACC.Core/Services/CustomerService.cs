@@ -120,17 +120,7 @@ public class CustomerService : ICustomerService
         await _customerRepository.UpdateAsync(customer);
         if (customerUpdate.PhotoBytes != null)
         {
-            string imagesFolder = Path.Combine(Directory.GetCurrentDirectory(), "CustomerImages");
-            if (!Directory.Exists(imagesFolder))
-                Directory.CreateDirectory(imagesFolder);
-            var setting = await _settingService.GetSetting();
-            string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(setting.CustomerImageUrl);
-            string filePath = Path.Combine(imagesFolder, uniqueFileName);
-
-            await File.WriteAllBytesAsync(filePath, customerUpdate.PhotoBytes);
-
-            // ذخیره مسیر در مدل EF برای ذخیره در DB
-            customer.Photo = filePath;
+            await File.WriteAllBytesAsync(customerUpdate.Photo, customerUpdate.PhotoBytes);
         }
         return new ResultDto
         {

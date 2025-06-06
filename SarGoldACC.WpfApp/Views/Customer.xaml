@@ -64,6 +64,7 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="1"
                              KeyDown="NameBox_KeyDown"
+                             GotFocus="NameBox_GotFocus"
                              Margin="0 0 0 0"
                              Style="{StaticResource InputTextBox}"
                              Text="{Binding Name}"/>
@@ -73,13 +74,16 @@
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="0,0,5,0"/>
-                    <TextBox x:Name="CellPhone" 
+                    <TextBox Grid.Column="3" x:Name="CellPhone"
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="3"
+                             Text="{Binding CellPhone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             Style="{StaticResource ValidatedTextBoxStyle}"
                              KeyDown="CellPhoneBox_KeyDown"
+                             GotFocus="CellPhone_GotFocus"
+                             Loaded="CellPhone_Loaded"
                              Margin="0 0 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding CellPhone}"/>
+                             MaxLength="11"
+                             PreviewTextInput="CellPhone_PreviewTextInput"/>
                     <TextBlock Text="شهر"
                                Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="4"

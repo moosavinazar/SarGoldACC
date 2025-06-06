@@ -1,4 +1,8 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
@@ -14,6 +18,9 @@ namespace SarGoldACC.WpfApp.Views;
 
 public partial class Customer : Window
 {
+    [DllImport("user32.dll")]
+    static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
+    
     private readonly CustomerViewModel _viewModel;
     private readonly IAuthorizationService _authorizationService;
     private readonly IServiceProvider _serviceProvider;
@@ -25,10 +32,14 @@ public partial class Customer : Window
         DataContext = _viewModel;
         _authorizationService = authorizationService;
         _serviceProvider = serviceProvider;
+        // هندل کردن Paste به صورت Preview در سطح Command
+        CellPhone.AddHandler(CommandManager.PreviewExecutedEvent,
+            new ExecutedRoutedEventHandler(CellPhone_PreviewExecuted), true);
     }
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        NameBox.Focus();
     }
     private void CustomerWindow_KeyDown(object sender, KeyEventArgs e)
     {
@@ -45,6 +56,14 @@ public partial class Customer : Window
             e.Handled = true;
         }
     }
+    private void NameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(NameBox);
+        NameBox.SelectAll();
+        // تنظیم زبان فارسی
+        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
+    }
     private void CellPhoneBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
@@ -52,6 +71,14 @@ public partial class Customer : Window
             Phone.Focus();
             e.Handled = true;
         }
+    }
+    private void CellPhone_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(CellPhone);
+        CellPhone.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
     }
     private void PhoneBox_KeyDown(object sender, KeyEventArgs e)
     {
@@ -277,4 +304,50 @@ public partial class Customer : Window
             new DataGridTextColumn { Header = "توضیحات", Binding = new Binding("Description"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) }
         );
     }
+    private void CellPhone_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, "^[0-9]+$");
+    }
+    private void CellPhone_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (e.Command == ApplicationCommands.Paste)
+        {
+            if (Clipboard.ContainsText())
+            {
+                string pasteText = Clipboard.GetText();
+                if (!Regex.IsMatch(pasteText, @"^09\d{9}$"))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+    }
+    
+    private void CellPhone_Loaded(object sender, RoutedEventArgs e)
+    {
+        DependencyPropertyDescriptor
+            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
+            .AddValueChanged(CellPhone, (s, args) =>
+            {
+                var tb = s as TextBox;
+                if (Validation.GetHasError(tb))
+                {
+                    ToolTip tt = new ToolTip
+                    {
+                        Content = Validation.GetErrors(tb)[0].ErrorContent,
+                        IsOpen = true,
+                        PlacementTarget = tb,
+                        StaysOpen = true,
+                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
+                    };
+                    tb.ToolTip = tt;
+                }
+                else
+                {
+                    if (tb.ToolTip is ToolTip ttip)
+                        ttip.IsOpen = false;
+                }
+            });
+    }
+
 }

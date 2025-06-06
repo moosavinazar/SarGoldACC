@@ -1,5 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.IO;
+using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
 using PersianDateControlsPlus.PersianDate;
 using SarGoldACC.Core.DTOs;
@@ -11,7 +13,7 @@ using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class CustomerViewModel : ViewModelBase
+public class CustomerViewModel : ViewModelBase, INotifyPropertyChanged, IDataErrorInfo
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly ICustomerService _customerService;
@@ -107,7 +109,8 @@ public class CustomerViewModel : ViewModelBase
         _customerService = customerService;
         _cityService = cityService;
         Cities = new ObservableCollection<CityDto>();
-        
+        CityId = 1;
+        SearchText = "نامعلوم";
         Task.Run(async () =>
         {
             await LoadCitiesAsync();
@@ -136,7 +139,32 @@ public class CustomerViewModel : ViewModelBase
     public string CellPhone
     {
         get => _cellPhone;
-        set => SetProperty(ref _cellPhone, value);
+        set
+        {
+            if (_cellPhone != value)
+            {
+                _cellPhone = value;
+                OnPropertyChanged(nameof(CellPhone));
+            }
+        }
+    }
+    
+    // IDataErrorInfo
+    public string Error => null;
+    public string this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(CellPhone))
+            {
+                if (string.IsNullOrWhiteSpace(CellPhone))
+                    return "شماره موبایل الزامی است.";
+
+                if (!Regex.IsMatch(CellPhone, @"^09\d{9}$"))
+                    return "شماره موبایل باید با 09 شروع شود و 11 رقم باشد.";
+            }
+            return null;
+        }
     }
     
     public string Address
@@ -421,4 +449,8 @@ public class CustomerViewModel : ViewModelBase
             FilteredCities = new ObservableCollection<CityDto>(filtered);
         }
     }
+    
+    public event PropertyChangedEventHandler PropertyChanged;
+    protected void OnPropertyChanged(string propertyName) =>
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

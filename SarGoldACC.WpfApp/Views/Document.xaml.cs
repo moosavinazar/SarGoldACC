@@ -18,9 +18,6 @@ public partial class Document : Window
     
     [DllImport("user32.dll")]
     static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
-
-    [DllImport("user32.dll")]
-    static extern bool PostMessage(IntPtr hWnd, uint Msg, int wParam, int lParam);
     
     public Document(DocumentViewModel viewModel, IAuthorizationService authorizationService, IServiceProvider serviceProvider)
     {

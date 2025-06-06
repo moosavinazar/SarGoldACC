@@ -35,6 +35,8 @@ public partial class Customer : Window
         // هندل کردن Paste به صورت Preview در سطح Command
         CellPhone.AddHandler(CommandManager.PreviewExecutedEvent,
             new ExecutedRoutedEventHandler(CellPhone_PreviewExecuted), true);
+        NameBox.AddHandler(CommandManager.PreviewExecutedEvent,
+            new ExecutedRoutedEventHandler(NameBox_PreviewExecuted), true);
     }
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -322,7 +324,6 @@ public partial class Customer : Window
             }
         }
     }
-    
     private void CellPhone_Loaded(object sender, RoutedEventArgs e)
     {
         DependencyPropertyDescriptor
@@ -349,5 +350,48 @@ public partial class Customer : Window
                 }
             });
     }
-
+    private void NameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^.+$");
+    }
+    private void NameBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (e.Command == ApplicationCommands.Paste)
+        {
+            if (Clipboard.ContainsText())
+            {
+                string pasteText = Clipboard.GetText();
+                if (!Regex.IsMatch(pasteText, @"^.+$"))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+    }
+    private void NameBox_Loaded(object sender, RoutedEventArgs e)
+    {
+        DependencyPropertyDescriptor
+            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
+            .AddValueChanged(CellPhone, (s, args) =>
+            {
+                var tb = s as TextBox;
+                if (Validation.GetHasError(tb))
+                {
+                    ToolTip tt = new ToolTip
+                    {
+                        Content = Validation.GetErrors(tb)[0].ErrorContent,
+                        IsOpen = true,
+                        PlacementTarget = tb,
+                        StaysOpen = true,
+                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
+                    };
+                    tb.ToolTip = tt;
+                }
+                else
+                {
+                    if (tb.ToolTip is ToolTip ttip)
+                        ttip.IsOpen = false;
+                }
+            });
+    }
 }

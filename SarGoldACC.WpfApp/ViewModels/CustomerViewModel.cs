@@ -121,7 +121,14 @@ public class CustomerViewModel : ViewModelBase, INotifyPropertyChanged, IDataErr
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+            }
+        }
     }
     
     public string IdCode
@@ -162,6 +169,14 @@ public class CustomerViewModel : ViewModelBase, INotifyPropertyChanged, IDataErr
 
                 if (!Regex.IsMatch(CellPhone, @"^09\d{9}$"))
                     return "شماره موبایل باید با 09 شروع شود و 11 رقم باشد.";
+            }
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name))
+                    return "نام مشتری الزامی است.";
+
+                if (!Regex.IsMatch(Name, @"^.+$"))
+                    return "نام مشتری الزامی است";
             }
             return null;
         }

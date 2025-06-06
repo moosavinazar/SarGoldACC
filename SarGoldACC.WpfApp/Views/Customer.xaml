@@ -65,9 +65,11 @@
                              Grid.Column="1"
                              KeyDown="NameBox_KeyDown"
                              GotFocus="NameBox_GotFocus"
+                             Loaded="NameBox_Loaded"
+                             PreviewTextInput="NameBox_PreviewTextInput"
                              Margin="0 0 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding Name}"/>
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
                     <TextBlock Text="موبایل"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"

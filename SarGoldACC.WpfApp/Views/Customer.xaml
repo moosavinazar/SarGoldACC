@@ -102,6 +102,8 @@
                               Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
                               PreviewTextInput="CityComboBox_PreviewTextInput"
                               PreviewKeyDown="CityComboBox_PreviewKeyDown"
+                              GotFocus="CityComboBox_GotFocus"
+                              LostFocus="CityComboBox_LostFocus"
                               Margin="0,0,0,0"/>
                     <Button Grid.Column="6" x:Name="AddCityButton"
                             Visibility="{Binding CanAccessCityButton, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -131,9 +133,13 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="1"
                              KeyDown="PhoneBox_KeyDown"
+                             GotFocus="Phone_GotFocus"
+                             Loaded="Phone_Loaded"
                              Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding Phone}"/>
+                             Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             MaxLength="11"
+                             PreviewTextInput="Phone_PreviewTextInput"/>
                     <TextBlock Text="تاریخ تولد"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"
@@ -156,9 +162,13 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="5"
                              KeyDown="IdCodeBox_KeyDown"
+                             GotFocus="IdCode_GotFocus"
+                             Loaded="IdCode_Loaded"
                              Margin="0 5 5 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding IdCode}"/>
+                             Text="{Binding IdCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             MaxLength="10"
+                             PreviewTextInput="IdCode_PreviewTextInput"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>

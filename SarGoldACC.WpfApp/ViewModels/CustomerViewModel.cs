@@ -13,7 +13,7 @@ using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class CustomerViewModel : ViewModelBase, INotifyPropertyChanged, IDataErrorInfo
+public class CustomerViewModel : ViewModelBase, IDataErrorInfo
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly ICustomerService _customerService;
@@ -177,6 +177,16 @@ public class CustomerViewModel : ViewModelBase, INotifyPropertyChanged, IDataErr
 
                 if (!Regex.IsMatch(Name, @"^.+$"))
                     return "نام مشتری الزامی است";
+            }
+            if (columnName == nameof(Phone))
+            {
+                if (!Regex.IsMatch(Name, @"^\d{1,10}$"))
+                    return "حداقل یک رقم تا 11 رقم وارد کنید";
+            }
+            if (columnName == nameof(IdCode))
+            {
+                if (!Regex.IsMatch(Name, @"^\d{0,10}$"))
+                    return "10 رقم وارد کنید";
             }
             return null;
         }
@@ -464,8 +474,4 @@ public class CustomerViewModel : ViewModelBase, INotifyPropertyChanged, IDataErr
             FilteredCities = new ObservableCollection<CityDto>(filtered);
         }
     }
-    
-    public event PropertyChangedEventHandler PropertyChanged;
-    protected void OnPropertyChanged(string propertyName) =>
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }

@@ -394,4 +394,150 @@ public partial class Customer : Window
                 }
             });
     }
+    private void CityComboBox_GotFocus(object sender, RoutedEventArgs e)
+    {
+        // تمرکز روی ComboBox
+        // Keyboard.Focus(CityComboBox);
+
+        // گرفتن TextBox داخلی
+        var textBox = GetComboBoxTextBox(CityComboBox);
+        if (textBox != null)
+        {
+            // تنظیم زبان فارسی
+            LoadKeyboardLayout("00000429", 1);
+            InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
+            textBox.SelectAll();
+        }
+    }
+    private TextBox GetComboBoxTextBox(ComboBox comboBox)
+    {
+        return comboBox.Template.FindName("PART_EditableTextBox", comboBox) as TextBox;
+    }
+    private void CityComboBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.CityId == 0 || _viewModel.SearchText == "")
+        {
+            _viewModel.CityId = 1;
+            _viewModel.SearchText = "نامعلوم";
+        }
+    }
+    private void Phone_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(Phone);
+        Phone.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void Phone_Loaded(object sender, RoutedEventArgs e)
+    {
+        DependencyPropertyDescriptor
+            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
+            .AddValueChanged(Phone, (s, args) =>
+            {
+                var tb = s as TextBox;
+                if (Validation.GetHasError(tb))
+                {
+                    ToolTip tt = new ToolTip
+                    {
+                        Content = Validation.GetErrors(tb)[0].ErrorContent,
+                        IsOpen = true,
+                        PlacementTarget = tb,
+                        StaysOpen = true,
+                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
+                    };
+                    tb.ToolTip = tt;
+                }
+                else
+                {
+                    if (tb.ToolTip is ToolTip ttip)
+                        ttip.IsOpen = false;
+                }
+            });
+    }
+    private void Phone_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        TextBox textBox = sender as TextBox;
+        string currentText = textBox.Text;
+
+        // محل قرارگیری کرسر را در نظر بگیریم
+        int selectionStart = textBox.SelectionStart;
+        int selectionLength = textBox.SelectionLength;
+
+        // متن نهایی بعد از اضافه شدن کاراکتر جدید
+        string newText = currentText.Remove(selectionStart, selectionLength).Insert(selectionStart, e.Text);
+
+        // اگر خالی است، اجازه بده
+        if (string.IsNullOrEmpty(newText))
+        {
+            e.Handled = false;
+            return;
+        }
+
+        // بررسی: فقط عدد و حداکثر 11 رقم
+        e.Handled = !Regex.IsMatch(newText, @"^\d{1,11}$");
+    }
+    private void IdCode_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(IdCode);
+        IdCode.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void IdCode_Loaded(object sender, RoutedEventArgs e)
+    {
+        DependencyPropertyDescriptor
+            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
+            .AddValueChanged(IdCode, (s, args) =>
+            {
+                var tb = s as TextBox;
+                if (Validation.GetHasError(tb))
+                {
+                    ToolTip tt = new ToolTip
+                    {
+                        Content = Validation.GetErrors(tb)[0].ErrorContent,
+                        IsOpen = true,
+                        PlacementTarget = tb,
+                        StaysOpen = true,
+                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
+                    };
+                    tb.ToolTip = tt;
+                }
+                else
+                {
+                    if (tb.ToolTip is ToolTip ttip)
+                        ttip.IsOpen = false;
+                }
+            });
+    }
+    private void IdCode_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        TextBox textBox = sender as TextBox;
+        string currentText = textBox.Text;
+
+        // محل قرارگیری کرسر را در نظر بگیریم
+        int selectionStart = textBox.SelectionStart;
+        int selectionLength = textBox.SelectionLength;
+
+        // متن نهایی بعد از اضافه شدن کاراکتر جدید
+        string newText = currentText.Remove(selectionStart, selectionLength).Insert(selectionStart, e.Text);
+
+        // اگر خالی است، اجازه بده
+        if (string.IsNullOrEmpty(newText))
+        {
+            e.Handled = false;
+            return;
+        }
+
+        // فقط اعداد مجازند و باید دقیقاً 10 رقم باشند
+        if (Regex.IsMatch(newText, @"^\d{0,10}$"))
+        {
+            e.Handled = false; // فعلاً اجازه بده چون ممکنه کاربر هنوز کامل نکرده
+        }
+        else
+        {
+            e.Handled = true; // ورودی نامعتبر
+        }
+    }
 }

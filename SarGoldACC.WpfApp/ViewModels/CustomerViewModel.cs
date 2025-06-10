@@ -134,13 +134,27 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
     public string IdCode
     {
         get => _idCode;
-        set => SetProperty(ref _idCode, value);
+        set
+        {
+            if (_idCode != value)
+            {
+                _idCode = value;
+                OnPropertyChanged(nameof(IdCode));
+            }
+        }
     }
     
     public string Phone
     {
         get => _phone;
-        set => SetProperty(ref _phone, value);
+        set
+        {
+            if (_phone != value)
+            {
+                _phone = value;
+                OnPropertyChanged(nameof(Phone));
+            }
+        }
     }
     
     public string CellPhone
@@ -180,12 +194,12 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             }
             if (columnName == nameof(Phone))
             {
-                if (!Regex.IsMatch(Name, @"^\d{1,10}$"))
-                    return "حداقل یک رقم تا 11 رقم وارد کنید";
+                if (!Regex.IsMatch(Phone, @"^(|\d{1,11})$"))
+                    return "شماره تلفن باید شامل کد شهر و شماره تلفن تا 8 رقم باشد (12345678-044).";
             }
             if (columnName == nameof(IdCode))
             {
-                if (!Regex.IsMatch(Name, @"^\d{0,10}$"))
+                if (!Regex.IsMatch(IdCode, @"^(|\d{10})$"))
                     return "10 رقم وارد کنید";
             }
             return null;

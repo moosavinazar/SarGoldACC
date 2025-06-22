@@ -187,6 +187,7 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="1"
                              KeyDown="StoreNameBox_KeyDown"
+                             GotFocus="StoreNameBox_GotFocus"
                              Margin="0 5 0 0"
                              Style="{StaticResource InputTextBox}"
                              Text="{Binding StoreName}"/>
@@ -200,9 +201,12 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="3"
                              KeyDown="WeightLimitBox_KeyDown"
+                             GotFocus="WeightLimitBox_GotFocus"
+                             LostFocus="WeightLimitBox_LostFocus"
                              Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding WeightLimit}"/>
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             Text="{Binding WeightLimit, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="WeightLimit_PreviewTextInput"/>
                     <TextBlock Text="محدودیت ریال"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="4"
@@ -213,9 +217,12 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="5"
                              KeyDown="RiyalLimitBox_KeyDown"
+                             GotFocus="RiyalLimitBox_GotFocus"
+                             LostFocus="RiyalLimitBox_LostFocus"
                              Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding RiyalLimit}"/>
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             Text="{Binding RiyalLimit, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="RiyalLimit_PreviewTextInput"/>
                 </Grid>
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
@@ -234,6 +241,7 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="1"
                              KeyDown="MoarefBox_KeyDown"
+                             GotFocus="MoarefBox_GotFocus"
                              Margin="0 5 5 0"
                              Style="{StaticResource InputTextBox}"
                              Text="{Binding Moaref}"/>
@@ -247,9 +255,11 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="3"
                              KeyDown="EmailBox_KeyDown"
+                             GotFocus="EmailBox_GotFocus"
                              Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding Email}"/>
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="Email_PreviewTextInput"/>
                 </Grid>
                 <Grid Grid.Row="4">
                     <Grid.ColumnDefinitions>

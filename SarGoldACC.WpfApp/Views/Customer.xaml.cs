@@ -134,6 +134,14 @@ public partial class Customer : Window
             e.Handled = true;
         }
     }
+    private void StoreNameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(StoreName);
+        StoreName.SelectAll();
+        // تنظیم زبان فارسی
+        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
+    }
     private void WeightLimitBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
@@ -142,12 +150,52 @@ public partial class Customer : Window
             e.Handled = true;
         }
     }
+    private void WeightLimitBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(WeightLimit);
+        WeightLimit.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void WeightLimit_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
+    }
+    private void WeightLimitBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (WeightLimit.Text == "")
+        {
+            _viewModel.WeightLimit = 0;
+            WeightLimit.Text = "0";
+        }
+    }
     private void RiyalLimitBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
             IdCode.Focus();
             e.Handled = true;
+        }
+    }
+    private void RiyalLimitBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(RiyalLimit);
+        RiyalLimit.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void RiyalLimit_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^(0|\d)$");
+    }
+    private void RiyalLimitBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (RiyalLimit.Text == "")
+        {
+            _viewModel.RiyalLimit = 0;
+            RiyalLimit.Text = "0";
         }
     }
     private void IdCodeBox_KeyDown(object sender, KeyEventArgs e)
@@ -166,6 +214,14 @@ public partial class Customer : Window
             e.Handled = true;
         }
     }
+    private void MoarefBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(Moaref);
+        Moaref.SelectAll();
+        // تنظیم زبان فارسی
+        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
+    }
     private void EmailBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
@@ -173,6 +229,18 @@ public partial class Customer : Window
             Address.Focus();
             e.Handled = true;
         }
+    }
+    private void EmailBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(Email);
+        Email.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void Email_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
     }
     private void AddressBox_KeyDown(object sender, KeyEventArgs e)
     {

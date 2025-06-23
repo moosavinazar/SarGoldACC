@@ -7,11 +7,14 @@ using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
+using System.Windows.Interop;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.DTOs.Customer;
 using SarGoldACC.Core.Services;
 using SarGoldACC.Core.Services.Interfaces;
+using SarGoldACC.WpfApp.Helpers;
 using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp.Views;
@@ -24,6 +27,16 @@ public partial class Customer : Window
     private readonly CustomerViewModel _viewModel;
     private readonly IAuthorizationService _authorizationService;
     private readonly IServiceProvider _serviceProvider;
+    
+    [DllImport("user32.dll")]
+    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
+
+    [DllImport("user32.dll")]
+    private static extern IntPtr GetActiveWindow();
+
+    const int SW_MINIMIZE = 6;
+    const int SW_RESTORE = 9;
+
     
     public Customer(CustomerViewModel viewModel, IAuthorizationService authorizationService, IServiceProvider serviceProvider)
     {
@@ -325,21 +338,29 @@ public partial class Customer : Window
         CellPhone.Text = "";
         _viewModel.CityId = 0;
         Phone.Text = "";
-        WeightBed.Text = "";
-        WeightBes.Text = "";
-        RiyalBed.Text = "";
-        RiyalBes.Text = "";
+        WeightBed.Text = "0";
+        WeightBes.Text = "0";
+        RiyalBed.Text = "0";
+        RiyalBes.Text = "0";
         BirthDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
         StoreName.Text = "";
-        WeightLimit.Text = "";
-        RiyalLimit.Text = "";
+        WeightLimit.Text = "0";
+        RiyalLimit.Text = "0";
         IdCode.Text = "";
         Moaref.Text = "";
         Email.Text = "";
         Address.Text = "";
         Description.Text = "";
+        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
+        
+        // فوکوس را از فرم بگیر و بازگردان
+        WindowFocusHelper.SimulateFocusLossAndRestore(this);
+
+        CityComboBox.Focus();
+        NameBox.Focus();
     }
-    
+
     private void ChoosePhotoButton_Click(object sender, RoutedEventArgs e)
     {
         var openFileDialog = new Microsoft.Win32.OpenFileDialog

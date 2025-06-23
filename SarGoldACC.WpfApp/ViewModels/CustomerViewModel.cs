@@ -99,6 +99,19 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
                                            _authorizationService.HasPermission("City.Create") ||
                                            _authorizationService.HasPermission("City.Edit") ||
                                            _authorizationService.HasPermission("City.Delete");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
 
     public CustomerViewModel(
         IAuthorizationService authorizationService, 
@@ -115,6 +128,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
         {
             await LoadCitiesAsync();
             await LoadCustomerAsync();
+            ValidateAll();
         }).GetAwaiter().GetResult();
     }
 
@@ -127,6 +141,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             {
                 _name = value;
                 OnPropertyChanged(nameof(Name));
+                ValidateAll();
             }
         }
     }
@@ -140,6 +155,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             {
                 _idCode = value;
                 OnPropertyChanged(nameof(IdCode));
+                ValidateAll();
             }
         }
     }
@@ -166,9 +182,24 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             {
                 _cellPhone = value;
                 OnPropertyChanged(nameof(CellPhone));
+                ValidateAll();
             }
         }
     }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(CellPhone),
+        nameof(IdCode),
+        nameof(Email)
+    };
+
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => !string.IsNullOrWhiteSpace(this[p]));
+        CanSave = !hasError;
+    }
+
     
     // IDataErrorInfo
     public string Error => null;
@@ -199,11 +230,17 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             }
             if (columnName == nameof(IdCode))
             {
+                if (string.IsNullOrWhiteSpace(IdCode))
+                    return null;
+                
                 if (!Regex.IsMatch(IdCode, @"^(|\d{10})$"))
                     return "10 رقم وارد کنید";
             }
             if (columnName == nameof(Email))
             {
+                if (string.IsNullOrWhiteSpace(Email))
+                    return null;
+                
                 if (!Regex.IsMatch(Email, @"^(|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$"))
                     return "آدرس ایمیل معتبر نمی باشد";
             }
@@ -272,7 +309,15 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
     public string Email
     {
         get => _email;
-        set => SetProperty(ref _email, value);
+        set
+        {
+            if (_email != value)
+            {
+                _email = value;
+                OnPropertyChanged(nameof(Email));
+                ValidateAll();
+            }
+        }
     }
 
     public string StoreName

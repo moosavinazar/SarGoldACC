@@ -401,6 +401,7 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" 
                     Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
             <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanSave}"
                     Content="ذخیره"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"

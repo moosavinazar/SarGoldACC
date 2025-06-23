@@ -202,6 +202,11 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
                 if (!Regex.IsMatch(IdCode, @"^(|\d{10})$"))
                     return "10 رقم وارد کنید";
             }
+            if (columnName == nameof(Email))
+            {
+                if (!Regex.IsMatch(Email, @"^(|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$"))
+                    return "آدرس ایمیل معتبر نمی باشد";
+            }
             return null;
         }
     }

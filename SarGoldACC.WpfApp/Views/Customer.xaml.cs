@@ -94,12 +94,44 @@ public partial class Customer : Window
             e.Handled = true;
         }
     }
+    private void WeightBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(WeightBed);
+        WeightBed.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void WeightBedBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (WeightBed.Text == "")
+        {
+            _viewModel.WeightBed = 0;
+            WeightBed.Text = "0";
+        }
+    }
     private void WeightBesBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
             RiyalBed.Focus();
             e.Handled = true;
+        }
+    }
+    private void WeightBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(WeightBes);
+        WeightBes.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void WeightBesBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (WeightBes.Text == "")
+        {
+            _viewModel.WeightBes = 0;
+            WeightBes.Text = "0";
         }
     }
     private void RiyalBedBox_KeyDown(object sender, KeyEventArgs e)
@@ -110,12 +142,44 @@ public partial class Customer : Window
             e.Handled = true;
         }
     }
+    private void RiyalBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(RiyalBed);
+        RiyalBed.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void RiyalBedBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (RiyalBed.Text == "")
+        {
+            _viewModel.RiyalBed = 0;
+            RiyalBed.Text = "0";
+        }
+    }
     private void RiyalBesBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Enter)
         {
             BirthDate.Focus();
             e.Handled = true;
+        }
+    }
+    private void RiyalBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(RiyalBes);
+        RiyalBes.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void RiyalBesBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (RiyalBes.Text == "")
+        {
+            _viewModel.RiyalBes = 0;
+            RiyalBes.Text = "0";
         }
     }
     private void BirthDateBox_KeyDown(object sender, KeyEventArgs e)
@@ -158,7 +222,7 @@ public partial class Customer : Window
         LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
     }
-    private void WeightLimit_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    private void Weight_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
     }
@@ -186,7 +250,7 @@ public partial class Customer : Window
         LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
     }
-    private void RiyalLimit_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    private void Riyal_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         e.Handled = !Regex.IsMatch(e.Text, @"^(0|\d)$");
     }
@@ -237,10 +301,6 @@ public partial class Customer : Window
         // تنظیم زبان انگلیسی
         LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void Email_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$");
     }
     private void AddressBox_KeyDown(object sender, KeyEventArgs e)
     {

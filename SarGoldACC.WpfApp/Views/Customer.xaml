@@ -206,7 +206,7 @@
                              Margin="0 5 0 0"
                              Style="{StaticResource ValidatedTextBoxStyle}"
                              Text="{Binding WeightLimit, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             PreviewTextInput="WeightLimit_PreviewTextInput"/>
+                             PreviewTextInput="Weight_PreviewTextInput"/>
                     <TextBlock Text="محدودیت ریال"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="4"
@@ -222,7 +222,7 @@
                              Margin="0 5 0 0"
                              Style="{StaticResource ValidatedTextBoxStyle}"
                              Text="{Binding RiyalLimit, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             PreviewTextInput="RiyalLimit_PreviewTextInput"/>
+                             PreviewTextInput="Riyal_PreviewTextInput"/>
                 </Grid>
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
@@ -258,8 +258,7 @@
                              GotFocus="EmailBox_GotFocus"
                              Margin="0 5 0 0"
                              Style="{StaticResource ValidatedTextBoxStyle}"
-                             Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             PreviewTextInput="Email_PreviewTextInput"/>
+                             Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
                 </Grid>
                 <Grid Grid.Row="4">
                     <Grid.ColumnDefinitions>
@@ -278,9 +277,12 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="1"
                              KeyDown="WeightBedBox_KeyDown"
+                             GotFocus="WeightBedBox_GotFocus"
+                             LostFocus="WeightBedBox_LostFocus"
                              Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding WeightBed}"/>
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             Text="{Binding WeightBed, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="Weight_PreviewTextInput"/>
                     <TextBlock Text="بستانکاری طلا"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"
@@ -291,9 +293,12 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="3"
                              KeyDown="WeightBesBox_KeyDown"
+                             GotFocus="WeightBesBox_GotFocus"
+                             LostFocus="WeightBesBox_LostFocus"
                              Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding WeightBes}"/>
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             Text="{Binding WeightBes, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="Weight_PreviewTextInput"/>
                 </Grid>
                 <Grid Grid.Row="5">
                     <Grid.ColumnDefinitions>
@@ -312,9 +317,12 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="1"
                              KeyDown="RiyalBedBox_KeyDown"
+                             GotFocus="RiyalBedBox_GotFocus"
+                             LostFocus="RiyalBedBox_LostFocus"
                              Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding RiyalBed}"/>
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             Text="{Binding RiyalBed, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="Riyal_PreviewTextInput"/>
                     <TextBlock Text="بستانکاری ریال"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"
@@ -325,9 +333,12 @@
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="3"
                              KeyDown="RiyalBesBox_KeyDown"
+                             GotFocus="RiyalBesBox_GotFocus"
+                             LostFocus="RiyalBesBox_LostFocus"
                              Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding RiyalBes}"/>
+                             Style="{StaticResource ValidatedTextBoxStyle}"
+                             Text="{Binding RiyalBes, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="Riyal_PreviewTextInput"/>
                 </Grid>
             </Grid>
             <Grid Grid.Column="1">

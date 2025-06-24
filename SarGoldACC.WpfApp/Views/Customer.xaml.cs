@@ -66,13 +66,13 @@ public partial class Customer : Window
         {
             this.Close();
         }
-    }
-    private void NameBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
         {
-            CellPhone.Focus();
-            e.Handled = true;
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
         }
     }
     private void NameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
@@ -83,14 +83,6 @@ public partial class Customer : Window
         LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
     }
-    private void CellPhoneBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            Phone.Focus();
-            e.Handled = true;
-        }
-    }
     private void CellPhone_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
         Keyboard.Focus(CellPhone);
@@ -98,14 +90,6 @@ public partial class Customer : Window
         // تنظیم زبان انگلیسی
         LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void WeightBedBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            WeightBes.Focus();
-            e.Handled = true;
-        }
     }
     private void WeightBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
@@ -121,14 +105,6 @@ public partial class Customer : Window
         {
             _viewModel.WeightBed = 0;
             WeightBed.Text = "0";
-        }
-    }
-    private void WeightBesBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            RiyalBed.Focus();
-            e.Handled = true;
         }
     }
     private void WeightBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
@@ -147,14 +123,6 @@ public partial class Customer : Window
             WeightBes.Text = "0";
         }
     }
-    private void RiyalBedBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            RiyalBes.Focus();
-            e.Handled = true;
-        }
-    }
     private void RiyalBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
         Keyboard.Focus(RiyalBed);
@@ -169,14 +137,6 @@ public partial class Customer : Window
         {
             _viewModel.RiyalBed = 0;
             RiyalBed.Text = "0";
-        }
-    }
-    private void RiyalBesBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            BirthDate.Focus();
-            e.Handled = true;
         }
     }
     private void RiyalBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
@@ -195,22 +155,6 @@ public partial class Customer : Window
             RiyalBes.Text = "0";
         }
     }
-    private void BirthDateBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            StoreName.Focus();
-            e.Handled = true;
-        }
-    }
-    private void StoreNameBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            WeightLimit.Focus();
-            e.Handled = true;
-        }
-    }
     private void StoreNameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
         Keyboard.Focus(StoreName);
@@ -218,14 +162,6 @@ public partial class Customer : Window
         // تنظیم زبان فارسی
         LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-    }
-    private void WeightLimitBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            RiyalLimit.Focus();
-            e.Handled = true;
-        }
     }
     private void WeightLimitBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
@@ -245,14 +181,6 @@ public partial class Customer : Window
         {
             _viewModel.WeightLimit = 0;
             WeightLimit.Text = "0";
-        }
-    }
-    private void RiyalLimitBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            IdCode.Focus();
-            e.Handled = true;
         }
     }
     private void RiyalLimitBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
@@ -275,22 +203,6 @@ public partial class Customer : Window
             RiyalLimit.Text = "0";
         }
     }
-    private void IdCodeBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            Moaref.Focus();
-            e.Handled = true;
-        }
-    }
-    private void MoarefBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            Email.Focus();
-            e.Handled = true;
-        }
-    }
     private void MoarefBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
         Keyboard.Focus(Moaref);
@@ -298,14 +210,6 @@ public partial class Customer : Window
         // تنظیم زبان فارسی
         LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-    }
-    private void EmailBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            Address.Focus();
-            e.Handled = true;
-        }
     }
     private void EmailBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
@@ -315,25 +219,21 @@ public partial class Customer : Window
         LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
     }
-    private void AddressBox_KeyDown(object sender, KeyEventArgs e)
+    private void ClickSaveCustomer(object sender, RoutedEventArgs e)
     {
-        if (e.Key == Key.Enter)
-        {
-            Description.Focus();
-            e.Handled = true;
-        }
+        Save();
     }
-    private void DescriptionBox_KeyDown(object sender, KeyEventArgs e)
+    private void ClickClearForm(object sender, RoutedEventArgs e)
     {
-        if (e.Key == Key.Enter)
-        {
-            Address.Focus();
-            e.Handled = true;
-        }
+        ClearForm();
     }
-    private async void ClickSaveCustomer(object sender, RoutedEventArgs e)
+    private async void Save()
     {
         await _viewModel.SaveCustomer();
+        ClearForm();
+    }
+    private void ClearForm()
+    {
         NameBox.Text = "";
         CellPhone.Text = "";
         _viewModel.CityId = 0;
@@ -342,7 +242,6 @@ public partial class Customer : Window
         WeightBes.Text = "0";
         RiyalBed.Text = "0";
         RiyalBes.Text = "0";
-        BirthDate.Text = DateTime.Now.ToString("dd/MM/yyyy");
         StoreName.Text = "";
         WeightLimit.Text = "0";
         RiyalLimit.Text = "0";
@@ -351,6 +250,10 @@ public partial class Customer : Window
         Email.Text = "";
         Address.Text = "";
         Description.Text = "";
+        _viewModel.BirthDate = null;
+        _viewModel.PhotoPreview = null;
+        _viewModel.PhotoFileName = "";
+        _viewModel.PhotoBytes = null;
         LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
         
@@ -359,6 +262,7 @@ public partial class Customer : Window
 
         CityComboBox.Focus();
         NameBox.Focus();
+        _viewModel.Clear();
     }
 
     private void ChoosePhotoButton_Click(object sender, RoutedEventArgs e)
@@ -430,6 +334,7 @@ public partial class Customer : Window
         {
             if (obj is CustomerDto customer)
             {
+                CityComboBox.Text = "";
                 await _viewModel.EditAsync(customer.Id);
             }
         };
@@ -616,14 +521,6 @@ public partial class Customer : Window
                     e.Handled = true;
                 }
             }
-        }
-    }
-    private void PhoneBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            Phone.Focus();
-            e.Handled = true;
         }
     }
     private void Phone_GotFocus(object sender, RoutedEventArgs routedEventArgs)

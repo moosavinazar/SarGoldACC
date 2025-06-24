@@ -7,6 +7,7 @@ using PersianDateControlsPlus.PersianDate;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.DTOs.Customer;
+using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Services;
 using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.Helpers;
@@ -482,6 +483,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
         WeightLimit = customerDto.WeightLimit;
         RiyalLimit = customerDto.RiyalLimit;
         Description = customerDto.Description;
+        CityId = customerDto.CityId;
         // بارگذاری تصویر
         if (!string.IsNullOrEmpty(Photo) && File.Exists(Photo))
         {
@@ -498,6 +500,11 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
         {
             PhotoPreview = null;
         }
+    }
+
+    public void Clear()
+    {
+        _editingCustomerId = null;
     }
     
     public async Task DeleteAsync(long userId)

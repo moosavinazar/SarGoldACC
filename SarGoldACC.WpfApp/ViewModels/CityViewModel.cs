@@ -1,22 +1,33 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.Helpers;
+using SarGoldACC.WpfApp.Views;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class CityViewModel : ViewModelBase
+public class CityViewModel : ViewModelBase, IDataErrorInfo
 {
     private readonly IAuthorizationService _authorizationService;
-    private readonly ICityService _branchService;
+    private readonly ICityService _cityService;
     
     private long? _editingCityId = null;
-    private string _branchName;
+    private string _cityName;
     public string CityName
     {
-        get => _branchName;
-        set => SetProperty(ref _branchName, value);
+        get => _cityName;
+        set
+        {
+            if (_cityName != value)
+            {
+                _cityName = value;
+                OnPropertyChanged(nameof(CityName));
+                ValidateAll();
+            }
+        }
     }
     
     private ObservableCollection<CityDto> _allCities = new();
@@ -32,12 +43,55 @@ public class CityViewModel : ViewModelBase
     public bool CanAccessCityDelete => _authorizationService.HasPermission("City.Delete");
     public bool CanAccessCityCreateOrEdit => _authorizationService.HasPermission("City.Create") ||
                                               _authorizationService.HasPermission("City.Edit");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
 
+    // IDataErrorInfo
+    public string Error => null;
+    public string this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(CityName))
+            {
+                if (string.IsNullOrWhiteSpace(CityName))
+                    return "نام شهر الزامی است.";
+
+                if (!Regex.IsMatch(CityName, @"^.+$"))
+                    return "نام شهر الزامی است";
+            }
+            return null;
+        }
+    }
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => !string.IsNullOrWhiteSpace(this[p]));
+        CanSave = !hasError;
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(CityName),
+    };
+    public void Clear()
+    {
+        _editingCityId = null;
+    }
     public CityViewModel(IAuthorizationService authorizationService, 
         ICityService branchService)
     {
         _authorizationService = authorizationService;
-        _branchService = branchService;
+        _cityService = branchService;
         AllCities = new ObservableCollection<CityDto>();
         
         // بارگذاری تنظیمات و داده‌ها
@@ -60,7 +114,7 @@ public class CityViewModel : ViewModelBase
                 Id = _editingCityId.Value,
                 Name = CityName
             };
-            result = await _branchService.UpdateAsync(dto);
+            result = await _cityService.UpdateAsync(dto);
             _editingCityId = null;
             if (result.Success)
             {
@@ -77,7 +131,7 @@ public class CityViewModel : ViewModelBase
             {
                 Name = CityName
             };
-            result = await _branchService.AddAsync(branchCreate);
+            result = await _cityService.AddAsync(branchCreate);
             if (result.Success)
             {
                 MessageBoxHelper.ShowSuccess("شهر با موفقیت ذخیره شد.");
@@ -92,20 +146,20 @@ public class CityViewModel : ViewModelBase
     
     public async Task DeleteAsync(long groupId)
     {
-        await _branchService.DeleteAsync(groupId);
+        await _cityService.DeleteAsync(groupId);
     }
 
     public async Task EditAsync(long branchId)
     {
         _editingCityId = branchId;
-        var city = await _branchService.GetByIdAsync(branchId);
+        var city = await _cityService.GetByIdAsync(branchId);
         CityName = city.Name;
     }
     
     private async Task LoadCitiesAsync()
     {
         AllCities.Clear();
-        var groups = await _branchService.GetAllAsync();
+        var groups = await _cityService.GetAllAsync();
         foreach (var g in groups)
         {
             AllCities.Add(g);

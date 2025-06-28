@@ -422,7 +422,7 @@ public partial class Customer : Window
     {
         DependencyPropertyDescriptor
             .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
-            .AddValueChanged(CellPhone, (s, args) =>
+            .AddValueChanged(NameBox, (s, args) =>
             {
                 var tb = s as TextBox;
                 if (Validation.GetHasError(tb))

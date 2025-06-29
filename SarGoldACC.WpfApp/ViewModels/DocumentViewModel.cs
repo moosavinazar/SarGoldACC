@@ -65,6 +65,16 @@ public class DocumentViewModel : ViewModelBase
             }
         }
     }
+    private string _userImagePath;
+    public string UserImagePath
+    {
+        get => _userImagePath;
+        set
+        {
+            _userImagePath = value;
+            OnPropertyChanged(nameof(UserImagePath));
+        }
+    }
     public bool IsCounterpartySelected => CounterpartyId != 0;
     private long _counterpartyId;
     public long CounterpartyId
@@ -76,9 +86,20 @@ public class DocumentViewModel : ViewModelBase
             {
                 _counterpartyId = value;
                 OnPropertyChanged();
-                OnPropertyChanged(nameof(IsCounterpartySelected));
+                Console.WriteLine(CounterpartyId);
+
+                // بدون await فراخوانی async
+                _ = LoadCounterpartyAsync(_counterpartyId);
             }
         }
+    }
+    private async Task LoadCounterpartyAsync(long id)
+    {
+        var counterparty = await _counterpartyService.GetByIdAsync(id);
+        // فرضاً اینجا مقدار را در یک ویژگی دیگر ذخیره می‌کنی
+        UserImagePath = counterparty.Customer.Photo;
+        // اگر چیزی برای نمایش یا فعال‌سازی لازم است
+        OnPropertyChanged(nameof(IsCounterpartySelected));
     }
     private string _searchText;
     public string SearchText

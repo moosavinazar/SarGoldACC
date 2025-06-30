@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.DTOs.Document;
@@ -12,7 +13,7 @@ public partial class RcvOrder : Window
     private readonly RcvOrderViewModel _viewModel;
     private readonly IServiceProvider _serviceProvider;
     public DocumentItemDto ResultItem { get; private set; }
-    
+    public long SideOneCounterpartyId { get; set; }
     public RcvOrder(RcvOrderViewModel viewModel, IServiceProvider serviceProvider)
     {
         InitializeComponent();
@@ -24,6 +25,29 @@ public partial class RcvOrder : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        _viewModel.SideOneCounterPartyId = SideOneCounterpartyId;
+        await _viewModel.ReloadAllAsync();
+    }
+    private void CounterpartyComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        var comboBox = sender as ComboBox;
+        if (comboBox != null)
+        {
+            comboBox.IsDropDownOpen = true;
+        }
+    }
+    private void CounterpartyComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
+    {
+        if (e.Key == Key.Insert)
+        {
+            OpenAddCustomerWindow();
+        }
+    }
+    private async void OpenAddCustomerWindow()
+    {
+        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
+        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
+        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
     }
     private void RcvOrderWindow_KeyDown(object sender, KeyEventArgs e)
     {

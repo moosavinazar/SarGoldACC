@@ -5,6 +5,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.Enums;
+using SarGoldACC.Core.Repositories;
 using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.ViewModels;
 
@@ -113,7 +114,7 @@ public partial class Document : Window
     {
         var rcvOrderWindow = _serviceProvider.GetRequiredService<RcvOrder>();
         rcvOrderWindow.Owner = this;
-
+        rcvOrderWindow.SideOneCounterpartyId = _viewModel.CounterpartyId;
         bool? result = rcvOrderWindow.ShowDialog();
         if (result == true && rcvOrderWindow.ResultItem != null)
         {
@@ -125,7 +126,7 @@ public partial class Document : Window
     {
         var payOrderWindow = _serviceProvider.GetRequiredService<PayOrder>();
         payOrderWindow.Owner = this;
-
+        payOrderWindow.SideOneCounterpartyId = _viewModel.CounterpartyId;
         bool? result = payOrderWindow.ShowDialog();
         if (result == true && payOrderWindow.ResultItem != null)
         {

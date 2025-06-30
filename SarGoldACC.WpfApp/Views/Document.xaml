@@ -39,7 +39,7 @@
                 <Ellipse Width="60" Height="60" Stroke="#000000" StrokeThickness="2" />
                 <Ellipse Width="60" Height="60">
                     <Ellipse.Fill>
-                        <ImageBrush ImageSource="{Binding UserImagePath}" />
+                        <ImageBrush ImageSource="{Binding UserImagePath}" Stretch="UniformToFill"/>
                     </Ellipse.Fill>
                 </Ellipse>
             </Grid>

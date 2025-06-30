@@ -65,7 +65,7 @@ public class DocumentViewModel : ViewModelBase
             }
         }
     }
-    private string _userImagePath;
+    private string _userImagePath = "pack://application:,,,/Resources/Icons/UserLarge.png";
     public string UserImagePath
     {
         get => _userImagePath;
@@ -86,8 +86,6 @@ public class DocumentViewModel : ViewModelBase
             {
                 _counterpartyId = value;
                 OnPropertyChanged();
-                Console.WriteLine(CounterpartyId);
-
                 // بدون await فراخوانی async
                 _ = LoadCounterpartyAsync(_counterpartyId);
             }
@@ -96,9 +94,8 @@ public class DocumentViewModel : ViewModelBase
     private async Task LoadCounterpartyAsync(long id)
     {
         var counterparty = await _counterpartyService.GetByIdAsync(id);
-        // فرضاً اینجا مقدار را در یک ویژگی دیگر ذخیره می‌کنی
-        UserImagePath = counterparty.Customer.Photo;
-        // اگر چیزی برای نمایش یا فعال‌سازی لازم است
+        //TODO
+        UserImagePath = counterparty.Customer?.Photo ?? "pack://application:,,,/Resources/Icons/UserLarge.png";
         OnPropertyChanged(nameof(IsCounterpartySelected));
     }
     private string _searchText;

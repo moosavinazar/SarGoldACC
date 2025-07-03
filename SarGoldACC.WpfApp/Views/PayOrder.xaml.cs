@@ -1,16 +1,20 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.Enums;
-using SarGoldACC.Core.Services.Interfaces;
 using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp.Views;
 
 public partial class PayOrder : Window
 {
+    [DllImport("user32.dll")]
+    static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
     private readonly PayOrderViewModel _viewModel;
     private readonly IServiceProvider _serviceProvider;
     public DocumentItemDto ResultItem { get; private set; }
@@ -94,5 +98,44 @@ public partial class PayOrder : Window
         this.DialogResult = true;
         this.Close();
     }
-
+    private void RiyalBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(RiyalBed);
+        RiyalBed.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void RiyalBedBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (RiyalBed.Text == "")
+        {
+            _viewModel.RiyalBed = 0;
+            RiyalBed.Text = "0";
+        }
+    }
+    private void Riyal_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^(0|\d)$");
+    }
+    private void WeightBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(WeightBed);
+        WeightBed.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void WeightBedBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (WeightBed.Text == "")
+        {
+            _viewModel.WeightBed = 0;
+            WeightBed.Text = "0";
+        }
+    }
+    private void Weight_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
+    }
 }

@@ -1,4 +1,7 @@
-﻿using System.Windows;
+﻿using System.Globalization;
+using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
+using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
 using Microsoft.Extensions.DependencyInjection;
@@ -10,6 +13,8 @@ namespace SarGoldACC.WpfApp.Views;
 
 public partial class RcvOrder : Window
 {
+    [DllImport("user32.dll")]
+    static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
     private readonly RcvOrderViewModel _viewModel;
     private readonly IServiceProvider _serviceProvider;
     public DocumentItemDto ResultItem { get; private set; }
@@ -92,5 +97,45 @@ public partial class RcvOrder : Window
 
         this.DialogResult = true;
         this.Close();
+    }
+    private void WeightBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(WeightBes);
+        WeightBes.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void WeightBesBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (WeightBes.Text == "")
+        {
+            _viewModel.WeightBes = 0;
+            WeightBes.Text = "0";
+        }
+    }
+    private void Weight_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
+    }
+    private void RiyalBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        Keyboard.Focus(RiyalBes);
+        RiyalBes.SelectAll();
+        // تنظیم زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+    private void RiyalBesBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (RiyalBes.Text == "")
+        {
+            _viewModel.RiyalBes = 0;
+            RiyalBes.Text = "0";
+        }
+    }
+    private void Riyal_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    {
+        e.Handled = !Regex.IsMatch(e.Text, @"^(0|\d)$");
     }
 }

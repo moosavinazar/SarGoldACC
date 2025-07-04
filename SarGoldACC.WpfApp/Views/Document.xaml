@@ -7,6 +7,7 @@
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         xmlns:PersianDateControlsPlus="clr-namespace:PersianDateControlsPlus;assembly=PersianDateControlsPlus"
+        xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
         Title="سند" 
         KeyDown="DocumentWindow_KeyDown"
@@ -56,32 +57,24 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <TextBlock Text="مشتری"
                                Grid.Column="0"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="5,10,5,0"/>
-                    <ComboBox x:Name="CounterpartyComboBox" Grid.Column="1"
-                              IsEditable="True"
-                              IsTextSearchEnabled="False"
-                              ItemsSource="{Binding FilteredCounterparties}"
-                              DisplayMemberPath="Name"
-                              SelectedValuePath="Id"
-                              SelectedValue="{Binding CounterpartyId, Mode=TwoWay}"
-                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                              PreviewTextInput="CounterpartyComboBox_PreviewTextInput"
-                              PreviewKeyDown="CounterpartyComboBox_PreviewKeyDown"
-                              Margin="0,0,0,0"/>
-                    <Button Grid.Column="2" x:Name="AddCustomerButton"
-                            Visibility="{Binding CanAccessCustomerButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                            Content="+"
-                            Style="{StaticResource AddCounterpartyButton}"
-                            HorizontalAlignment="Center"
-                            Click="ClickAddCustomer"
-                            Padding="10,5"
-                            Margin="0"/>
+                    
+                    <controls:ComboBoxSelector 
+                        x:Name="CounterpartySelectorControl" 
+                        Grid.Column="1"
+                        ItemsSource="{Binding FilteredCounterparties}"
+                        SelectedValue="{Binding CounterpartyId, Mode=TwoWay}"
+                        DisplayMemberPath="Name"
+                        SelectedValuePath="Id"
+                        SearchText="{Binding SearchText, Mode=TwoWay}"
+                        CanAccessAddButton="{Binding CanAccessCustomerButton}"
+                        AddWindowType="{x:Type views:Customer}"/>
+                    
                     <TextBlock Text="اعتبار"
                                Visibility="{Binding CanAccessDocumentCredit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="3"

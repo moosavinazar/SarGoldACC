@@ -11,7 +11,7 @@ public class MiscViewModel
     public long BoxId { get; set; }
     public ObservableCollection<BoxDto> Boxes { get; }
     public bool Certain { get; set; }
-    public int Ayar { get; set; }
+    public int Ayar { get; set; } = 750;
     public double Weight { get; set; }
     public double? Weight750 { get; set; }
     public string Description { get; set; }

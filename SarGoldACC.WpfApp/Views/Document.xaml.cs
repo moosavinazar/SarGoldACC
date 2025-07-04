@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.Enums;
 using SarGoldACC.Core.Repositories;
 using SarGoldACC.Core.Services.Interfaces;
+using SarGoldACC.WpfApp.Control;
 using SarGoldACC.WpfApp.ViewModels;
 
 namespace SarGoldACC.WpfApp.Views;
@@ -45,22 +46,8 @@ public partial class Document : Window
         
         // تمرکز روی بخش متنی ComboBox
         await Task.Delay(100); // صبر کوتاه برای اطمینان از آماده بودن UI
-
-        CounterpartyComboBox.Focus();
-        if (CounterpartyComboBox.IsEditable)
-        {
-            var textBox = (TextBox)CounterpartyComboBox.Template.FindName("PART_EditableTextBox", CounterpartyComboBox);
-            if (textBox != null)
-            {
-                Keyboard.Focus(textBox);
-                textBox.SelectAll();
-                // تنظیم زبان فارسی
-                LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-                InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-            }
-        }
+        CounterpartySelectorControl.ServiceProvider = _serviceProvider;
     }
-
     private void DocumentWindow_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape)

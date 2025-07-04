@@ -52,11 +52,14 @@
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,5,5,0"/>
-            <TextBox x:Name="RiyalBes" 
+            <TextBox x:Name="Ayar" 
                      Grid.Column="3"
+                     GotFocus="AyarBox_GotFocus"
+                     LostFocus="AyarBox_LostFocus"
                      Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Ayar}"/>
+                     Style="{StaticResource ValidatedTextBoxStyle}"
+                     Text="{Binding Ayar, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                     PreviewTextInput="Ayar_PreviewTextInput"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
@@ -70,11 +73,15 @@
                        FontWeight="Bold"
                        VerticalAlignment="Center"
                        Margin="0,5,5,0"/>
-            <TextBox x:Name="Weight" 
+            <TextBox x:Name="WeightBox" 
                      Grid.Column="1"
+                     GotFocus="WeightBox_GotFocus"
+                     LostFocus="WeightBox_LostFocus"
                      Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Weight}"/>
+                     Style="{StaticResource ValidatedTextBoxStyle}"
+                     Text="{Binding Weight, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, 
+                        NotifyOnValidationError=True, Mode=TwoWay}"
+                     PreviewTextInput="Weight_PreviewTextInput"/>
             <TextBlock Text="750"
                        Grid.Column="2"
                        FontWeight="Bold"
@@ -82,9 +89,10 @@
                        Margin="0,5,5,0"/>
             <TextBox x:Name="Weight750" 
                      Grid.Column="3"
+                     IsEnabled="False"
                      Margin="0 5 0 0"
                      Style="{StaticResource InputTextBox}"
-                     Text="{Binding Weight750}"/>
+                     Text="{Binding Weight750, Mode=TwoWay}"/>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
@@ -98,18 +106,26 @@
                        VerticalAlignment="Center"
                        Margin="5,10,5,0"/>
             <ComboBox x:Name="BoxComboBox" Grid.Column="1"
-                      Visibility="{Binding CanAccessBoxButton, Converter={StaticResource BoolToVisibilityConverter}}"
+                      IsEditable="True"
+                      IsTextSearchEnabled="False"
                       ItemsSource="{Binding Boxes}"
                       DisplayMemberPath="Name"
                       SelectedValuePath="Id"
                       SelectedValue="{Binding BoxId, Mode=TwoWay}"
+                      Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
+                      PreviewTextInput="BoxComboBox_PreviewTextInput"
+                      PreviewKeyDown="BoxComboBox_PreviewKeyDown"
+                      VerticalAlignment="Center"
                       Margin="0,5,0,0"/>
             <Button Grid.Column="2" x:Name="AddBoxButton"
+                    Visibility="{Binding CanAccessBoxButton, Converter={StaticResource BoolToVisibilityConverter}}"
                     Content="+"
-                    Style="{StaticResource SuccessBtn}"
+                    Style="{StaticResource AddCounterpartyButton}"
                     HorizontalAlignment="Center"
                     Click="ClickAddBox"
-                    Padding="10,5"/>
+                    Padding="10,5"
+                    VerticalAlignment="Center"
+                    Margin="0 5 5 0 "/>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>

@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         mc:Ignorable="d"
-        Title="گروه" 
+        Title="شعبه" 
         Height="600" 
         Width="800"
         KeyDown="BranchWindow_KeyDown"
@@ -33,6 +33,7 @@
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
             
             <TextBlock Grid.Column="0" Text="نام شعبه"
@@ -44,9 +45,12 @@
                      x:Name="BranchNameBox" 
                      Visibility="{Binding CanAccessBranchCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                      KeyDown="BranchNameBox_KeyDown"
-                     Margin="0 0 10 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding BranchName}"/>
+                     GotFocus="BranchNameBox_GotFocus"
+                     Loaded="BranchNameBox_Loaded"
+                     PreviewTextInput="BranchNameBox_PreviewTextInput"
+                     Margin="10,10"
+                     Style="{StaticResource ValidatedTextBoxStyle}"
+                     Text="{Binding BranchName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
             <Button Grid.Column="2" 
                     x:Name="SaveButton"
                     Visibility="{Binding CanAccessBranchCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
@@ -55,6 +59,14 @@
                     HorizontalAlignment="Center"
                     Margin="10,10"
                     Click="ClickSaveBranch"
+                    Padding="10,5"/>
+            <Button Grid.Column="3" x:Name="ClearButton"
+                    Content="جدید"
+                    ToolTip="F5"
+                    Style="{StaticResource PrimaryBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickClearForm"
+                    Margin="10,10"
                     Padding="10,5"/>
         </Grid>
         <controls:CustomizableDataGrid Grid.Row="1" x:Name="BranchDataGrid"

@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Box;
 using SarGoldACC.Core.DTOs.Branch;
@@ -8,7 +10,7 @@ using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class BoxViewModel : ViewModelBase
+public class BoxViewModel : ViewModelBase, IDataErrorInfo
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly IBoxService _boxService;
@@ -44,7 +46,36 @@ public class BoxViewModel : ViewModelBase
     public ObservableCollection<BranchDto> Branches
     {
         get => _allBranches;
-        set => SetProperty(ref _allBranches, value);
+        set
+        {
+            _allBranches = value;
+            OnPropertyChanged();
+            FilterBranches();
+        }
+    }
+    private ObservableCollection<BranchDto> _filteredBranches;
+    public ObservableCollection<BranchDto> FilteredBranches
+    {
+        get => _filteredBranches;
+        set
+        {
+            _filteredBranches = value;
+            OnPropertyChanged();
+        }
+    }
+    private string _searchText;
+    public string SearchText
+    {
+        get => _searchText;
+        set
+        {
+            if (_searchText != value)
+            {
+                _searchText = value;
+                OnPropertyChanged();
+                FilterBranches();
+            }
+        }
     }
     private ObservableCollection<BoxDto> _allBoxes = new();
     public ObservableCollection<BoxDto> AllBoxes
@@ -58,6 +89,25 @@ public class BoxViewModel : ViewModelBase
     public bool CanAccessBoxDelete => _authorizationService.HasPermission("Box.Delete");
     public bool CanAccessBoxCreateOrEdit => _authorizationService.HasPermission("Box.Create") ||
                                              _authorizationService.HasPermission("Box.Edit");
+    public bool CanAccessBranchButton => _authorizationService.HasPermission("Branch.Create") ||
+                                         _authorizationService.HasPermission("Branch.Edit");
+    // IDataErrorInfo
+    public string Error => null;
+    public string this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name))
+                    return "نام جعبه الزامی است.";
+
+                if (!Regex.IsMatch(Name, @"^.+$"))
+                    return "نام جعبه الزامی است";
+            }
+            return null;
+        }
+    }
     public BoxViewModel(IAuthorizationService authorizationService, 
         IBoxService boxService,
         IBranchService branchService)
@@ -157,5 +207,20 @@ public class BoxViewModel : ViewModelBase
         Weight = box.Weight;
         Type = box.Type;
     }
-    
+    private void FilterBranches()
+    {
+        if (string.IsNullOrWhiteSpace(SearchText))
+        {
+            BranchId = 0;
+            FilteredBranches = new ObservableCollection<BranchDto>(Branches);
+        }
+        else
+        {
+            var filtered = Branches
+                .Where(c => c.Name != null && c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
+                .ToList();
+
+            FilteredBranches = new ObservableCollection<BranchDto>(filtered);
+        }
+    }
 }

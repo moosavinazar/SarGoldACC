@@ -32,27 +32,7 @@ public partial class RcvOrder : Window
         Keyboard.Focus(this);
         _viewModel.SideOneCounterPartyId = SideOneCounterpartyId;
         await _viewModel.ReloadAllAsync();
-    }
-    private void CounterpartyComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        var comboBox = sender as ComboBox;
-        if (comboBox != null)
-        {
-            comboBox.IsDropDownOpen = true;
-        }
-    }
-    private void CounterpartyComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Insert)
-        {
-            OpenAddCustomerWindow();
-        }
-    }
-    private async void OpenAddCustomerWindow()
-    {
-        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
-        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+        CounterpartySelectorControl.ServiceProvider = _serviceProvider;
     }
     private void RcvOrderWindow_KeyDown(object sender, KeyEventArgs e)
     {
@@ -76,13 +56,6 @@ public partial class RcvOrder : Window
     {
         await _viewModel.ReloadAllAsync();
     }
-    private async void ClickAddCustomer(object sender, RoutedEventArgs e)
-    {
-        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
-        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-
     private void ClickSaveRcvOrder(object sender, RoutedEventArgs e)
     {
         ResultItem = new DocumentItemDto

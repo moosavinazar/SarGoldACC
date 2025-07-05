@@ -24,7 +24,7 @@ public partial class TextBoxValidText : UserControl, IDataErrorInfo
         {
             if (columnName == nameof(ValidText))
             {
-                if (string.IsNullOrWhiteSpace(ValidText))
+                if (!AllowNullText && string.IsNullOrWhiteSpace(ValidText))
                     return NotValidTextMessage;
 
                 if (!Regex.IsMatch(ValidText, @ValidTextPattern))
@@ -101,4 +101,15 @@ public partial class TextBoxValidText : UserControl, IDataErrorInfo
         get => (string)GetValue(NotValidTextMessageProperty);
         set => SetValue(NotValidTextMessageProperty, value);
     }
+    public static readonly DependencyProperty AllowNullTextProperty =
+        DependencyProperty.Register(nameof(AllowNullText),
+            typeof(bool),
+            typeof(TextBoxValidText),
+            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public bool AllowNullText
+    {
+        get => (bool)GetValue(AllowNullTextProperty);
+        set => SetValue(AllowNullTextProperty, value);
+    }
+
 }

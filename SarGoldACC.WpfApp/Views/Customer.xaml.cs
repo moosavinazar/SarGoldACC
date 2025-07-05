@@ -48,8 +48,8 @@ public partial class Customer : Window
         // هندل کردن Paste به صورت Preview در سطح Command
         CellPhone.AddHandler(CommandManager.PreviewExecutedEvent,
             new ExecutedRoutedEventHandler(CellPhone_PreviewExecuted), true);
-        NameBox.AddHandler(CommandManager.PreviewExecutedEvent,
-            new ExecutedRoutedEventHandler(NameBox_PreviewExecuted), true);
+        /*NameBox.AddHandler(CommandManager.PreviewExecutedEvent,
+            new ExecutedRoutedEventHandler(NameBox_PreviewExecuted), true);*/
         Phone.AddHandler(CommandManager.PreviewExecutedEvent,
             new ExecutedRoutedEventHandler(Phone_PreviewExecuted), true);
         IdCode.AddHandler(CommandManager.PreviewExecutedEvent,
@@ -74,14 +74,6 @@ public partial class Customer : Window
         {
             ClearForm();
         }
-    }
-    private void NameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(NameBox);
-        NameBox.SelectAll();
-        // تنظیم زبان فارسی
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
     }
     private void CellPhone_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
@@ -234,7 +226,7 @@ public partial class Customer : Window
     }
     private void ClearForm()
     {
-        NameBox.Text = "";
+        // NameBox.Text = "";
         CellPhone.Text = "";
         _viewModel.CityId = 0;
         Phone.Text = "";
@@ -400,10 +392,6 @@ public partial class Customer : Window
                 }
             });
     }
-    private void NameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^.+$");
-    }
     private void NameBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         if (e.Command == ApplicationCommands.Paste)
@@ -417,32 +405,6 @@ public partial class Customer : Window
                 }
             }
         }
-    }
-    private void NameBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        DependencyPropertyDescriptor
-            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
-            .AddValueChanged(NameBox, (s, args) =>
-            {
-                var tb = s as TextBox;
-                if (Validation.GetHasError(tb))
-                {
-                    ToolTip tt = new ToolTip
-                    {
-                        Content = Validation.GetErrors(tb)[0].ErrorContent,
-                        IsOpen = true,
-                        PlacementTarget = tb,
-                        StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
-                    };
-                    tb.ToolTip = tt;
-                }
-                else
-                {
-                    if (tb.ToolTip is ToolTip ttip)
-                        ttip.IsOpen = false;
-                }
-            });
     }
     private void CityComboBox_GotFocus(object sender, RoutedEventArgs e)
     {

@@ -128,7 +128,6 @@ public partial class ComboBoxSelector : UserControl
         OpenWindow();
     }
 
-    // این تابع رو باید تغییر بدی متناسب با نوع پنجره‌ای که باز می‌کنی
     private void OpenWindow()
     {
         if (ServiceProvider == null || AddWindowType == null) return;

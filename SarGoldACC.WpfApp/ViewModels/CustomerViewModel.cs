@@ -20,8 +20,6 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
     private readonly ICustomerService _customerService;
     private readonly ICityService _cityService;
     private long? _editingCustomerId = null;
-    
-    private string _name;
     private string _idCode;
     private string _phone;
     private string _cellPhone;
@@ -132,7 +130,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             ValidateAll();
         }).GetAwaiter().GetResult();
     }
-
+    private string _name;
     public string Name
     {
         get => _name;

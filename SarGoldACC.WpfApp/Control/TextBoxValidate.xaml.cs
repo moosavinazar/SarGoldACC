@@ -8,11 +8,11 @@ using System.Windows.Input;
 
 namespace SarGoldACC.WpfApp.Control;
 
-public partial class TextBoxValidText : UserControl, IDataErrorInfo
+public partial class TextBoxValidate : UserControl, IDataErrorInfo
 {
     [DllImport("user32.dll")]
     static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
-    public TextBoxValidText()
+    public TextBoxValidate()
     {
         InitializeComponent();
     }
@@ -33,13 +33,25 @@ public partial class TextBoxValidText : UserControl, IDataErrorInfo
             return null;
         }
     }
-    private void NameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
+    private void NameBox_GotFocus(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(ValidTextBox);
         ValidTextBox.SelectAll();
-        // تنظیم زبان فارسی
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
+
+        string langCode = InputLanguage switch
+        {
+            InputLanguageEnum.Persian => "00000429",
+            InputLanguageEnum.English => "00000409",
+            _ => "00000409"
+        };
+        string langString = InputLanguage switch
+        {
+            InputLanguageEnum.Persian => "fa-IR",
+            InputLanguageEnum.English => "en-US",
+            _ => "en-US"
+        };
+        LoadKeyboardLayout(langCode, 1);
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo(langString);
     }
     private void NameBox_Loaded(object sender, RoutedEventArgs e)
     {
@@ -74,7 +86,7 @@ public partial class TextBoxValidText : UserControl, IDataErrorInfo
     public static readonly DependencyProperty ValidTextProperty =
         DependencyProperty.Register(nameof(ValidText),
             typeof(string),
-            typeof(TextBoxValidText),
+            typeof(TextBoxValidate),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     public string ValidText
     {
@@ -84,7 +96,7 @@ public partial class TextBoxValidText : UserControl, IDataErrorInfo
     public static readonly DependencyProperty ValidTextPatternProperty =
         DependencyProperty.Register(nameof(ValidTextPattern),
             typeof(string),
-            typeof(TextBoxValidText),
+            typeof(TextBoxValidate),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     public string ValidTextPattern
     {
@@ -94,7 +106,7 @@ public partial class TextBoxValidText : UserControl, IDataErrorInfo
     public static readonly DependencyProperty NotValidTextMessageProperty =
         DependencyProperty.Register(nameof(NotValidTextMessage),
             typeof(string),
-            typeof(TextBoxValidText),
+            typeof(TextBoxValidate),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     public string NotValidTextMessage
     {
@@ -104,12 +116,25 @@ public partial class TextBoxValidText : UserControl, IDataErrorInfo
     public static readonly DependencyProperty AllowNullTextProperty =
         DependencyProperty.Register(nameof(AllowNullText),
             typeof(bool),
-            typeof(TextBoxValidText),
+            typeof(TextBoxValidate),
             new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     public bool AllowNullText
     {
         get => (bool)GetValue(AllowNullTextProperty);
         set => SetValue(AllowNullTextProperty, value);
     }
+    public static readonly DependencyProperty InputLanguageProperty =
+        DependencyProperty.Register(nameof(InputLanguage), typeof(InputLanguageEnum), typeof(TextBoxValidate),
+            new PropertyMetadata(InputLanguageEnum.English));
 
+    public InputLanguageEnum InputLanguage
+    {
+        get => (InputLanguageEnum)GetValue(InputLanguageProperty);
+        set => SetValue(InputLanguageProperty, value);
+    }
+}
+public enum InputLanguageEnum
+{
+    English,
+    Persian
 }

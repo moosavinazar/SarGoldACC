@@ -1,0 +1,22 @@
+﻿<UserControl x:Class="SarGoldACC.WpfApp.Control.TextBoxValidDecimal"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:SarGoldACC.WpfApp.Control"
+             mc:Ignorable="d"
+             x:Name="Root">
+    <Grid>
+        <TextBox x:Name="ValidTextBox" 
+                 GotFocus="NameBox_GotFocus"
+                 Loaded="NameBox_Loaded"
+                 PreviewTextInput="NameBox_PreviewTextInput"
+                 Margin="0 0 0 0"
+                 Style="{StaticResource ValidatedTextBoxStyle}"
+                 Text="{Binding ValidText, 
+                    UpdateSourceTrigger=LostFocus, 
+                    ValidatesOnDataErrors=True, 
+                    NotifyOnValidationError=True, 
+                    ElementName=Root}"/>
+    </Grid>
+</UserControl>

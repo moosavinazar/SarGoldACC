@@ -60,14 +60,15 @@
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="0,0,5,0"/>
-                    <controls:TextBoxValidText 
+                    <controls:TextBoxValidate 
                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                         x:Name="NameBox" 
                         Grid.Column="1"
                         ValidText="{Binding Name, Mode=TwoWay}"
                         ValidTextPattern="^.+$"
                         NotValidTextMessage="نام مشتری الزامی است"
-                        AllowNullText="False"/>
+                        AllowNullText="False"
+                        InputLanguage="Persian"/>
                     <TextBlock Text="موبایل"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"

@@ -15,6 +15,8 @@ public partial class TextBoxValidate : UserControl, IDataErrorInfo
     public TextBoxValidate()
     {
         InitializeComponent();
+        ValidTextBox.AddHandler(CommandManager.PreviewExecutedEvent,
+            new ExecutedRoutedEventHandler(TextBox_PreviewExecuted), true);
     }
     // IDataErrorInfo
     public string Error => null;
@@ -27,13 +29,13 @@ public partial class TextBoxValidate : UserControl, IDataErrorInfo
                 if (!AllowNullText && string.IsNullOrWhiteSpace(ValidText))
                     return NotValidTextMessage;
 
-                if (!Regex.IsMatch(ValidText, @ValidTextPattern))
+                if (!Regex.IsMatch(ValidText, @ValidTextFinalPattern))
                     return NotValidTextMessage;
             }
             return null;
         }
     }
-    private void NameBox_GotFocus(object sender, RoutedEventArgs e)
+    private void TextBox_GotFocus(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(ValidTextBox);
         ValidTextBox.SelectAll();
@@ -53,7 +55,7 @@ public partial class TextBoxValidate : UserControl, IDataErrorInfo
         LoadKeyboardLayout(langCode, 1);
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo(langString);
     }
-    private void NameBox_Loaded(object sender, RoutedEventArgs e)
+    private void TextBox_Loaded(object sender, RoutedEventArgs e)
     {
         DependencyPropertyDescriptor
             .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
@@ -79,9 +81,33 @@ public partial class TextBoxValidate : UserControl, IDataErrorInfo
                 }
             });
     }
-    private void NameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
+    private void TextBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         e.Handled = !Regex.IsMatch(e.Text, @ValidTextPattern);
+    }
+    private void TextBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
+    {
+        if (e.Command == ApplicationCommands.Paste)
+        {
+            if (Clipboard.ContainsText())
+            {
+                string pasteText = Clipboard.GetText();
+                if (!Regex.IsMatch(pasteText, @ValidTextPattern))
+                {
+                    e.Handled = true;
+                }
+            }
+        }
+    }
+    public static readonly DependencyProperty LabelProperty =
+        DependencyProperty.Register(nameof(Label),
+            typeof(string),
+            typeof(TextBoxValidate),
+            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public string Label
+    {
+        get => (string)GetValue(LabelProperty);
+        set => SetValue(LabelProperty, value);
     }
     public static readonly DependencyProperty ValidTextProperty =
         DependencyProperty.Register(nameof(ValidText),
@@ -102,6 +128,16 @@ public partial class TextBoxValidate : UserControl, IDataErrorInfo
     {
         get => (string)GetValue(ValidTextPatternProperty);
         set => SetValue(ValidTextPatternProperty, value);
+    }
+    public static readonly DependencyProperty ValidTextFinalPatternProperty =
+        DependencyProperty.Register(nameof(ValidTextFinalPattern),
+            typeof(string),
+            typeof(TextBoxValidate),
+            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public string ValidTextFinalPattern
+    {
+        get => (string)GetValue(ValidTextFinalPatternProperty);
+        set => SetValue(ValidTextFinalPatternProperty, value);
     }
     public static readonly DependencyProperty NotValidTextMessageProperty =
         DependencyProperty.Register(nameof(NotValidTextMessage),

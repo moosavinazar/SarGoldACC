@@ -46,8 +46,8 @@ public partial class Customer : Window
         _authorizationService = authorizationService;
         _serviceProvider = serviceProvider;
         // هندل کردن Paste به صورت Preview در سطح Command
-        CellPhone.AddHandler(CommandManager.PreviewExecutedEvent,
-            new ExecutedRoutedEventHandler(CellPhone_PreviewExecuted), true);
+        // CellPhone.AddHandler(CommandManager.PreviewExecutedEvent,
+        //     new ExecutedRoutedEventHandler(CellPhone_PreviewExecuted), true);
         /*NameBox.AddHandler(CommandManager.PreviewExecutedEvent,
             new ExecutedRoutedEventHandler(NameBox_PreviewExecuted), true);*/
         Phone.AddHandler(CommandManager.PreviewExecutedEvent,
@@ -58,7 +58,7 @@ public partial class Customer : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
-        NameBox.Focus();
+        Name.Focus();
     }
     private void CustomerWindow_KeyDown(object sender, KeyEventArgs e)
     {
@@ -74,14 +74,6 @@ public partial class Customer : Window
         {
             ClearForm();
         }
-    }
-    private void CellPhone_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(CellPhone);
-        CellPhone.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
     }
     private void WeightBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
@@ -227,7 +219,7 @@ public partial class Customer : Window
     private void ClearForm()
     {
         // NameBox.Text = "";
-        CellPhone.Text = "";
+        // CellPhone.Text = "";
         _viewModel.CityId = 0;
         Phone.Text = "";
         WeightBed.Text = "0";
@@ -253,7 +245,7 @@ public partial class Customer : Window
         WindowFocusHelper.SimulateFocusLossAndRestore(this);
 
         CityComboBox.Focus();
-        NameBox.Focus();
+        Name.Focus();
         _viewModel.Clear();
     }
 
@@ -347,64 +339,6 @@ public partial class Customer : Window
             new DataGridTextColumn { Header = "آدرس", Binding = new Binding("Address"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "توضیحات", Binding = new Binding("Description"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) }
         );
-    }
-    private void CellPhone_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, "^[0-9]+$");
-    }
-    private void CellPhone_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (e.Command == ApplicationCommands.Paste)
-        {
-            if (Clipboard.ContainsText())
-            {
-                string pasteText = Clipboard.GetText();
-                if (!Regex.IsMatch(pasteText, @"^09\d{9}$"))
-                {
-                    e.Handled = true;
-                }
-            }
-        }
-    }
-    private void CellPhone_Loaded(object sender, RoutedEventArgs e)
-    {
-        DependencyPropertyDescriptor
-            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
-            .AddValueChanged(CellPhone, (s, args) =>
-            {
-                var tb = s as TextBox;
-                if (Validation.GetHasError(tb))
-                {
-                    ToolTip tt = new ToolTip
-                    {
-                        Content = Validation.GetErrors(tb)[0].ErrorContent,
-                        IsOpen = true,
-                        PlacementTarget = tb,
-                        StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
-                    };
-                    tb.ToolTip = tt;
-                }
-                else
-                {
-                    if (tb.ToolTip is ToolTip ttip)
-                        ttip.IsOpen = false;
-                }
-            });
-    }
-    private void NameBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (e.Command == ApplicationCommands.Paste)
-        {
-            if (Clipboard.ContainsText())
-            {
-                string pasteText = Clipboard.GetText();
-                if (!Regex.IsMatch(pasteText, @"^.+$"))
-                {
-                    e.Handled = true;
-                }
-            }
-        }
     }
     private void CityComboBox_GotFocus(object sender, RoutedEventArgs e)
     {

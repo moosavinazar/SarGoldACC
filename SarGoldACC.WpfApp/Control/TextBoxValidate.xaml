@@ -7,11 +7,20 @@
              mc:Ignorable="d"
              x:Name="Root">
     <Grid>
-        <TextBox x:Name="ValidTextBox" 
-                 GotFocus="NameBox_GotFocus"
-                 Loaded="NameBox_Loaded"
-                 PreviewTextInput="NameBox_PreviewTextInput"
-                 Margin="0 0 0 0"
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0"
+                   Text="{Binding Label, ElementName=Root}"
+                   FontWeight="Bold"
+                   VerticalAlignment="Center"
+                   Margin="0,0,5,0"/>
+        <TextBox Grid.Column="1" x:Name="ValidTextBox" 
+                 GotFocus="TextBox_GotFocus"
+                 Loaded="TextBox_Loaded"
+                 PreviewTextInput="TextBox_PreviewTextInput"
+                 Margin="0 0 10 0"
                  Style="{StaticResource ValidatedTextBoxStyle}"
                  Text="{Binding ValidText, 
                     UpdateSourceTrigger=PropertyChanged, 

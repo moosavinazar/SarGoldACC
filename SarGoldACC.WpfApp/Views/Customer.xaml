@@ -46,51 +46,41 @@
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="نام"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="0"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,0,5,0"/>
                     <controls:TextBoxValidate 
                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                        x:Name="NameBox" 
-                        Grid.Column="1"
+                        x:Name="Name" 
+                        Grid.Column="0"
+                        Label="نام"
                         ValidText="{Binding Name, Mode=TwoWay}"
                         ValidTextPattern="^.+$"
+                        ValidTextFinalPattern="^.+$"
                         NotValidTextMessage="نام مشتری الزامی است"
                         AllowNullText="False"
                         InputLanguage="Persian"/>
-                    <TextBlock Text="موبایل"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="CellPhone" 
+                        Grid.Column="1"
+                        Label="موبایل"
+                        ValidText="{Binding CellPhone, Mode=TwoWay}"
+                        ValidTextPattern="^[0-9]+$"
+                        ValidTextFinalPattern="^09\d{9}$"
+                        NotValidTextMessage="شماره موبایل باید با 09 شروع شود و 11 رقم باشد"
+                        AllowNullText="False"
+                        InputLanguage="English"/>
+                    <TextBlock Text="شهر"
+                               Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
-                               Margin="0,0,5,0"/>
-                    <TextBox Grid.Column="3" x:Name="CellPhone"
-                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Text="{Binding CellPhone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             Style="{StaticResource ValidatedTextBoxStyle}"
-                             GotFocus="CellPhone_GotFocus"
-                             Loaded="CellPhone_Loaded"
-                             Margin="0 0 0 0"
-                             MaxLength="11"
-                             PreviewTextInput="CellPhone_PreviewTextInput"/>
-                    <TextBlock Text="شهر"
-                               Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="4"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
                                Margin="5,5,5,0"/>
-                    <ComboBox x:Name="CityComboBox" Grid.Column="5"
+                    <ComboBox x:Name="CityComboBox" Grid.Column="3"
                               IsEditable="True"
                               IsTextSearchEnabled="False"
                               ItemsSource="{Binding FilteredCities}"
@@ -103,7 +93,7 @@
                               GotFocus="CityComboBox_GotFocus"
                               LostFocus="CityComboBox_LostFocus"
                               Margin="0,0,0,0"/>
-                    <Button Grid.Column="6" x:Name="AddCityButton"
+                    <Button Grid.Column="4" x:Name="AddCityButton"
                             Visibility="{Binding CanAccessCityButton, Converter={StaticResource BoolToVisibilityConverter}}"
                             Content="+"
                             Style="{StaticResource AddCounterpartyButton}"

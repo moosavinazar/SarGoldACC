@@ -70,7 +70,7 @@ public partial class TextBoxValidate : UserControl, IDataErrorInfo
                         IsOpen = true,
                         PlacementTarget = tb,
                         StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
+                        Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom
                     };
                     tb.ToolTip = tt;
                 }

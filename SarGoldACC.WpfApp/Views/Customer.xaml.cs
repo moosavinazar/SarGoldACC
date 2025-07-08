@@ -45,20 +45,12 @@ public partial class Customer : Window
         DataContext = _viewModel;
         _authorizationService = authorizationService;
         _serviceProvider = serviceProvider;
-        // هندل کردن Paste به صورت Preview در سطح Command
-        // CellPhone.AddHandler(CommandManager.PreviewExecutedEvent,
-        //     new ExecutedRoutedEventHandler(CellPhone_PreviewExecuted), true);
-        /*NameBox.AddHandler(CommandManager.PreviewExecutedEvent,
-            new ExecutedRoutedEventHandler(NameBox_PreviewExecuted), true);*/
-        Phone.AddHandler(CommandManager.PreviewExecutedEvent,
-            new ExecutedRoutedEventHandler(Phone_PreviewExecuted), true);
-        IdCode.AddHandler(CommandManager.PreviewExecutedEvent,
-            new ExecutedRoutedEventHandler(IdCode_PreviewExecuted), true);
     }
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
         Name.Focus();
+        CitySelectorControl.ServiceProvider = _serviceProvider;
     }
     private void CustomerWindow_KeyDown(object sender, KeyEventArgs e)
     {
@@ -139,33 +131,9 @@ public partial class Customer : Window
             RiyalBes.Text = "0";
         }
     }
-    private void StoreNameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(StoreName);
-        StoreName.SelectAll();
-        // تنظیم زبان فارسی
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-    }
-    private void WeightLimitBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(WeightLimit);
-        WeightLimit.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
     private void Weight_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
-    }
-    private void WeightLimitBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (WeightLimit.Text == "")
-        {
-            _viewModel.WeightLimit = 0;
-            WeightLimit.Text = "0";
-        }
     }
     private void RiyalLimitBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
@@ -187,22 +155,6 @@ public partial class Customer : Window
             RiyalLimit.Text = "0";
         }
     }
-    private void MoarefBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(Moaref);
-        Moaref.SelectAll();
-        // تنظیم زبان فارسی
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-    }
-    private void EmailBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(Email);
-        Email.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
     private void ClickSaveCustomer(object sender, RoutedEventArgs e)
     {
         Save();
@@ -221,17 +173,17 @@ public partial class Customer : Window
         // NameBox.Text = "";
         // CellPhone.Text = "";
         _viewModel.CityId = 0;
-        Phone.Text = "";
+        // Phone.Text = "";
         WeightBed.Text = "0";
         WeightBes.Text = "0";
         RiyalBed.Text = "0";
         RiyalBes.Text = "0";
-        StoreName.Text = "";
-        WeightLimit.Text = "0";
+        // StoreName.Text = "";
+        // WeightLimit.Text = "0";
         RiyalLimit.Text = "0";
-        IdCode.Text = "";
-        Moaref.Text = "";
-        Email.Text = "";
+        // IdCode.Text = "";
+        // Moaref.Text = "";
+        // Email.Text = "";
         Address.Text = "";
         Description.Text = "";
         _viewModel.BirthDate = null;
@@ -244,7 +196,7 @@ public partial class Customer : Window
         // فوکوس را از فرم بگیر و بازگردان
         WindowFocusHelper.SimulateFocusLossAndRestore(this);
 
-        CityComboBox.Focus();
+        // CityComboBox.Focus();
         Name.Focus();
         _viewModel.Clear();
     }
@@ -273,34 +225,6 @@ public partial class Customer : Window
             vm.PhotoFileName = Path.GetFileName(selectedFilePath);
         }
     }
-
-    private void CityComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        var comboBox = sender as ComboBox;
-        if (comboBox != null)
-        {
-            comboBox.IsDropDownOpen = true;
-        }
-    }
-    private void CityComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Insert)
-        {
-            OpenAddCityWindow();
-        }
-    }
-    private async void ClickAddCity(object sender, RoutedEventArgs e)
-    {
-        OpenAddCityWindow();
-    }
-    
-    private async void OpenAddCityWindow()
-    {
-        var cityWindow = _serviceProvider.GetRequiredService<City>();
-        cityWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        cityWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-
     private void CustomerDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
         // CustomerDataGrid.DeleteActionShow = _viewModel.CanAccessCustomerDelete;
@@ -318,7 +242,7 @@ public partial class Customer : Window
         {
             if (obj is CustomerDto customer)
             {
-                CityComboBox.Text = "";
+                // CityComboBox.Text = "";
                 await _viewModel.EditAsync(customer.Id);
             }
         };
@@ -340,135 +264,12 @@ public partial class Customer : Window
             new DataGridTextColumn { Header = "توضیحات", Binding = new Binding("Description"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) }
         );
     }
-    private void CityComboBox_GotFocus(object sender, RoutedEventArgs e)
-    {
-        // تمرکز روی ComboBox
-        // Keyboard.Focus(CityComboBox);
-
-        // گرفتن TextBox داخلی
-        var textBox = GetComboBoxTextBox(CityComboBox);
-        if (textBox != null)
-        {
-            // تنظیم زبان فارسی
-            LoadKeyboardLayout("00000429", 1);
-            InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-            textBox.SelectAll();
-        }
-    }
-    private TextBox GetComboBoxTextBox(ComboBox comboBox)
-    {
-        return comboBox.Template.FindName("PART_EditableTextBox", comboBox) as TextBox;
-    }
-    private void CityComboBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    private void CitySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
     {
         if (_viewModel.CityId == 0 || _viewModel.SearchText == "")
         {
             _viewModel.CityId = 1;
             _viewModel.SearchText = "نامعلوم";
-        }
-    }
-    private void IdCode_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(IdCode);
-        IdCode.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void IdCode_Loaded(object sender, RoutedEventArgs e)
-    {
-        DependencyPropertyDescriptor
-            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
-            .AddValueChanged(IdCode, (s, args) =>
-            {
-                var tb = s as TextBox;
-                if (Validation.GetHasError(tb))
-                {
-                    ToolTip tt = new ToolTip
-                    {
-                        Content = Validation.GetErrors(tb)[0].ErrorContent,
-                        IsOpen = true,
-                        PlacementTarget = tb,
-                        StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
-                    };
-                    tb.ToolTip = tt;
-                }
-                else
-                {
-                    if (tb.ToolTip is ToolTip ttip)
-                        ttip.IsOpen = false;
-                }
-            });
-    }
-    private void IdCode_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, "^[0-9]+$");
-    }
-    private void IdCode_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (e.Command == ApplicationCommands.Paste)
-        {
-            if (Clipboard.ContainsText())
-            {
-                string pasteText = Clipboard.GetText();
-                if (!Regex.IsMatch(pasteText, @"^(|\d{10})$"))
-                {
-                    e.Handled = true;
-                }
-            }
-        }
-    }
-    private void Phone_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(Phone);
-        Phone.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void Phone_Loaded(object sender, RoutedEventArgs e)
-    {
-        DependencyPropertyDescriptor
-            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
-            .AddValueChanged(CellPhone, (s, args) =>
-            {
-                var tb = s as TextBox;
-                if (Validation.GetHasError(tb))
-                {
-                    ToolTip tt = new ToolTip
-                    {
-                        Content = Validation.GetErrors(tb)[0].ErrorContent,
-                        IsOpen = true,
-                        PlacementTarget = tb,
-                        StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
-                    };
-                    tb.ToolTip = tt;
-                }
-                else
-                {
-                    if (tb.ToolTip is ToolTip ttip)
-                        ttip.IsOpen = false;
-                }
-            });
-    }
-    private void Phone_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^(|\d{1,11})$");
-    }
-    private void Phone_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
-    {
-        if (e.Command == ApplicationCommands.Paste)
-        {
-            if (Clipboard.ContainsText())
-            {
-                string pasteText = Clipboard.GetText();
-                if (!Regex.IsMatch(pasteText, @"^(|\d{1,11})$"))
-                {
-                    e.Handled = true;
-                }
-            }
         }
     }
 }

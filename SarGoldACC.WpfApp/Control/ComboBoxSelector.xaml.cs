@@ -92,7 +92,16 @@ public partial class ComboBoxSelector : UserControl
         get => (string)GetValue(SearchTextProperty);
         set => SetValue(SearchTextProperty, value);
     }
-
+    public static readonly DependencyProperty LabelProperty =
+        DependencyProperty.Register(nameof(Label),
+            typeof(string),
+            typeof(ComboBoxSelector),
+            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public string Label
+    {
+        get => (string)GetValue(LabelProperty);
+        set => SetValue(LabelProperty, value);
+    }
     // آیا دکمه + نمایش داده شود؟
     public static readonly DependencyProperty CanAccessAddButtonProperty =
         DependencyProperty.Register(nameof(CanAccessAddButton),

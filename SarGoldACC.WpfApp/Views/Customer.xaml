@@ -7,6 +7,7 @@
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         xmlns:PersianDateControlsPlus="clr-namespace:PersianDateControlsPlus;assembly=PersianDateControlsPlus"
+        xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
         Title="مشتری" 
         Height="600" 
@@ -48,12 +49,11 @@
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                     <controls:TextBoxValidate 
-                        Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
                         x:Name="Name" 
                         Grid.Column="0"
                         Label="نام"
@@ -64,7 +64,8 @@
                         AllowNullText="False"
                         InputLanguage="Persian"/>
                     <controls:TextBoxValidate 
-                        Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
                         x:Name="CellPhone" 
                         Grid.Column="1"
                         Label="موبایل"
@@ -74,171 +75,129 @@
                         NotValidTextMessage="شماره موبایل باید با 09 شروع شود و 11 رقم باشد"
                         AllowNullText="False"
                         InputLanguage="English"/>
-                    <TextBlock Text="شهر"
-                               Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="2"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="5,5,5,0"/>
-                    <ComboBox x:Name="CityComboBox" Grid.Column="3"
-                              IsEditable="True"
-                              IsTextSearchEnabled="False"
-                              ItemsSource="{Binding FilteredCities}"
-                              DisplayMemberPath="Name"
-                              SelectedValuePath="Id"
-                              SelectedValue="{Binding CityId, Mode=TwoWay}"
-                              Text="{Binding SearchText, UpdateSourceTrigger=PropertyChanged}"
-                              PreviewTextInput="CityComboBox_PreviewTextInput"
-                              PreviewKeyDown="CityComboBox_PreviewKeyDown"
-                              GotFocus="CityComboBox_GotFocus"
-                              LostFocus="CityComboBox_LostFocus"
-                              Margin="0,0,0,0"/>
-                    <Button Grid.Column="4" x:Name="AddCityButton"
-                            Visibility="{Binding CanAccessCityButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                            Content="+"
-                            Style="{StaticResource AddCounterpartyButton}"
-                            HorizontalAlignment="Center"
-                            Click="ClickAddCity"
-                            Padding="10,5"
-                            Margin="0"/>
+                    <controls:ComboBoxSelector 
+                        x:Name="CitySelectorControl" 
+                        Grid.Column="2"
+                        LostFocus="CitySelectorControl_LostFocus"
+                        Label="شهر"
+                        ItemsSource="{Binding FilteredCities}"
+                        SelectedValue="{Binding CityId, Mode=TwoWay}"
+                        DisplayMemberPath="Name"
+                        SelectedValuePath="Id"
+                        SearchText="{Binding SearchText, Mode=TwoWay}"
+                        CanAccessAddButton="{Binding CanAccessCityButton}"
+                        AddWindowType="{x:Type views:City}"/>
                 </Grid>
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="تلفن"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="0"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,5,5,0"/>
-                    <TextBox Grid.Column="1" x:Name="Phone"
-                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Text="{Binding Phone, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             Style="{StaticResource ValidatedTextBoxStyle}"
-                             GotFocus="Phone_GotFocus"
-                             Loaded="Phone_Loaded"
-                             Margin="0 5 5 0"
-                             MaxLength="11"
-                             PreviewTextInput="Phone_PreviewTextInput"/>
-                    <TextBlock Text="تاریخ تولد"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="2"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,5,5,0"/>
-                    <PersianDateControlsPlus:PersianDatePicker x:Name="BirthDate" 
-                                                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                                                               Grid.Column="3"
-                                                               Margin="0 5 0 0"
-                                                               SelectedDate="{Binding PersianDate, Mode=TwoWay}" />
-                    <TextBlock Text="کد ملی"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="4"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,5,5,0"/>
-                    <TextBox Grid.Column="5" x:Name="IdCode"
-                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Text="{Binding IdCode, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             Style="{StaticResource ValidatedTextBoxStyle}"
-                             GotFocus="IdCode_GotFocus"
-                             Loaded="IdCode_Loaded"
-                             Margin="0 5 5 0"
-                             MaxLength="10"
-                             PreviewTextInput="IdCode_PreviewTextInput"/>
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="Phone" 
+                        Grid.Column="0"
+                        Label="تلفن"
+                        ValidText="{Binding Phone, Mode=TwoWay}"
+                        ValidTextPattern="^[0-9]+$"
+                        ValidTextFinalPattern="^(|\d+)$"
+                        NotValidTextMessage="شماره تلفن اختیاری است"
+                        AllowNullText="True"
+                        InputLanguage="English"/>
+                    <controls:TextBoxDate
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        Grid.Column="1"
+                        x:Name="BirthDate" 
+                        Label="تاریخ تولد"
+                        Date="{Binding PersianDate, Mode=TwoWay}"
+                        />
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="IdCode" 
+                        Grid.Column="2"
+                        Label="کد ملی"
+                        ValidText="{Binding IdCode, Mode=TwoWay}"
+                        ValidTextPattern="^[0-9]+$"
+                        ValidTextFinalPattern="^(|\d{10})$"
+                        NotValidTextMessage="ده رقم وارد کنید"
+                        AllowNullText="True"
+                        InputLanguage="English"/>
                 </Grid>
                 <Grid Grid.Row="2">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="StoreName" 
+                        Grid.Column="0"
+                        Label="فروشگاه"
+                        ValidText="{Binding StoreName, Mode=TwoWay}"
+                        ValidTextPattern="^*$"
+                        ValidTextFinalPattern="^*$"
+                        NotValidTextMessage="نام فروشگاه اختیاری است"
+                        AllowNullText="True"
+                        InputLanguage="Persian"/>
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="Moaref" 
+                        Grid.Column="1"
+                        Label="معرف"
+                        ValidText="{Binding Moaref, Mode=TwoWay}"
+                        ValidTextPattern="^*$"
+                        ValidTextFinalPattern="^*$"
+                        NotValidTextMessage="نام معرف اختیاری است"
+                        AllowNullText="True"
+                        InputLanguage="Persian"/>
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="Email" 
+                        Grid.Column="2"
+                        Label="ایمیل"
+                        ValidText="{Binding Email, Mode=TwoWay}"
+                        ValidTextPattern="^*$"
+                        ValidTextFinalPattern="^(|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$"
+                        NotValidTextMessage="آدرس ایمیل معتبر نمی باشد"
+                        AllowNullText="True"
+                        InputLanguage="English"/>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="نام فروشگاه"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="0"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,5,5,0"/>
-                    <TextBox x:Name="StoreName" 
-                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="1"
-                             GotFocus="StoreNameBox_GotFocus"
-                             Margin="0 5 0 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding StoreName}"/>
-                    <TextBlock Text="محدودیت وزن"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="2"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,5,5,0"/>
-                    <TextBox x:Name="WeightLimit" 
-                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="3"
-                             GotFocus="WeightLimitBox_GotFocus"
-                             LostFocus="WeightLimitBox_LostFocus"
-                             Margin="0 5 0 0"
-                             Style="{StaticResource ValidatedTextBoxStyle}"
-                             Text="{Binding WeightLimit, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             PreviewTextInput="Weight_PreviewTextInput"/>
+                    <controls:TextBoxValidDecimal
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="WeightLimit" 
+                        Grid.Column="0"
+                        Label="محدودیت وزن"
+                        ValidText="{Binding WeightLimit, Mode=TwoWay}"/>
                     <TextBlock Text="محدودیت ریال"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="4"
+                               Grid.Column="1"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="0,5,5,0"/>
                     <TextBox x:Name="RiyalLimit" 
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="5"
+                             Grid.Column="2"
                              GotFocus="RiyalLimitBox_GotFocus"
                              LostFocus="RiyalLimitBox_LostFocus"
                              Margin="0 5 0 0"
                              Style="{StaticResource ValidatedTextBoxStyle}"
                              Text="{Binding RiyalLimit, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                              PreviewTextInput="Riyal_PreviewTextInput"/>
-                </Grid>
-                <Grid Grid.Row="3">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Text="معرف"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="0"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,5,5,0"/>
-                    <TextBox x:Name="Moaref" 
-                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="1"
-                             GotFocus="MoarefBox_GotFocus"
-                             Margin="0 5 5 0"
-                             Style="{StaticResource InputTextBox}"
-                             Text="{Binding Moaref}"/>
-                    <TextBlock Text="ایمیل"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="2"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,5,5,0"/>
-                    <TextBox x:Name="Email" 
-                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="3"
-                             GotFocus="EmailBox_GotFocus"
-                             Margin="0 5 0 0"
-                             Style="{StaticResource ValidatedTextBoxStyle}"
-                             Text="{Binding Email, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
                 </Grid>
                 <Grid Grid.Row="4">
                     <Grid.ColumnDefinitions>
@@ -262,21 +221,21 @@
                              Style="{StaticResource ValidatedTextBoxStyle}"
                              Text="{Binding WeightBed, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
                              PreviewTextInput="Weight_PreviewTextInput"/>
-                    <TextBlock Text="بستانکاری طلا"
+                    <TextBlock Text="بدهکاری ریال"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="0,5,5,0"/>
-                    <TextBox x:Name="WeightBes" 
+                    <TextBox x:Name="RiyalBed" 
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="3"
-                             GotFocus="WeightBesBox_GotFocus"
-                             LostFocus="WeightBesBox_LostFocus"
+                             GotFocus="RiyalBedBox_GotFocus"
+                             LostFocus="RiyalBedBox_LostFocus"
                              Margin="0 5 0 0"
                              Style="{StaticResource ValidatedTextBoxStyle}"
-                             Text="{Binding WeightBes, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             PreviewTextInput="Weight_PreviewTextInput"/>
+                             Text="{Binding RiyalBed, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="Riyal_PreviewTextInput"/>
                 </Grid>
                 <Grid Grid.Row="5">
                     <Grid.ColumnDefinitions>
@@ -285,21 +244,21 @@
                         <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <TextBlock Text="بدهکاری ریال"
+                    <TextBlock Text="بستانکاری طلا"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="0"
                                FontWeight="Bold"
                                VerticalAlignment="Center"
                                Margin="0,5,5,0"/>
-                    <TextBox x:Name="RiyalBed" 
+                    <TextBox x:Name="WeightBes" 
                              Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                              Grid.Column="1"
-                             GotFocus="RiyalBedBox_GotFocus"
-                             LostFocus="RiyalBedBox_LostFocus"
+                             GotFocus="WeightBesBox_GotFocus"
+                             LostFocus="WeightBesBox_LostFocus"
                              Margin="0 5 0 0"
                              Style="{StaticResource ValidatedTextBoxStyle}"
-                             Text="{Binding RiyalBed, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             PreviewTextInput="Riyal_PreviewTextInput"/>
+                             Text="{Binding WeightBes, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
+                             PreviewTextInput="Weight_PreviewTextInput"/>
                     <TextBlock Text="بستانکاری ریال"
                                Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                                Grid.Column="2"

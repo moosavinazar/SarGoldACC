@@ -206,27 +206,6 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
     {
         get
         {
-            if (columnName == nameof(CellPhone))
-            {
-                if (string.IsNullOrWhiteSpace(CellPhone))
-                    return "شماره موبایل الزامی است.";
-
-                if (!Regex.IsMatch(CellPhone, @"^09\d{9}$"))
-                    return "شماره موبایل باید با 09 شروع شود و 11 رقم باشد.";
-            }
-            if (columnName == nameof(Name))
-            {
-                if (string.IsNullOrWhiteSpace(Name))
-                    return "نام مشتری الزامی است.";
-
-                if (!Regex.IsMatch(Name, @"^.+$"))
-                    return "نام مشتری الزامی است";
-            }
-            if (columnName == nameof(Phone))
-            {
-                if (!Regex.IsMatch(Phone, @"^(|\d{1,11})$"))
-                    return "شماره تلفن باید شامل کد شهر و شماره تلفن تا 8 رقم باشد (12345678-044).";
-            }
             if (columnName == nameof(IdCode))
             {
                 if (string.IsNullOrWhiteSpace(IdCode))

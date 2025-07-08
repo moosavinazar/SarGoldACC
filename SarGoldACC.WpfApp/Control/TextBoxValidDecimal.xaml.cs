@@ -8,7 +8,7 @@ using System.Windows.Input;
 
 namespace SarGoldACC.WpfApp.Control;
 
-public partial class TextBoxValidDecimal : UserControl, IDataErrorInfo
+public partial class TextBoxValidDecimal : UserControl
 {
     [DllImport("user32.dll")]
     static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
@@ -16,27 +16,28 @@ public partial class TextBoxValidDecimal : UserControl, IDataErrorInfo
     {
         InitializeComponent();
     }
-    // IDataErrorInfo
-    public string Error => null;
-    public string this[string columnName]
+    private void NameBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
     {
-        get
+        if (ValidTextBox.Text == "")
         {
-            if (columnName == nameof(ValidText))
-            {
-                if (!AllowNullText && string.IsNullOrWhiteSpace(ValidText))
-                    return NotValidTextMessage;
-
-                if (!Regex.IsMatch(ValidText, @ValidTextPattern))
-                    return NotValidTextMessage;
-            }
-            return null;
+            ValidTextBox.Text = "0";
         }
+    }
+    private void NameBox_KeyDown(object sender, RoutedEventArgs routedEventArgs)
+    {
+        
     }
     private void NameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
     {
         Keyboard.Focus(ValidTextBox);
-        ValidTextBox.SelectAll();
+        if (ValidTextBox.Text == "0")
+        {
+            ValidTextBox.Text = string.Empty;
+        }
+        else
+        {
+            ValidTextBox.SelectAll();
+        }
         // تنظیم زبان انگلیسی
         LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
@@ -56,7 +57,7 @@ public partial class TextBoxValidDecimal : UserControl, IDataErrorInfo
                         IsOpen = true,
                         PlacementTarget = tb,
                         StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
+                        Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom
                     };
                     tb.ToolTip = tt;
                 }
@@ -69,46 +70,83 @@ public partial class TextBoxValidDecimal : UserControl, IDataErrorInfo
     }
     private void NameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
-        e.Handled = !Regex.IsMatch(e.Text, @ValidTextPattern);
+        var textBox = sender as TextBox;
+        if (textBox == null) return;
+
+        string currentText = textBox.Text;
+        int caretIndex = textBox.CaretIndex;
+
+        // متن نهایی اگر ورودی اعمال شود
+        string proposedText = currentText.Insert(caretIndex, e.Text);
+
+        // اگر کاراکتر عدد باشد
+        if (Regex.IsMatch(e.Text, "[0-9]"))
+        {
+            int dotIndex = currentText.IndexOf('.');
+            if (dotIndex >= 0)
+            {
+                // اگر نقطه وجود دارد، تعداد رقم بعدش رو بررسی کن
+                int digitsAfterDecimal = currentText.Substring(dotIndex + 1).Length;
+
+                // اگر کاربر در بخش اعشاری تایپ می‌کند
+                if (caretIndex > dotIndex)
+                {
+                    if (digitsAfterDecimal >= 3)
+                    {
+                        e.Handled = true; // بیشتر از ۳ رقم اجازه نداره
+                        return;
+                    }
+                }
+            }
+
+            e.Handled = false; // عدد مجاز است
+        }
+        else if (e.Text == ".")
+        {
+            // فقط یک نقطه مجاز است
+            if (currentText.Contains("."))
+            {
+                e.Handled = true;
+            }
+            else
+            {
+                // اگر قبل از نقطه عددی نیست، 0. بنویسه
+                if (string.IsNullOrEmpty(currentText) || caretIndex == 0)
+                {
+                    textBox.Text = currentText.Insert(caretIndex, "0.");
+                    textBox.CaretIndex = caretIndex + 2;
+                    e.Handled = true;
+                }
+                else
+                {
+                    e.Handled = false;
+                }
+            }
+        }
+        else
+        {
+            // هر چیز غیر از عدد و نقطه رد شود
+            e.Handled = true;
+        }
     }
     public static readonly DependencyProperty ValidTextProperty =
         DependencyProperty.Register(nameof(ValidText),
             typeof(string),
-            typeof(TextBoxValidate),
+            typeof(TextBoxValidDecimal),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     public string ValidText
     {
         get => (string)GetValue(ValidTextProperty);
         set => SetValue(ValidTextProperty, value);
     }
-    public static readonly DependencyProperty ValidTextPatternProperty =
-        DependencyProperty.Register(nameof(ValidTextPattern),
+    public static readonly DependencyProperty LabelProperty =
+        DependencyProperty.Register(nameof(Label),
             typeof(string),
-            typeof(TextBoxValidate),
+            typeof(TextBoxValidDecimal),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-    public string ValidTextPattern
+    public string Label
     {
-        get => (string)GetValue(ValidTextPatternProperty);
-        set => SetValue(ValidTextPatternProperty, value);
-    }
-    public static readonly DependencyProperty NotValidTextMessageProperty =
-        DependencyProperty.Register(nameof(NotValidTextMessage),
-            typeof(string),
-            typeof(TextBoxValidate),
-            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-    public string NotValidTextMessage
-    {
-        get => (string)GetValue(NotValidTextMessageProperty);
-        set => SetValue(NotValidTextMessageProperty, value);
-    }
-    public static readonly DependencyProperty AllowNullTextProperty =
-        DependencyProperty.Register(nameof(AllowNullText),
-            typeof(bool),
-            typeof(TextBoxValidate),
-            new FrameworkPropertyMetadata(false, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
-    public bool AllowNullText
-    {
-        get => (bool)GetValue(AllowNullTextProperty);
-        set => SetValue(AllowNullTextProperty, value);
+        get => (string)GetValue(LabelProperty);
+        set => SetValue(LabelProperty, value);
     }
 }

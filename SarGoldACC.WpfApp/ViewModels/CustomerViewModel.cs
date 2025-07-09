@@ -14,7 +14,7 @@ using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class CustomerViewModel : ViewModelBase, IDataErrorInfo
+public class CustomerViewModel : ViewModelBase
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly ICustomerService _customerService;
@@ -127,7 +127,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
         {
             await LoadCitiesAsync();
             await LoadCustomerAsync();
-            ValidateAll();
+            // ValidateAll();
         }).GetAwaiter().GetResult();
     }
     private string _name;
@@ -140,7 +140,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             {
                 _name = value;
                 OnPropertyChanged(nameof(Name));
-                ValidateAll();
+                // ValidateAll();
             }
         }
     }
@@ -154,7 +154,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             {
                 _idCode = value;
                 OnPropertyChanged(nameof(IdCode));
-                ValidateAll();
+                // ValidateAll();
             }
         }
     }
@@ -181,7 +181,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             {
                 _cellPhone = value;
                 OnPropertyChanged(nameof(CellPhone));
-                ValidateAll();
+                // ValidateAll();
             }
         }
     }
@@ -192,39 +192,6 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
         nameof(IdCode),
         nameof(Email)
     };
-
-    private void ValidateAll()
-    {
-        bool hasError = _validatedProperties.Any(p => !string.IsNullOrWhiteSpace(this[p]));
-        CanSave = !hasError;
-    }
-
-    
-    // IDataErrorInfo
-    public string Error => null;
-    public string this[string columnName]
-    {
-        get
-        {
-            if (columnName == nameof(IdCode))
-            {
-                if (string.IsNullOrWhiteSpace(IdCode))
-                    return null;
-                
-                if (!Regex.IsMatch(IdCode, @"^(|\d{10})$"))
-                    return "10 رقم وارد کنید";
-            }
-            if (columnName == nameof(Email))
-            {
-                if (string.IsNullOrWhiteSpace(Email))
-                    return null;
-                
-                if (!Regex.IsMatch(Email, @"^(|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$"))
-                    return "آدرس ایمیل معتبر نمی باشد";
-            }
-            return null;
-        }
-    }
     
     public string Address
     {
@@ -293,7 +260,7 @@ public class CustomerViewModel : ViewModelBase, IDataErrorInfo
             {
                 _email = value;
                 OnPropertyChanged(nameof(Email));
-                ValidateAll();
+                // ValidateAll();
             }
         }
     }

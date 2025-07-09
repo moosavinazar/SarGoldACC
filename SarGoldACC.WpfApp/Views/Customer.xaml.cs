@@ -135,25 +135,9 @@ public partial class Customer : Window
     {
         e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
     }
-    private void RiyalLimitBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(RiyalLimit);
-        RiyalLimit.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
     private void Riyal_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {
         e.Handled = !Regex.IsMatch(e.Text, @"^(0|\d)$");
-    }
-    private void RiyalLimitBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (RiyalLimit.Text == "")
-        {
-            _viewModel.RiyalLimit = 0;
-            RiyalLimit.Text = "0";
-        }
     }
     private void ClickSaveCustomer(object sender, RoutedEventArgs e)
     {
@@ -180,7 +164,7 @@ public partial class Customer : Window
         RiyalBes.Text = "0";
         // StoreName.Text = "";
         // WeightLimit.Text = "0";
-        RiyalLimit.Text = "0";
+        // RiyalLimit.Text = "0";
         // IdCode.Text = "";
         // Moaref.Text = "";
         // Email.Text = "";

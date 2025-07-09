@@ -173,31 +173,22 @@
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
-                    <controls:TextBoxValidDecimal
+                    <controls:TextBoxWeight
                         Visibility="{Binding CanAccessCustomerCreateOrEdit, 
                         Converter={StaticResource BoolToVisibilityConverter}}"
                         x:Name="WeightLimit" 
                         Grid.Column="0"
                         Label="محدودیت وزن"
                         ValidText="{Binding WeightLimit, Mode=TwoWay}"/>
-                    <TextBlock Text="محدودیت ریال"
-                               Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                               Grid.Column="1"
-                               FontWeight="Bold"
-                               VerticalAlignment="Center"
-                               Margin="0,5,5,0"/>
-                    <TextBox x:Name="RiyalLimit" 
-                             Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="2"
-                             GotFocus="RiyalLimitBox_GotFocus"
-                             LostFocus="RiyalLimitBox_LostFocus"
-                             Margin="0 5 0 0"
-                             Style="{StaticResource ValidatedTextBoxStyle}"
-                             Text="{Binding RiyalLimit, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                             PreviewTextInput="Riyal_PreviewTextInput"/>
+                    <controls:TextBoxRiyal
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="RiyalLimit" 
+                        Grid.Column="1"
+                        Label="محدودیت ریال"
+                        ValidText="{Binding RiyalLimit, Mode=TwoWay}"/>
                 </Grid>
                 <Grid Grid.Row="4">
                     <Grid.ColumnDefinitions>

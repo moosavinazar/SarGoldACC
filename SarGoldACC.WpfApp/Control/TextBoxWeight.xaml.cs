@@ -8,11 +8,11 @@ using System.Windows.Input;
 
 namespace SarGoldACC.WpfApp.Control;
 
-public partial class TextBoxValidDecimal : UserControl
+public partial class TextBoxWeight : UserControl
 {
     [DllImport("user32.dll")]
     static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
-    public TextBoxValidDecimal()
+    public TextBoxWeight()
     {
         InitializeComponent();
     }
@@ -132,7 +132,7 @@ public partial class TextBoxValidDecimal : UserControl
     public static readonly DependencyProperty ValidTextProperty =
         DependencyProperty.Register(nameof(ValidText),
             typeof(string),
-            typeof(TextBoxValidDecimal),
+            typeof(TextBoxWeight),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     public string ValidText
     {
@@ -142,7 +142,7 @@ public partial class TextBoxValidDecimal : UserControl
     public static readonly DependencyProperty LabelProperty =
         DependencyProperty.Register(nameof(Label),
             typeof(string),
-            typeof(TextBoxValidDecimal),
+            typeof(TextBoxWeight),
             new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
     public string Label
     {

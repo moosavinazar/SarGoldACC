@@ -16,6 +16,7 @@ public partial class TextBoxRiyal : UserControl
     public TextBoxRiyal()
     {
         InitializeComponent();
+        ValidTextBox.Text = "0";
     }
     private void NameBox_GotFocus(object sender, RoutedEventArgs e)
     {
@@ -108,7 +109,27 @@ public partial class TextBoxRiyal : UserControl
         DependencyProperty.Register(nameof(ValidText),
             typeof(string),
             typeof(TextBoxRiyal),
-            new FrameworkPropertyMetadata(string.Empty, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+            new FrameworkPropertyMetadata(string.Empty, 
+                FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, 
+                OnValidTextChanged));
+    private static void OnValidTextChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is TextBoxRiyal control && e.NewValue is string newValue)
+        {
+            if (string.IsNullOrWhiteSpace(newValue))
+            {
+                control.ValidTextBox.Text = "0";
+            }
+            else if (long.TryParse(newValue.Replace(",", ""), out var number))
+            {
+                control.ValidTextBox.Text = number.ToString("N0", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                control.ValidTextBox.Text = newValue;
+            }
+        }
+    }
     public string ValidText
     {
         get => (string)GetValue(ValidTextProperty);

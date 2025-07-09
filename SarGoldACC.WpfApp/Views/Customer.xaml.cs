@@ -28,16 +28,6 @@ public partial class Customer : Window
     private readonly IAuthorizationService _authorizationService;
     private readonly IServiceProvider _serviceProvider;
     
-    [DllImport("user32.dll")]
-    private static extern bool ShowWindow(IntPtr hWnd, int nCmdShow);
-
-    [DllImport("user32.dll")]
-    private static extern IntPtr GetActiveWindow();
-
-    const int SW_MINIMIZE = 6;
-    const int SW_RESTORE = 9;
-
-    
     public Customer(CustomerViewModel viewModel, IAuthorizationService authorizationService, IServiceProvider serviceProvider)
     {
         InitializeComponent();
@@ -67,78 +57,6 @@ public partial class Customer : Window
             ClearForm();
         }
     }
-    private void WeightBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(WeightBed);
-        WeightBed.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void WeightBedBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (WeightBed.Text == "")
-        {
-            _viewModel.WeightBed = 0;
-            WeightBed.Text = "0";
-        }
-    }
-    private void WeightBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(WeightBes);
-        WeightBes.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void WeightBesBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (WeightBes.Text == "")
-        {
-            _viewModel.WeightBes = 0;
-            WeightBes.Text = "0";
-        }
-    }
-    private void RiyalBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(RiyalBed);
-        RiyalBed.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void RiyalBedBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (RiyalBed.Text == "")
-        {
-            _viewModel.RiyalBed = 0;
-            RiyalBed.Text = "0";
-        }
-    }
-    private void RiyalBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(RiyalBes);
-        RiyalBes.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void RiyalBesBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (RiyalBes.Text == "")
-        {
-            _viewModel.RiyalBes = 0;
-            RiyalBes.Text = "0";
-        }
-    }
-    private void Weight_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
-    }
-    private void Riyal_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^(0|\d)$");
-    }
     private void ClickSaveCustomer(object sender, RoutedEventArgs e)
     {
         Save();
@@ -154,31 +72,28 @@ public partial class Customer : Window
     }
     private void ClearForm()
     {
-        // NameBox.Text = "";
-        // CellPhone.Text = "";
+        _viewModel.Name = "";
+        _viewModel.CellPhone = "";
         _viewModel.CityId = 0;
-        // Phone.Text = "";
-        WeightBed.Text = "0";
-        WeightBes.Text = "0";
-        RiyalBed.Text = "0";
-        RiyalBes.Text = "0";
-        // StoreName.Text = "";
-        // WeightLimit.Text = "0";
-        // RiyalLimit.Text = "0";
-        // IdCode.Text = "";
-        // Moaref.Text = "";
-        // Email.Text = "";
-        Address.Text = "";
-        Description.Text = "";
+        _viewModel.Phone = "";
+        _viewModel.WeightBed = 0;
+        _viewModel.WeightBes = 0;
+        _viewModel.RiyalBed = 0;
+        _viewModel.RiyalBes = 0;
+        _viewModel.StoreName = "";
+        _viewModel.WeightLimit = 0;
+        _viewModel.RiyalLimit = 0;
+        _viewModel.IdCode = "";
+        _viewModel.Moaref = "";
+        _viewModel.Email = "";
+        _viewModel.Address = "";
+        _viewModel.Description = "";
         _viewModel.BirthDate = null;
         _viewModel.PhotoPreview = null;
         _viewModel.PhotoFileName = "";
         _viewModel.PhotoBytes = null;
         LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
         InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-        
-        // فوکوس را از فرم بگیر و بازگردان
-        WindowFocusHelper.SimulateFocusLossAndRestore(this);
 
         // CityComboBox.Focus();
         Name.Focus();

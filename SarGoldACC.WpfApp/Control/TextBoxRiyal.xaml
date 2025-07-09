@@ -21,14 +21,9 @@
                  GotFocus="NameBox_GotFocus"
                  LostFocus="NameBox_LostFocus"
                  Loaded="NameBox_Loaded"
-                 KeyDown="NameBox_KeyDown"
                  PreviewTextInput="NameBox_PreviewTextInput"
+                 TextChanged="ValidTextBox_TextChanged"
                  Margin="0 5 10 5"
-                 Style="{StaticResource ValidatedTextBoxStyle}"
-                 Text="{Binding ValidText, 
-                    UpdateSourceTrigger=LostFocus, 
-                    ValidatesOnDataErrors=True, 
-                    NotifyOnValidationError=True, 
-                    ElementName=Root}"/>
+                 Style="{StaticResource ValidatedTextBoxStyle}" />
     </Grid>
 </UserControl>

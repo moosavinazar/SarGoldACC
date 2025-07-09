@@ -12,36 +12,40 @@ public partial class TextBoxRiyal : UserControl
 {
     [DllImport("user32.dll")]
     static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
+    private bool _isUpdatingTextManually = false;
     public TextBoxRiyal()
     {
         InitializeComponent();
     }
-    private void NameBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    private void NameBox_GotFocus(object sender, RoutedEventArgs e)
     {
-        if (ValidTextBox.Text == "")
+        Keyboard.Focus(ValidTextBox);
+        ValidTextBox.Text = RemoveSeparators(ValidTextBox.Text);
+        if (ValidTextBox.Text == "0")
+            ValidTextBox.Text = "";
+        else
+            ValidTextBox.SelectAll();
+
+        // زبان انگلیسی
+        LoadKeyboardLayout("00000409", 1);
+        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
+    }
+
+    private void NameBox_LostFocus(object sender, RoutedEventArgs e)
+    {
+        if (string.IsNullOrWhiteSpace(ValidTextBox.Text))
         {
             ValidTextBox.Text = "0";
         }
-    }
-    private void NameBox_KeyDown(object sender, RoutedEventArgs routedEventArgs)
-    {
-        
-    }
-    private void NameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(ValidTextBox);
-        if (ValidTextBox.Text == "0")
+        // مقدار خام در بایند
+        ValidText = RemoveSeparators(ValidTextBox.Text);
+        // اعمال جداکننده در نمایش
+        if (long.TryParse(ValidText, out var number))
         {
-            ValidTextBox.Text = string.Empty;
+            ValidTextBox.Text = number.ToString("N0", CultureInfo.InvariantCulture);
         }
-        else
-        {
-            ValidTextBox.SelectAll();
-        }
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
     }
+
     private void NameBox_Loaded(object sender, RoutedEventArgs e)
     {
         DependencyPropertyDescriptor
@@ -83,8 +87,16 @@ public partial class TextBoxRiyal : UserControl
         }
         else if (e.Text == ".")
         {
-            textBox.Text = currentText.Insert(caretIndex, "000");
-            textBox.CaretIndex = caretIndex + 3;
+            // بررسی وجود عدد قبل از مکان درج
+            bool hasDigitBefore = caretIndex > 0 && char.IsDigit(currentText[caretIndex - 1]);
+
+            if (hasDigitBefore)
+            {
+                textBox.Text = currentText.Insert(caretIndex, "000");
+                textBox.CaretIndex = caretIndex + 3;
+            }
+
+            e.Handled = true; // جلو ورود خود نقطه گرفته شود
         }
         else
         {
@@ -111,5 +123,34 @@ public partial class TextBoxRiyal : UserControl
     {
         get => (string)GetValue(LabelProperty);
         set => SetValue(LabelProperty, value);
+    }
+    private string RemoveSeparators(string input)
+    {
+        return input.Replace(",", "");
+    }
+    private void ValidTextBox_TextChanged(object sender, TextChangedEventArgs e)
+    {
+        if (_isUpdatingTextManually) return;
+
+        var textBox = sender as TextBox;
+        if (textBox == null) return;
+
+        string rawText = RemoveSeparators(textBox.Text);
+        if (string.IsNullOrWhiteSpace(rawText)) return;
+
+        if (long.TryParse(rawText, out var value))
+        {
+            _isUpdatingTextManually = true;
+
+            int caretIndex = textBox.CaretIndex;
+            textBox.Text = value.ToString("N0", CultureInfo.InvariantCulture);
+
+            // قرار دادن caret در انتها (یا تنظیم مجدد اگر نیاز بود دقیق‌تر)
+            textBox.CaretIndex = textBox.Text.Length;
+
+            ValidText = value.ToString(); // مقدار بدون کاما برای بایند
+
+            _isUpdatingTextManually = false;
+        }
     }
 }

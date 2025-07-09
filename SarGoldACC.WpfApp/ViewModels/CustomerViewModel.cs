@@ -127,7 +127,7 @@ public class CustomerViewModel : ViewModelBase
         {
             await LoadCitiesAsync();
             await LoadCustomerAsync();
-            // ValidateAll();
+            ValidateAll();
         }).GetAwaiter().GetResult();
     }
     private string _name;
@@ -140,9 +140,62 @@ public class CustomerViewModel : ViewModelBase
             {
                 _name = value;
                 OnPropertyChanged(nameof(Name));
-                // ValidateAll();
+                ValidateAll();
             }
         }
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(CellPhone))
+            {
+                if (string.IsNullOrWhiteSpace(CellPhone) || !Regex.IsMatch(CellPhone, @"^09\d{9}$"))
+                    return true;
+            }
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(Phone))
+            {
+                if (string.IsNullOrWhiteSpace(Phone))
+                    return false;
+                
+                if (!Regex.IsMatch(Phone, @"^(|\d{1,11})$"))
+                    return true;
+            }
+            if (columnName == nameof(IdCode))
+            {
+                if (string.IsNullOrWhiteSpace(IdCode))
+                    return false;
+                
+                if (!Regex.IsMatch(IdCode, @"^(|\d{10})$"))
+                    return true;
+            }
+            if (columnName == nameof(Email))
+            {
+                if (string.IsNullOrWhiteSpace(Email))
+                    return false;
+                
+                if (!Regex.IsMatch(Email, @"^(|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(CellPhone),
+        nameof(IdCode),
+        nameof(Email)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
     }
     
     public string IdCode
@@ -154,7 +207,7 @@ public class CustomerViewModel : ViewModelBase
             {
                 _idCode = value;
                 OnPropertyChanged(nameof(IdCode));
-                // ValidateAll();
+                ValidateAll();
             }
         }
     }
@@ -181,18 +234,10 @@ public class CustomerViewModel : ViewModelBase
             {
                 _cellPhone = value;
                 OnPropertyChanged(nameof(CellPhone));
-                // ValidateAll();
+                ValidateAll();
             }
         }
     }
-    private readonly string[] _validatedProperties = new[]
-    {
-        nameof(Name),
-        nameof(CellPhone),
-        nameof(IdCode),
-        nameof(Email)
-    };
-    
     public string Address
     {
         get => _address;
@@ -260,7 +305,7 @@ public class CustomerViewModel : ViewModelBase
             {
                 _email = value;
                 OnPropertyChanged(nameof(Email));
-                // ValidateAll();
+                ValidateAll();
             }
         }
     }

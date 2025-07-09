@@ -69,6 +69,7 @@
                         x:Name="CellPhone" 
                         Grid.Column="1"
                         Label="موبایل"
+                        TextLength="11"
                         ValidText="{Binding CellPhone, Mode=TwoWay}"
                         ValidTextPattern="^[0-9]+$"
                         ValidTextFinalPattern="^09\d{9}$"

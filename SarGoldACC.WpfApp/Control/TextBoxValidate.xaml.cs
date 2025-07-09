@@ -159,6 +159,16 @@ public partial class TextBoxValidate : UserControl, IDataErrorInfo
         get => (bool)GetValue(AllowNullTextProperty);
         set => SetValue(AllowNullTextProperty, value);
     }
+    public static readonly DependencyProperty TextLengthProperty =
+        DependencyProperty.Register(nameof(TextLength),
+            typeof(int),
+            typeof(TextBoxValidate),
+            new FrameworkPropertyMetadata(255, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public int TextLength
+    {
+        get => (int)GetValue(TextLengthProperty);
+        set => SetValue(TextLengthProperty, value);
+    }
     public static readonly DependencyProperty InputLanguageProperty =
         DependencyProperty.Register(nameof(InputLanguage), typeof(InputLanguageEnum), typeof(TextBoxValidate),
             new PropertyMetadata(InputLanguageEnum.English));

@@ -23,6 +23,7 @@
                  PreviewTextInput="TextBox_PreviewTextInput"
                  Margin="0 5 10 5"
                  Style="{StaticResource ValidatedTextBoxStyle}"
+                 MaxLength="{Binding TextLength, ElementName=Root}"
                  Text="{Binding ValidText, 
                     UpdateSourceTrigger=PropertyChanged, 
                     ValidatesOnDataErrors=True, 

@@ -60,31 +60,6 @@ public class CustomerViewModel : ViewModelBase
         {
             _cities = value;
             OnPropertyChanged();
-            FilterCities();
-        }
-    }
-    private ObservableCollection<CityDto> _filteredCities;
-    public ObservableCollection<CityDto> FilteredCities
-    {
-        get => _filteredCities;
-        set
-        {
-            _filteredCities = value;
-            OnPropertyChanged();
-        }
-    }
-    private string _searchText;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (_searchText != value)
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                FilterCities();
-            }
         }
     }
     public bool CanAccessCustomerView => _authorizationService.HasPermission("Customer.View");
@@ -122,7 +97,6 @@ public class CustomerViewModel : ViewModelBase
         _cityService = cityService;
         Cities = new ObservableCollection<CityDto>();
         CityId = 1;
-        SearchText = "نامعلوم";
         Task.Run(async () =>
         {
             await LoadCitiesAsync();
@@ -516,22 +490,5 @@ public class CustomerViewModel : ViewModelBase
     {
         var cities = await _cityService.GetAllAsync();
         Cities = new ObservableCollection<CityDto>(cities); // باعث اجرای FilterCities میشه
-    }
-    
-    private void FilterCities()
-    {
-        if (string.IsNullOrWhiteSpace(SearchText))
-        {
-            CityId = 0;
-            FilteredCities = new ObservableCollection<CityDto>(Cities);
-        }
-        else
-        {
-            var filtered = Cities
-                .Where(c => c.Name != null && c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            FilteredCities = new ObservableCollection<CityDto>(filtered);
-        }
     }
 }

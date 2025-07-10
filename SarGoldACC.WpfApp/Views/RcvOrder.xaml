@@ -48,11 +48,10 @@
             <controls:ComboBoxSelector 
                 x:Name="CounterpartySelectorControl" 
                 Grid.Column="1"
-                ItemsSource="{Binding FilteredCounterparties}"
+                ItemsSource="{Binding Counterparties}"
                 SelectedValue="{Binding CounterpartyId, Mode=TwoWay}"
                 DisplayMemberPath="Name"
                 SelectedValuePath="Id"
-                SearchText="{Binding SearchText, Mode=TwoWay}"
                 CanAccessAddButton="{Binding CanAccessCustomerButton}"
                 AddWindowType="{x:Type views:Customer}"
                 Margin="0,10,5,10"/>

@@ -81,11 +81,10 @@
                         Grid.Column="2"
                         LostFocus="CitySelectorControl_LostFocus"
                         Label="شهر"
-                        ItemsSource="{Binding FilteredCities}"
+                        ItemsSource="{Binding Cities}"
                         SelectedValue="{Binding CityId, Mode=TwoWay}"
                         DisplayMemberPath="Name"
                         SelectedValuePath="Id"
-                        SearchText="{Binding SearchText, Mode=TwoWay}"
                         CanAccessAddButton="{Binding CanAccessCityButton}"
                         AddWindowType="{x:Type views:City}"/>
                 </Grid>

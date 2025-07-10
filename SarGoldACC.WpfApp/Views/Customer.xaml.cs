@@ -165,10 +165,9 @@ public partial class Customer : Window
     }
     private void CitySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
     {
-        if (_viewModel.CityId == 0 || _viewModel.SearchText == "")
+        if (_viewModel.CityId == 0)
         {
             _viewModel.CityId = 1;
-            _viewModel.SearchText = "نامعلوم";
         }
     }
 }

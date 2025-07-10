@@ -67,11 +67,10 @@
                 <controls:ComboBoxSelector 
                     x:Name="BranchSelectorControl" 
                     Grid.Column="3"
-                    ItemsSource="{Binding FilteredBranches}"
+                    ItemsSource="{Binding Branches}"
                     SelectedValue="{Binding BranchId, Mode=TwoWay}"
                     DisplayMemberPath="Name"
                     SelectedValuePath="Id"
-                    SearchText="{Binding SearchText, Mode=TwoWay}"
                     CanAccessAddButton="{Binding CanAccessBranchButton}"
                     AddWindowType="{x:Type views:Branch}"
                     Margin="5,10,5,5"/>

@@ -8,20 +8,58 @@ namespace SarGoldACC.WpfApp.Control;
 
 public partial class ComboBoxSelector : UserControl
 {
+    public IServiceProvider ServiceProvider { get; set; }
+    private List<object> _filteredItems = new();
+    private bool _isUserTyping = false;
+    
     public ComboBoxSelector()
     {
         InitializeComponent();
+
+        CustomComboBox.Loaded += (s, e) =>
+        {
+            Dispatcher.InvokeAsync(() =>
+            {
+                var textBox = (TextBox)CustomComboBox.Template.FindName("PART_EditableTextBox", CustomComboBox);
+                if (textBox != null)
+                {
+                    /*textBox.TextChanged += (s2, e2) =>
+                    {
+                        // به جای SetValue مستقیم، از setter استفاده کن
+                        SearchText = textBox.Text;
+                        CustomComboBox.IsDropDownOpen = _filteredItems.Any();
+                    };*/
+                    textBox.TextChanged += (s2, e2) =>
+                    {
+                        if (_isUserTyping)
+                        {
+                            SearchText = textBox.Text;
+                        }
+                    };
+                    textBox.GotFocus += (s3, e3) =>
+                    {
+                        _isUserTyping = true;
+                    };
+                }
+
+                FilterItems(); // بار اول فیلتر
+            });
+        };
     }
 
-    public IServiceProvider ServiceProvider { get; set; }
-
-    // ItemsSource (لیست کلی آیتم‌ها)
     public static readonly DependencyProperty ItemsSourceProperty =
         DependencyProperty.Register(nameof(ItemsSource),
             typeof(IEnumerable),
             typeof(ComboBoxSelector),
-            new PropertyMetadata(null));
+            new PropertyMetadata(null, OnItemsSourceChanged));
 
+    private static void OnItemsSourceChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is ComboBoxSelector selector)
+        {
+            selector.FilterItems();
+        }
+    }
     public IEnumerable ItemsSource
     {
         get => (IEnumerable)GetValue(ItemsSourceProperty);
@@ -90,8 +128,67 @@ public partial class ComboBoxSelector : UserControl
     public string SearchText
     {
         get => (string)GetValue(SearchTextProperty);
-        set => SetValue(SearchTextProperty, value);
+        set
+        {
+            SetValue(SearchTextProperty, value);
+            FilterItems();
+
+            if (_isUserTyping)
+            {
+                CustomComboBox.IsDropDownOpen = _filteredItems.Any();
+            }
+        }
     }
+    private void FilterItems()
+    {
+        if (ItemsSource == null)
+            return;
+
+        string search = SearchText?.Trim() ?? "";
+
+        var items = ItemsSource.Cast<object>();
+
+        if (!string.IsNullOrWhiteSpace(search))
+        {
+            var filtered = items
+                .Where(item =>
+                {
+                    var prop = item.GetType().GetProperty(DisplayMemberPath);
+                    if (prop == null) return false;
+                    var value = prop.GetValue(item)?.ToString();
+                    return value != null && value.Contains(search, StringComparison.OrdinalIgnoreCase);
+                })
+                .ToList();
+
+            _filteredItems = filtered;
+        }
+        else
+        {
+            _filteredItems = items.ToList();
+        }
+
+        CustomComboBox.ItemsSource = null;
+        CustomComboBox.ItemsSource = _filteredItems;
+
+        // ✅ فقط اگر مقدار دقیقاً برابر بود، انتخاب کن
+        if (_filteredItems.Count == 1)
+        {
+            var singleItem = _filteredItems[0];
+            var displayProp = singleItem.GetType().GetProperty(DisplayMemberPath);
+            var value = displayProp?.GetValue(singleItem)?.ToString();
+
+            if (!string.IsNullOrWhiteSpace(value) && value.Equals(search, StringComparison.OrdinalIgnoreCase))
+            {
+                var selectedProp = singleItem.GetType().GetProperty(SelectedValuePath);
+                if (selectedProp != null)
+                {
+                    SelectedValue = selectedProp.GetValue(singleItem);
+                    CustomComboBox.IsDropDownOpen = false;
+                }
+            }
+        }
+    }
+
     public static readonly DependencyProperty LabelProperty =
         DependencyProperty.Register(nameof(Label),
             typeof(string),
@@ -114,16 +211,7 @@ public partial class ComboBoxSelector : UserControl
         get => (bool)GetValue(CanAccessAddButtonProperty);
         set => SetValue(CanAccessAddButtonProperty, value);
     }
-
-    // رویداد جستجو یا باز کردن لیست
-    private void CustomComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        if (sender is ComboBox comboBox)
-        {
-            comboBox.IsDropDownOpen = true;
-        }
-    }
-
+    
     private void CustomComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Insert)

@@ -62,11 +62,10 @@
                         x:Name="CounterpartySelectorControl" 
                         Grid.Column="0"
                         Label="مشتری"
-                        ItemsSource="{Binding FilteredCounterparties}"
+                        ItemsSource="{Binding Counterparties}"
                         SelectedValue="{Binding CounterpartyId, Mode=TwoWay}"
                         DisplayMemberPath="Name"
                         SelectedValuePath="Id"
-                        SearchText="{Binding SearchText, Mode=TwoWay}"
                         CanAccessAddButton="{Binding CanAccessCustomerButton}"
                         AddWindowType="{x:Type views:Customer}"/>
                     

@@ -9,7 +9,7 @@ using SarGoldACC.WpfApp.Views;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class CityViewModel : ViewModelBase, IDataErrorInfo
+public class CityViewModel : ViewModelBase
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly ICityService _cityService;
@@ -57,32 +57,27 @@ public class CityViewModel : ViewModelBase, IDataErrorInfo
         }
     }
 
-    // IDataErrorInfo
-    public string Error => null;
-    public string this[string columnName]
+    public bool this[string columnName]
     {
         get
         {
             if (columnName == nameof(CityName))
             {
-                if (string.IsNullOrWhiteSpace(CityName))
-                    return "نام شهر الزامی است.";
-
-                if (!Regex.IsMatch(CityName, @"^.+$"))
-                    return "نام شهر الزامی است";
+                if (string.IsNullOrWhiteSpace(CityName) || !Regex.IsMatch(CityName, @"^.+$"))
+                    return true;
             }
-            return null;
+            return false;
         }
-    }
-    private void ValidateAll()
-    {
-        bool hasError = _validatedProperties.Any(p => !string.IsNullOrWhiteSpace(this[p]));
-        CanSave = !hasError;
     }
     private readonly string[] _validatedProperties = new[]
     {
         nameof(CityName),
     };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
     public void Clear()
     {
         _editingCityId = null;

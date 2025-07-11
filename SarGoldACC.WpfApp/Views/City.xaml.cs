@@ -51,50 +51,10 @@ public partial class City : Window
     }
     private async void Save()
     {
+        if (!_viewModel.CanSave) return;
         await _viewModel.SaveCity();
         ClearForm();
     }
-    private void CityNameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(NameBox);
-        NameBox.SelectAll();
-        // تنظیم زبان فارسی
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-    }
-    
-    private void CityNameBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        DependencyPropertyDescriptor
-            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
-            .AddValueChanged(NameBox, (s, args) =>
-            {
-                var tb = s as TextBox;
-                if (Validation.GetHasError(tb))
-                {
-                    ToolTip tt = new ToolTip
-                    {
-                        Content = Validation.GetErrors(tb)[0].ErrorContent,
-                        IsOpen = true,
-                        PlacementTarget = tb,
-                        StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
-                    };
-                    tb.ToolTip = tt;
-                }
-                else
-                {
-                    if (tb.ToolTip is ToolTip ttip)
-                        ttip.IsOpen = false;
-                }
-            });
-    }
-    
-    private void CityNameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^.+$");
-    }
-    
     private void CityNameBox_PreviewExecuted(object sender, ExecutedRoutedEventArgs e)
     {
         if (e.Command == ApplicationCommands.Paste)
@@ -116,29 +76,13 @@ public partial class City : Window
 
     private void ClearForm()
     {
-        NameBox.Text = "";
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-        
-        // فوکوس را از فرم بگیر و بازگردان
-        WindowFocusHelper.SimulateFocusLossAndRestore(this);
-
+        _viewModel.CityName = "";
         NameBox.Focus();
         _viewModel.Clear();
     }
-    private void CityNameBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            SaveButton.Focus();
-            e.Handled = true;
-        }
-    }
-
     private async void ClickSaveCity(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveCity();
-        NameBox.Text = "";
+        Save();
     }
 
     private void CityDataGrid_Loaded(object sender, RoutedEventArgs e)

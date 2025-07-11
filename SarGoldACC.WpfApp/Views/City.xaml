@@ -30,45 +30,39 @@
         
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            
-            <TextBlock Grid.Column="0" Text="نام شهر"
-                       Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,10"/>
-            <TextBox Grid.Column="1" 
-                     x:Name="NameBox" 
-                     Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     KeyDown="CityNameBox_KeyDown"
-                     GotFocus="CityNameBox_GotFocus"
-                     Loaded="CityNameBox_Loaded"
-                     PreviewTextInput="CityNameBox_PreviewTextInput"
-                     Margin="0 0 10 10"
-                     Style="{StaticResource ValidatedTextBoxStyle}"
-                     Text="{Binding CityName, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
-            <Button Grid.Column="2" 
-                    x:Name="SaveButton"
-                    IsEnabled="{Binding CanSave}"
-                    Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Content="ذخیره"
-                    Style="{StaticResource SuccessBtn}"
-                    HorizontalAlignment="Center"
-                    Margin="0,0 0 10"
-                    Click="ClickSaveCity"
-                    Padding="10,5"/>
-            <Button Grid.Column="3" x:Name="ClearButton"
-                    Content="جدید"
-                    ToolTip="F5"
-                    Style="{StaticResource PrimaryBtn}"
-                    HorizontalAlignment="Center"
-                    Click="ClickClearForm"
-                    Margin="5,0 0 10"
-                    Padding="10,5"/>
+            <controls:TextBoxValidate 
+                Visibility="{Binding CanAccessCityCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="NameBox" 
+                Grid.Column="0"
+                Label="نام شهر"
+                ValidText="{Binding CityName, Mode=TwoWay}"
+                ValidTextPattern="^.+$"
+                ValidTextFinalPattern="^.+$"
+                NotValidTextMessage="نام شهر الزامی است"
+                AllowNullText="False"
+                InputLanguage="Persian"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" 
+                        Visibility="{Binding CanAccessBranchCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Button x:Name="SaveButton"
+                        IsEnabled="{Binding CanSave}"
+                        Content="ذخیره"
+                        ToolTip="Shift+Enter"
+                        Style="{StaticResource SuccessBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickSaveCity"
+                        Padding="10,5"/>
+                <Button x:Name="ClearButton"
+                        Content="جدید"
+                        ToolTip="F5"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickClearForm"
+                        Padding="10,5"/>
+            </StackPanel>
         </Grid>
         <controls:CustomizableDataGrid Grid.Row="1" x:Name="CityDataGrid"
                                        ItemsSource="{Binding AllCities}"

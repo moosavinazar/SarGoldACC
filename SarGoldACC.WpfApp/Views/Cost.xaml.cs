@@ -32,12 +32,7 @@ public partial class Cost : Window
     }
     private async void ClickSaveCost(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveCost();
-        NameBox.Text = "";
-        LabelBox.Text = "";
-        RiyalBes.Text = "";
-        RiyalBed.Text = "";
-        Description.Text = "";
+        Save();
     }
     private void CostDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
@@ -58,5 +53,25 @@ public partial class Cost : Window
             new DataGridTextColumn { Header = "عنوان", Binding = new Binding("Label"), Width = new DataGridLength(2, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "توضیحات", Binding = new Binding("Description"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
+    }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
+
+    private void ClearForm()
+    {
+        _viewModel.Name = "";
+        _viewModel.Label = "";
+        _viewModel.RiyalBed = 0;
+        _viewModel.RiyalBes = 0;
+        _viewModel.Description = "";
+        _viewModel.Clear();
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveCost();
+        ClearForm();
     }
 }

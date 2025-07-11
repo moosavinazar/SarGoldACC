@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Cost;
 using SarGoldACC.Core.DTOs.Currency;
@@ -31,6 +32,19 @@ public class CostViewModel : ViewModelBase
     
     public bool CanAccessCostCreateOrEdit => _authorizationService.HasPermission("Cost.Create") ||
                                              _authorizationService.HasPermission("Cost.Edit");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public CostViewModel(
         IAuthorizationService authorizationService, 
         ICostService costService,
@@ -51,12 +65,28 @@ public class CostViewModel : ViewModelBase
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
     public string Label
     {
         get => _label;
-        set => SetProperty(ref _label, value);
+        set
+        {
+            if (_label != value)
+            {
+                _label = value;
+                OnPropertyChanged(nameof(Label));
+                ValidateAll();
+            }
+        }
     }
     public string Description
     {
@@ -178,5 +208,36 @@ public class CostViewModel : ViewModelBase
     public async Task DeleteAsync(long costId)
     {
         await _costService.DeleteAsync(costId);
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(Label))
+            {
+                if (string.IsNullOrWhiteSpace(Label) || !Regex.IsMatch(Label, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(Label)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingCostId = null;
     }
 }

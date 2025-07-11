@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Income;
 using SarGoldACC.Core.DTOs.Currency;
@@ -31,6 +32,19 @@ public class IncomeViewModel : ViewModelBase
     
     public bool CanAccessIncomeCreateOrEdit => _authorizationService.HasPermission("Income.Create") ||
                                              _authorizationService.HasPermission("Income.Edit");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public IncomeViewModel(
         IAuthorizationService authorizationService, 
         IIncomeService incomeService,
@@ -51,12 +65,28 @@ public class IncomeViewModel : ViewModelBase
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
     public string Label
     {
         get => _label;
-        set => SetProperty(ref _label, value);
+        set
+        {
+            if (_label != value)
+            {
+                _label = value;
+                OnPropertyChanged(nameof(Label));
+                ValidateAll();
+            }
+        }
     }
     public string Description
     {
@@ -134,7 +164,7 @@ public class IncomeViewModel : ViewModelBase
             _editingIncomeId = null;
             if (result.Success)
             {
-                MessageBoxHelper.ShowSuccess("صندوق با موفقیت ویرایش شد.");
+                MessageBoxHelper.ShowSuccess("درآمد با موفقیت ویرایش شد.");
             }
             else
             {
@@ -156,7 +186,7 @@ public class IncomeViewModel : ViewModelBase
             result = await _incomeService.AddAsync(incomeDto);
             if (result.Success)
             {
-                MessageBoxHelper.ShowSuccess("صندوق با موفقیت ذخیره شد.");
+                MessageBoxHelper.ShowSuccess("درآمد با موفقیت ذخیره شد.");
             }
             else
             {
@@ -178,5 +208,36 @@ public class IncomeViewModel : ViewModelBase
     public async Task DeleteAsync(long incomeId)
     {
         await _incomeService.DeleteAsync(incomeId);
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(Label))
+            {
+                if (string.IsNullOrWhiteSpace(Label) || !Regex.IsMatch(Label, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(Label)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingIncomeId = null;
     }
 }

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
         Title="صندوق" 
         Height="600" 
@@ -36,110 +37,102 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="نام"
-                           Visibility="{Binding CanAccessCashCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="NameBox" 
-                         Visibility="{Binding CanAccessCashCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Name}"/>
-                <TextBlock Text="عنوان"
-                           Visibility="{Binding CanAccessCashCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="LabelBox" 
-                         Visibility="{Binding CanAccessCashCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Label}"/>
-                <TextBlock Text="واحد پول"
-                           Visibility="{Binding CanAccessBankCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="5,10,5,0"/>
-                <ComboBox x:Name="CurrencyComboBox" Grid.Column="5"
-                          Visibility="{Binding CanAccessBankCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                          ItemsSource="{Binding Currencies}"
-                          DisplayMemberPath="Label"
-                          SelectedValuePath="Id"
-                          SelectedValue="{Binding CurrencyId, Mode=TwoWay}"
-                          Margin="0,0,0,0">
-                </ComboBox>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessCashCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="NameBox" 
+                    Grid.Column="0"
+                    Label="نام صندوق"
+                    ValidText="{Binding Name, Mode=TwoWay}"
+                    ValidTextPattern="^.+$"
+                    ValidTextFinalPattern="^.+$"
+                    NotValidTextMessage="نام صندوق الزامی است"
+                    AllowNullText="False"
+                    InputLanguage="English"/>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessCashCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="LabelBox" 
+                    Grid.Column="1"
+                    Label="عنوان"
+                    ValidText="{Binding Label, Mode=TwoWay}"
+                    ValidTextPattern="^.+$"
+                    ValidTextFinalPattern="^.+$"
+                    NotValidTextMessage="عنوان الزامی است"
+                    AllowNullText="False"
+                    InputLanguage="Persian"/>
+                <controls:ComboBoxSelector 
+                    x:Name="CurrencyComboBox" 
+                    Grid.Column="2"
+                    Visibility="{Binding CanAccessCashCreateOrEdit, 
+                    Converter={StaticResource BoolToVisibilityConverter}}"
+                    LostFocus="CurrencySelectorControl_LostFocus"
+                    Label="واحد پول"
+                    ItemsSource="{Binding Currencies}"
+                    SelectedValue="{Binding CurrencyId, Mode=TwoWay}"
+                    DisplayMemberPath="Label"
+                    SelectedValuePath="Id"
+                    CanAccessAddButton="{Binding CanAccessCurrencyButton}"
+                    AddWindowType="{x:Type views:Currency}"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="بدهکاری ریال"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalBed" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalBed}"/>
-                <TextBlock Text="بستانکاری ریال"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalBes" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalBes}"/>
+                <controls:TextBoxRiyal
+                    Visibility="{Binding CanAccessCashCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="RiyalBed" 
+                    Grid.Column="0"
+                    Label="بدهکاری ریال"
+                    ValidText="{Binding RiyalBed, Mode=TwoWay}"/>
+                <controls:TextBoxRiyal
+                    Visibility="{Binding CanAccessBankCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="RiyalBes" 
+                    Grid.Column="1"
+                    Label="بستانکاری ریال"
+                    ValidText="{Binding RiyalBes, Mode=TwoWay}"/>
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="توضیحات"
-                           Visibility="{Binding CanAccessCashCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="Description" 
-                         Visibility="{Binding CanAccessCashCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Description}"/>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessBankCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="Description" 
+                    Grid.Column="0"
+                    Label="توضیحات"
+                    ValidText="{Binding Description, Mode=TwoWay}"
+                    ValidTextPattern="^*$"
+                    ValidTextFinalPattern="^*$"
+                    NotValidTextMessage="توضیحات اختیاری است"
+                    AllowNullText="True"
+                    InputLanguage="Persian"/>
             </Grid>
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
                     Visibility="{Binding CanAccessCashCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
             <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanSave}"
                     Content="ذخیره"
+                    ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
                     Click="ClickSaveCash"
+                    Padding="10,5"/>
+            <Button x:Name="ClearButton"
+                    Content="جدید"
+                    ToolTip="F5"
+                    Style="{StaticResource PrimaryBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickClearForm"
                     Padding="10,5"/>
         </StackPanel>
         <controls:CustomizableDataGrid Grid.Row="2" x:Name="CashDataGrid"

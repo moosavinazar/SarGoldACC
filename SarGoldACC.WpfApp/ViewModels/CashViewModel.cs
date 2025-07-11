@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Cash;
 using SarGoldACC.Core.DTOs.Currency;
@@ -32,6 +33,11 @@ public class CashViewModel : ViewModelBase
     
     public bool CanAccessCashCreateOrEdit => _authorizationService.HasPermission("Cash.Create") ||
                                              _authorizationService.HasPermission("Cash.Edit");
+    
+    public bool CanAccessCurrencyButton => _authorizationService.HasPermission("Currency.View") ||
+                                           _authorizationService.HasPermission("Currency.Create") ||
+                                           _authorizationService.HasPermission("Currency.Edit") ||
+                                           _authorizationService.HasPermission("Currency.Delete");
     public CashViewModel(
         IAuthorizationService authorizationService, 
         ICashService cashService,
@@ -41,23 +47,51 @@ public class CashViewModel : ViewModelBase
         _cashService = cashService;
         _currencyService = currencyService;
         Currencies = new ObservableCollection<CurrencyDto>();
-        
+        CurrencyId = 1;
         Task.Run(async () =>
         {
             await LoadCashAsync();
             await LoadCurrenciesAsync();
         }).GetAwaiter().GetResult();
     }
-    
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
     public string Label
     {
         get => _label;
-        set => SetProperty(ref _label, value);
+        set
+        {
+            if (_label != value)
+            {
+                _label = value;
+                OnPropertyChanged(nameof(Label));
+                ValidateAll();
+            }
+        }
     }
     public string Description
     {
@@ -185,5 +219,36 @@ public class CashViewModel : ViewModelBase
     public async Task DeleteAsync(long cashId)
     {
         await _cashService.DeleteAsync(cashId);
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(Label))
+            {
+                if (string.IsNullOrWhiteSpace(Label) || !Regex.IsMatch(Label, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(Label)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingCashId = null;
     }
 }

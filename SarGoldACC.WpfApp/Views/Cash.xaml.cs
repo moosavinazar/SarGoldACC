@@ -12,37 +12,49 @@ public partial class Cash : Window
 {
     private readonly CashViewModel _viewModel;
     private readonly IAuthorizationService _authorizationService;
-    public Cash(CashViewModel viewModel, IAuthorizationService authorizationService)
+    private readonly IServiceProvider _serviceProvider;
+
+    public Cash(CashViewModel viewModel, IAuthorizationService authorizationService, IServiceProvider serviceProvider)
     {
         InitializeComponent();
         _viewModel = viewModel;
         DataContext = _viewModel;
         _authorizationService = authorizationService;
+        _serviceProvider = serviceProvider;
     }
+
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        NameBox.Focus();
+        CurrencyComboBox.ServiceProvider = _serviceProvider;
     }
+
     private void CashWindow_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape)
         {
             this.Close();
         }
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
+        {
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
+        }
     }
+
     private async void ClickSaveCash(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveCash();
-        NameBox.Text = "";
-        LabelBox.Text = "";
-        RiyalBes.Text = "";
-        RiyalBed.Text = "";
-        Description.Text = "";
+        Save();
     }
+
     private void CashDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
         CashDataGrid.EditActionShow = _viewModel.CanAccessCashEdit;
-        
+
         CashDataGrid.EditAction = async obj =>
         {
             if (obj is CashDto cash)
@@ -50,13 +62,60 @@ public partial class Cash : Window
                 await _viewModel.EditAsync(cash.Id);
             }
         };
-        
-        CashDataGrid.ColumnConfigKey = $"CashGrid_{_authorizationService.GetCurrentUserIdAsString()}"; // یا هر شناسه خاصی که می‌خواهید
+
+        CashDataGrid.ColumnConfigKey =
+            $"CashGrid_{_authorizationService.GetCurrentUserIdAsString()}"; // یا هر شناسه خاصی که می‌خواهید
         CashDataGrid.SetColumns(
-            new DataGridTextColumn() { Header = "شناسه", Binding = new Binding("Id"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
-            new DataGridTextColumn { Header = "نام", Binding = new Binding("Name"), Width = new DataGridLength(2, DataGridLengthUnitType.Star) },
-            new DataGridTextColumn { Header = "عنوان", Binding = new Binding("Label"), Width = new DataGridLength(2, DataGridLengthUnitType.Star) },
-            new DataGridTextColumn { Header = "توضیحات", Binding = new Binding("Description"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
+            new DataGridTextColumn()
+            {
+                Header = "شناسه", Binding = new Binding("Id"),
+                Width = new DataGridLength(1, DataGridLengthUnitType.Star)
+            },
+            new DataGridTextColumn
+            {
+                Header = "نام", Binding = new Binding("Name"),
+                Width = new DataGridLength(2, DataGridLengthUnitType.Star)
+            },
+            new DataGridTextColumn
+            {
+                Header = "عنوان", Binding = new Binding("Label"),
+                Width = new DataGridLength(2, DataGridLengthUnitType.Star)
+            },
+            new DataGridTextColumn
+            {
+                Header = "توضیحات", Binding = new Binding("Description"),
+                Width = new DataGridLength(5, DataGridLengthUnitType.Star)
+            }
         );
+    }
+
+    private void CurrencySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.CurrencyId == 0)
+        {
+            _viewModel.CurrencyId = 1;
+        }
+    }
+
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
+
+    private void ClearForm()
+    {
+        _viewModel.Name = "";
+        _viewModel.Label = "";
+        _viewModel.RiyalBes = 0;
+        _viewModel.RiyalBed = 0;
+        _viewModel.CurrencyId = 1;
+        _viewModel.Description = "";
+        _viewModel.Clear();
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveCash();
+        ClearForm();
     }
 }

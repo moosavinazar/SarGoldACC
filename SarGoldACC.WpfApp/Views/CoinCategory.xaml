@@ -29,70 +29,72 @@
         
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            
-            <TextBlock Grid.Column="0" Text="عنوان"
-                       Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,0"/>
-            <TextBox Grid.Column="1" 
-                     x:Name="NameBox" 
-                     Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Margin="0 0 10 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Name}"/>
-            <TextBlock Grid.Column="2" Text="عیار"
-                       Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,0"/>
-            <TextBox Grid.Column="3" 
-                     x:Name="AyarBox" 
-                     Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Margin="0 0 10 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Ayar}"/>
-            <TextBlock Grid.Column="4" Text="وزن"
-                       Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,0"/>
-            <TextBox Grid.Column="5" 
-                     x:Name="WeightBox" 
-                     Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Margin="0 0 10 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Weight}"/>
-            <TextBlock Grid.Column="6" Text="وزن"
-                       Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,0"/>
-            <TextBox Grid.Column="7" 
-                     x:Name="Weight750Box" 
-                     Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Margin="0 0 10 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Weight750}"/>
-            <Button Grid.Column="8" 
-                    x:Name="SaveButton"
-                    Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Content="ذخیره"
-                    Style="{StaticResource SuccessBtn}"
-                    HorizontalAlignment="Center"
-                    Margin="10,10"
-                    Click="ClickSaveCoinCategory"
-                    Padding="10,5"/>
+            <controls:TextBoxValidate 
+                Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="NameBox" 
+                Grid.Column="0"
+                Label="عنوان"
+                ValidText="{Binding Name, Mode=TwoWay}"
+                ValidTextPattern="^.+$"
+                ValidTextFinalPattern="^.+$"
+                NotValidTextMessage="عنوان الزامی است"
+                AllowNullText="False"
+                InputLanguage="Persian"/>
+            <controls:TextBoxValidate 
+                Visibility="{Binding CanAccessCoinCategoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="AyarBox" 
+                Grid.Column="1"
+                Label="عیار"
+                ValidText="{Binding Ayar, Mode=TwoWay}"
+                ValidTextPattern="^[0-9]+$"
+                ValidTextFinalPattern="^(\d{3})$"
+                TextLength="3"
+                NotValidTextMessage="عیار الزامی است"
+                AllowNullText="False"
+                InputLanguage="English"/>
+            <controls:TextBoxWeight
+                Visibility="{Binding CanAccessBoxCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="WeightBox" 
+                Grid.Column="2"
+                Ayar="{Binding Ayar, Mode=TwoWay}"
+                Weight750="{Binding Weight750, Mode=TwoWay}"
+                Label="وزن"
+                ValidText="{Binding Weight, Mode=TwoWay}"/>
+            <controls:TextBoxWeight
+                Visibility="{Binding CanAccessBoxCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                IsEnabled="False"
+                x:Name="Weight750Box" 
+                Grid.Column="3"
+                Label="750"
+                ValidText="{Binding Weight750, Mode=TwoWay}"/>
+            <StackPanel Grid.Column="4" Orientation="Horizontal" HorizontalAlignment="Center" 
+                        Visibility="{Binding CanAccessBoxCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Button x:Name="SaveButton"
+                        IsEnabled="{Binding CanSave}"
+                        Content="ذخیره"
+                        ToolTip="Shift+Enter"
+                        Style="{StaticResource SuccessBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickSaveCoinCategory"
+                        Padding="10,5"/>
+                <Button x:Name="ClearButton"
+                        Content="جدید"
+                        ToolTip="F5"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickClearForm"
+                        Padding="10,5"/>
+            </StackPanel>
         </Grid>
         <controls:CustomizableDataGrid Grid.Row="1" x:Name="CoinCategoryDataGrid"
                                        ItemsSource="{Binding CoinCategories}"

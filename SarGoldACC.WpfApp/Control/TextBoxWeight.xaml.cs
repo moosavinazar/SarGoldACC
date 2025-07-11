@@ -22,6 +22,7 @@ public partial class TextBoxWeight : UserControl
         {
             ValidTextBox.Text = "0";
         }
+        UpdateWeight750();
     }
     private void NameBox_KeyDown(object sender, RoutedEventArgs routedEventArgs)
     {
@@ -98,8 +99,8 @@ public partial class TextBoxWeight : UserControl
                     }
                 }
             }
-
-            e.Handled = false; // عدد مجاز است
+            e.Handled = false;
+            Dispatcher.BeginInvoke(new Action(UpdateWeight750));
         }
         else if (e.Text == ".")
         {
@@ -120,6 +121,7 @@ public partial class TextBoxWeight : UserControl
                 else
                 {
                     e.Handled = false;
+                    Dispatcher.BeginInvoke(new Action(UpdateWeight750));
                 }
             }
         }
@@ -148,5 +150,43 @@ public partial class TextBoxWeight : UserControl
     {
         get => (string)GetValue(LabelProperty);
         set => SetValue(LabelProperty, value);
+    }
+    
+    public static readonly DependencyProperty AyarProperty =
+        DependencyProperty.Register(nameof(Ayar),
+            typeof(int),
+            typeof(TextBoxWeight),
+            new FrameworkPropertyMetadata(750, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault, OnAyarChanged));
+    private static void OnAyarChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        var control = d as TextBoxWeight;
+        control?.UpdateWeight750();
+    }
+    public int Ayar
+    {
+        get => (int)GetValue(AyarProperty);
+        set => SetValue(AyarProperty, value);
+    }
+    public static readonly DependencyProperty Weight750Property =
+        DependencyProperty.Register(nameof(Weight750),
+            typeof(double),
+            typeof(TextBoxWeight),
+            new FrameworkPropertyMetadata(0.0, FrameworkPropertyMetadataOptions.BindsTwoWayByDefault));
+    public double Weight750
+    {
+        get => (double)GetValue(Weight750Property);
+        set => SetValue(Weight750Property, value);
+    }
+    private void UpdateWeight750()
+    {
+        if (double.TryParse(ValidTextBox.Text, out double weight))
+        {
+            double result = (Ayar * weight) / 750.0;
+            Weight750 = Math.Round(result, 3);
+        }
+        else
+        {
+            Weight750 = 0;
+        }
     }
 }

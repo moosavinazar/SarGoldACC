@@ -33,12 +33,19 @@ public partial class CoinCategory : Window
         {
             this.Close();
         }
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
+        {
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
+        }
     }
 
     private async void ClickSaveCoinCategory(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveCoinCategory();
-        NameBox.Text = "";
+        Save();
     }
 
     private void CoinCategoryDataGrid_Loaded(object sender, RoutedEventArgs e)
@@ -70,5 +77,25 @@ public partial class CoinCategory : Window
             new DataGridTextColumn { Header = "وزن", Binding = new Binding("Weight"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "۷۵۰", Binding = new Binding("Weight750"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
+    }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        NameBox.Focus();
+        ClearForm();
+    }
+
+    private void ClearForm()
+    {
+        _viewModel.Name = "";
+        _viewModel.Ayar = 750;
+        _viewModel.Weight = 0;
+        _viewModel.Weight750 = 0;
+        _viewModel.Clear();
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveCoinCategory();
+        ClearForm();
     }
 }

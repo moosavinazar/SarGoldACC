@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.CoinCategory;
 using SarGoldACC.Core.Services.Interfaces;
@@ -16,7 +17,15 @@ public class CoinCategoryViewModel : ViewModelBase
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
     private double _weight;
     public double Weight
@@ -51,13 +60,26 @@ public class CoinCategoryViewModel : ViewModelBase
     public bool CanAccessCoinCategoryDelete => _authorizationService.HasPermission("CoinCategory.Delete");
     public bool CanAccessCoinCategoryCreateOrEdit => _authorizationService.HasPermission("CoinCategory.Create") ||
                                               _authorizationService.HasPermission("CoinCategory.Edit");
-
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public CoinCategoryViewModel(IAuthorizationService authorizationService, 
         ICoinCategoryService coinCategoriesService, IMadeCategoryService madeCategoryService)
     {
         _authorizationService = authorizationService;
         _coinCategoriesService = coinCategoriesService;
         CoinCategories = new ObservableCollection<CoinCategoryDto>();
+        Ayar = 750;
         // بارگذاری تنظیمات و داده‌ها
         Task.Run(async () =>
         {
@@ -132,5 +154,29 @@ public class CoinCategoryViewModel : ViewModelBase
             CoinCategories.Add(c);
         }
     }
-
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingCoinCategoryId = null;
+    }
 }

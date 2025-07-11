@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.MadeCategory;
 using SarGoldACC.Core.Services.Interfaces;
@@ -12,11 +13,19 @@ public class MadeCategoryViewModel : ViewModelBase
     private readonly IMadeCategoryService _madeSubCategoryService;
     
     private long? _editingMadeCategoryId = null;
-    private string _madeSubCategoryName;
+    private string _madeCategoryName;
     public string MadeCategoryName
     {
-        get => _madeSubCategoryName;
-        set => SetProperty(ref _madeSubCategoryName, value);
+        get => _madeCategoryName;
+        set
+        {
+            if (_madeCategoryName != value)
+            {
+                _madeCategoryName = value;
+                OnPropertyChanged(nameof(MadeCategoryName));
+                ValidateAll();
+            }
+        }
     }
     
     private ObservableCollection<MadeCategoryDto> _allMadeCategories = new();
@@ -32,7 +41,45 @@ public class MadeCategoryViewModel : ViewModelBase
     public bool CanAccessMadeCategoryDelete => _authorizationService.HasPermission("MadeCategory.Delete");
     public bool CanAccessMadeCategoryCreateOrEdit => _authorizationService.HasPermission("MadeCategory.Create") ||
                                               _authorizationService.HasPermission("MadeCategory.Edit");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
 
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(MadeCategoryName))
+            {
+                if (string.IsNullOrWhiteSpace(MadeCategoryName) || !Regex.IsMatch(MadeCategoryName, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(MadeCategoryName),
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingMadeCategoryId = null;
+    }
     public MadeCategoryViewModel(IAuthorizationService authorizationService, 
         IMadeCategoryService madeSubCategoryService)
     {

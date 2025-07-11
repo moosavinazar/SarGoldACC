@@ -7,7 +7,7 @@
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         mc:Ignorable="d"
-        Title="گروه" 
+        Title="گروه ساخته" 
         Height="600" 
         Width="800"
         KeyDown="Window_KeyDown"
@@ -29,31 +29,39 @@
         
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            
-            <TextBlock Grid.Column="0" Text="نام شهر"
-                       Visibility="{Binding CanAccessMadeCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,0"/>
-            <TextBox Grid.Column="1" 
-                     x:Name="MadeCategoryNameBox" 
-                     Visibility="{Binding CanAccessMadeCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Margin="0 0 10 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding MadeCategoryName}"/>
-            <Button Grid.Column="2" 
-                    x:Name="SaveButton"
-                    Visibility="{Binding CanAccessMadeCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Content="ذخیره"
-                    Style="{StaticResource SuccessBtn}"
-                    HorizontalAlignment="Center"
-                    Margin="10,10"
-                    Click="ClickSaveMadeCategory"
-                    Padding="10,5"/>
+            <controls:TextBoxValidate 
+                Visibility="{Binding CanAccessMadeCategoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="MadeCategoryNameBox" 
+                Grid.Column="0"
+                Label="نام گروه"
+                ValidText="{Binding MadeCategoryName, Mode=TwoWay}"
+                ValidTextPattern="^.+$"
+                ValidTextFinalPattern="^.+$"
+                NotValidTextMessage="نام شهر الزامی است"
+                AllowNullText="False"
+                InputLanguage="Persian"/>
+            <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" 
+                        Visibility="{Binding CanAccessMadeCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Button x:Name="SaveButton"
+                        IsEnabled="{Binding CanSave}"
+                        Content="ذخیره"
+                        ToolTip="Shift+Enter"
+                        Style="{StaticResource SuccessBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickSaveMadeCategory"
+                        Padding="10,5"/>
+                <Button x:Name="ClearButton"
+                        Content="جدید"
+                        ToolTip="F5"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickClearForm"
+                        Padding="10,5"/>
+            </StackPanel>
         </Grid>
         <controls:CustomizableDataGrid Grid.Row="1" x:Name="MadeCategoryDataGrid"
                                        ItemsSource="{Binding AllMadeCategories}"

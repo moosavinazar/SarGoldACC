@@ -50,7 +50,7 @@
             </Fluent:RibbonTabItem>
             <Fluent:RibbonTabItem x:Name="TabProducts" ToolTip="کلید میانبر (2)" Header="کالاها" Style="{StaticResource CustomTabStyle}">
                 <Fluent:RibbonGroupBox Header="دسته بندی ها" >
-                    <Fluent:Button x:Name="MadeSubCategory" Header="دستا بندی ساخته"
+                    <Fluent:Button x:Name="MadeSubCategory" Header="دسته بندی ساخته"
                                    Icon="pack://application:,,,/Resources/Icons/Category.png"
                                    LargeIcon="pack://application:,,,/Resources/Icons/CategoryLarge.png"
                                    Click="OpenMadeSubCategoryWindowButton_Click"

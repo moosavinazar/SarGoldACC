@@ -32,12 +32,24 @@ public partial class MadeCategory : Window
         {
             this.Close();
         }
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
+        {
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
+        }
     }
-
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveMadeCategory();
+        ClearForm();
+    }
     private async void ClickSaveMadeCategory(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveMadeCategory();
-        MadeCategoryNameBox.Text = "";
+        Save();
     }
 
     private void MadeCategoryDataGrid_Loaded(object sender, RoutedEventArgs e)
@@ -64,7 +76,18 @@ public partial class MadeCategory : Window
         MadeCategoryDataGrid.ColumnConfigKey = $"MadeCategoryGrid_{_authorizationService.GetCurrentUserIdAsString()}"; // یا هر شناسه خاصی که می‌خواهید
         MadeCategoryDataGrid.SetColumns(
             new DataGridTextColumn { Header = "شناسه", Binding = new Binding("Id"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
-            new DataGridTextColumn { Header = "شهر", Binding = new Binding("Name"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
+            new DataGridTextColumn { Header = "دسته بندی", Binding = new Binding("Name"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
+    }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
+
+    private void ClearForm()
+    {
+        _viewModel.MadeCategoryName = "";
+        MadeCategoryNameBox.Focus();
+        _viewModel.Clear();
     }
 }

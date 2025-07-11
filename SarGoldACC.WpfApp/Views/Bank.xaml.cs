@@ -12,18 +12,21 @@ public partial class Bank : Window
 {
     private readonly BankViewModel _viewModel;
     private readonly IAuthorizationService _authorizationService;
-    
-    public Bank(BankViewModel viewModel, IAuthorizationService authorizationService)
+    private readonly IServiceProvider _serviceProvider;
+    public Bank(BankViewModel viewModel, IAuthorizationService authorizationService, IServiceProvider serviceProvider)
     {
         InitializeComponent();
         _viewModel = viewModel;
         DataContext = _viewModel;
         _authorizationService = authorizationService;
+        _serviceProvider = serviceProvider;
     }
     
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        Name.Focus();
+        CurrencyComboBox.ServiceProvider = _serviceProvider;
     }
     private void BankWindow_KeyDown(object sender, KeyEventArgs e)
     {
@@ -31,19 +34,19 @@ public partial class Bank : Window
         {
             this.Close();
         }
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
+        {
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
+        }
     }
     
     private async void ClickSaveBank(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveBank();
-        NameBox.Text = "";
-        BranchBox.Text = "";
-        AccountNumberBox.Text = "";
-        CardNumberBox.Text = "";
-        IbanBox.Text = "";
-        RiyalBes.Text = "";
-        RiyalBed.Text = "";
-        Description.Text = "";
+        Save();
     }
     
     private void BankDataGrid_Loaded(object sender, RoutedEventArgs e)
@@ -68,5 +71,34 @@ public partial class Bank : Window
             new DataGridTextColumn { Header = "شماره شبا", Binding = new Binding("Iban"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "توضیحات", Binding = new Binding("Description"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
+    }
+    private void CurrencySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.CurrencyId == 0)
+        {
+            _viewModel.CurrencyId = 1;
+        }
+    }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
+    private void ClearForm()
+    {
+        _viewModel.Name = "";
+        _viewModel.Branch = "";
+        _viewModel.CurrencyId = 1;
+        _viewModel.AccountNumber = "";
+        _viewModel.CardNumber = "";
+        _viewModel.Iban = "";
+        _viewModel.RiyalBed = 0;
+        _viewModel.RiyalBes = 0;
+        _viewModel.Description = "";
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveBank();
+        ClearForm();
     }
 }

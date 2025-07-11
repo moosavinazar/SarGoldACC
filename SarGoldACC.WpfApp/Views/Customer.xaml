@@ -79,6 +79,8 @@
                     <controls:ComboBoxSelector 
                         x:Name="CitySelectorControl" 
                         Grid.Column="2"
+                        Visibility="{Binding CanAccessCustomerCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
                         LostFocus="CitySelectorControl_LostFocus"
                         Label="شهر"
                         ItemsSource="{Binding Cities}"

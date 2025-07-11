@@ -67,6 +67,7 @@ public partial class Customer : Window
     }
     private async void Save()
     {
+        if (!_viewModel.CanSave) return;
         await _viewModel.SaveCustomer();
         ClearForm();
     }
@@ -74,7 +75,7 @@ public partial class Customer : Window
     {
         _viewModel.Name = "";
         _viewModel.CellPhone = "";
-        _viewModel.CityId = 0;
+        _viewModel.CityId = 1;
         _viewModel.Phone = "";
         _viewModel.WeightBed = 0;
         _viewModel.WeightBes = 0;

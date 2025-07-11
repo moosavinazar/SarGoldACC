@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Bank;
 using SarGoldACC.Core.DTOs.Currency;
@@ -33,10 +34,25 @@ public class BankViewModel : ViewModelBase
     public bool CanAccessBankCreate => _authorizationService.HasPermission("Bank.Create");
     public bool CanAccessBankEdit => _authorizationService.HasPermission("Bank.Edit");
     public bool CanAccessBankDelete => _authorizationService.HasPermission("Bank.Delete");
-    
     public bool CanAccessBankCreateOrEdit => _authorizationService.HasPermission("Bank.Create") ||
                                                  _authorizationService.HasPermission("Bank.Edit");
-    
+    public bool CanAccessCurrencyButton => _authorizationService.HasPermission("Currency.View") ||
+                                           _authorizationService.HasPermission("Currency.Create") ||
+                                           _authorizationService.HasPermission("Currency.Edit") ||
+                                           _authorizationService.HasPermission("Currency.Delete");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public BankViewModel(
         IAuthorizationService authorizationService, 
         IBankService bankService,
@@ -46,30 +62,52 @@ public class BankViewModel : ViewModelBase
         _bankService = bankService;
         _currencyService = currencyService;
         Currencies = new ObservableCollection<CurrencyDto>();
-        
+        CurrencyId = 1;
         Task.Run(async () =>
         {
             await LoadBankAsync();
             await LoadCurrenciesAsync();
         }).GetAwaiter().GetResult();
     }
-    
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
-    
     public string Branch
     {
         get => _branch;
-        set => SetProperty(ref _branch, value);
+        set
+        {
+            if (_branch != value)
+            {
+                _branch = value;
+                OnPropertyChanged(nameof(Branch));
+                ValidateAll();
+            }
+        }
     }
-    
+
     public string Iban
     {
         get => _iban;
-        set => SetProperty(ref _iban, value);
+        set
+        {
+            if (_iban != value)
+            {
+                _iban = value;
+                OnPropertyChanged(nameof(Iban));
+                ValidateAll();
+            }
+        }
     }
     
     public string CardNumber
@@ -77,11 +115,19 @@ public class BankViewModel : ViewModelBase
         get => _cardNumber;
         set => SetProperty(ref _cardNumber, value);
     }
-    
+
     public string AccountNumber
     {
         get => _accountNumber;
-        set => SetProperty(ref _accountNumber, value);
+        set
+        {
+            if (_accountNumber != value)
+            {
+                _accountNumber = value;
+                OnPropertyChanged(nameof(AccountNumber));
+                ValidateAll();
+            }
+        }
     }
     
     public string Description
@@ -229,6 +275,46 @@ public class BankViewModel : ViewModelBase
     public async Task DeleteAsync(long bankId)
     {
         await _bankService.DeleteAsync(bankId);
+    }
+    
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(Branch))
+            {
+                if (string.IsNullOrWhiteSpace(Branch) || !Regex.IsMatch(Branch, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(AccountNumber))
+            {
+                if (string.IsNullOrWhiteSpace(AccountNumber) || !Regex.IsMatch(AccountNumber, @"^(\d+)$"))
+                    return true;
+            }
+            if (columnName == nameof(Iban))
+            {
+                if (string.IsNullOrWhiteSpace(Iban) || !Regex.IsMatch(Iban, @"^(\d{24})$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(Branch),
+        nameof(AccountNumber),
+        nameof(Iban)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
     }
     
 }

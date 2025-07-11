@@ -28,6 +28,8 @@ public partial class MadeSubCategory : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        MadeSubCategoryNameBox.Focus();
+        MadeSubCategorySelectorControl.ServiceProvider = _serviceProvider;
     }
 
     private void Window_KeyDown(object sender, KeyEventArgs e)
@@ -36,21 +38,20 @@ public partial class MadeSubCategory : Window
         {
             this.Close();
         }
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
+        {
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
+        }
     }
 
     private async void ClickSaveMadeSubCategory(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveMadeSubCategory();
-        MadeSubCategoryNameBox.Text = "";
+        Save();
     }
-    
-    private async void ClickAddMadeCategory(object sender, RoutedEventArgs e)
-    {
-        var madeCategoryWindow = _serviceProvider.GetRequiredService<MadeCategory>();
-        madeCategoryWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        madeCategoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-
     private void MadeSubCategoryDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
         MadeSubCategoryDataGrid.DeleteActionShow = _viewModel.CanAccessMadeSubCategoryDelete;
@@ -77,5 +78,29 @@ public partial class MadeSubCategory : Window
             new DataGridTextColumn() { Header = "شناسه", Binding = new Binding("Id"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "دسته بندی", Binding = new Binding("Name"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
+    }
+    private void MadeSubCategorySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.MadeCategoryId == 0)
+        {
+            _viewModel.MadeCategoryId = 1;
+        }
+    }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveMadeSubCategory();
+        ClearForm();
+    }
+
+    private void ClearForm()
+    {
+        _viewModel.Name = "";
+        _viewModel.MadeCategoryId = 1;
+        _viewModel.Clear();
     }
 }

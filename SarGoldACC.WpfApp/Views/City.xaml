@@ -46,7 +46,7 @@
                 AllowNullText="False"
                 InputLanguage="Persian"/>
             <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" 
-                        Visibility="{Binding CanAccessBranchCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                        Visibility="{Binding CanAccessCityCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
                 <Button x:Name="SaveButton"
                         IsEnabled="{Binding CanSave}"
                         Content="ذخیره"

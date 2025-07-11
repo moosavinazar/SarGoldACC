@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.MadeCategory;
 using SarGoldACC.Core.Services.Interfaces;
@@ -17,7 +18,15 @@ public class MadeSubCategoryViewModel : ViewModelBase
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
     
     private ObservableCollection<MadeSubCategoryDto> _allMadeSubCategories = new();
@@ -41,6 +50,45 @@ public class MadeSubCategoryViewModel : ViewModelBase
                                       _authorizationService.HasPermission("MadeCategory.Create") ||
                                       _authorizationService.HasPermission("MadeCategory.Edit") ||
                                       _authorizationService.HasPermission("MadeCategory.Delete");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
+
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingMadeSubCategoryId = null;
+    }
 
     public MadeSubCategoryViewModel(IAuthorizationService authorizationService, 
         IMadeSubCategoryService madeSubCategoriesService, IMadeCategoryService madeCategoryService)
@@ -50,6 +98,7 @@ public class MadeSubCategoryViewModel : ViewModelBase
         _madeCategoryService = madeCategoryService;
         AllMadeSubCategories = new ObservableCollection<MadeSubCategoryDto>();
         MadeCategories = new ObservableCollection<MadeCategoryDto>();
+        MadeCategoryId = 1;
         // بارگذاری تنظیمات و داده‌ها
         Task.Run(async () =>
         {

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
         Title="دسته بندی ساخته" 
         Height="600" 
@@ -29,52 +30,53 @@
         
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            
-            <TextBlock Grid.Column="0" Text="نام"
-                       Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,0"/>
-            <TextBox Grid.Column="1" 
-                     x:Name="MadeSubCategoryNameBox" 
-                     Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Margin="0 0 10 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Name}"/>
-            <TextBlock Text="دسته بندی اصلی"
-                       Grid.Column="2"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="5,10,5,0"/>
-            <ComboBox x:Name="MadeCategoryComboBox" Grid.Column="3"
-                      Visibility="{Binding CanAccessMadeCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                      ItemsSource="{Binding MadeCategories}"
-                      DisplayMemberPath="Name"
-                      SelectedValuePath="Id"
-                      SelectedValue="{Binding MadeCategoryId, Mode=TwoWay}"
-                      Margin="0,5,0,0"/>
-            <Button Grid.Column="4" x:Name="AddMadeCategoryButton"
-                    Content="+"
-                    Style="{StaticResource PrimaryBtn}"
-                    HorizontalAlignment="Center"
-                    Click="ClickAddMadeCategory"
-                    Padding="10,5"/>
-            <Button Grid.Column="5" 
-                    x:Name="SaveButton"
-                    Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Content="ذخیره"
-                    Style="{StaticResource SuccessBtn}"
-                    HorizontalAlignment="Center"
-                    Margin="10,10"
-                    Click="ClickSaveMadeSubCategory"
-                    Padding="10,5"/>
+            <controls:TextBoxValidate 
+                Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="MadeSubCategoryNameBox" 
+                Grid.Column="0"
+                Label="نام"
+                ValidText="{Binding Name, Mode=TwoWay}"
+                ValidTextPattern="^.+$"
+                ValidTextFinalPattern="^.+$"
+                NotValidTextMessage="نام الزامی است"
+                AllowNullText="False"
+                InputLanguage="Persian"/>
+            <controls:ComboBoxSelector 
+                x:Name="MadeSubCategorySelectorControl" 
+                Grid.Column="1"
+                Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                LostFocus="MadeSubCategorySelectorControl_LostFocus"
+                Label="دسته بندی اصلی"
+                ItemsSource="{Binding MadeCategories}"
+                SelectedValue="{Binding MadeCategoryId, Mode=TwoWay}"
+                DisplayMemberPath="Name"
+                SelectedValuePath="Id"
+                CanAccessAddButton="{Binding CanAccessMadeCategoryButton}"
+                AddWindowType="{x:Type views:MadeCategory}"/>
+            <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Center" 
+                        Visibility="{Binding CanAccessMadeSubCategoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                <Button x:Name="SaveButton"
+                        IsEnabled="{Binding CanSave}"
+                        Content="ذخیره"
+                        ToolTip="Shift+Enter"
+                        Style="{StaticResource SuccessBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickSaveMadeSubCategory"
+                        Padding="10,5"/>
+                <Button x:Name="ClearButton"
+                        Content="جدید"
+                        ToolTip="F5"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickClearForm"
+                        Padding="10,5"/>
+            </StackPanel>
         </Grid>
         <controls:CustomizableDataGrid Grid.Row="1" x:Name="MadeSubCategoryDataGrid"
                                        ItemsSource="{Binding AllMadeSubCategories}"

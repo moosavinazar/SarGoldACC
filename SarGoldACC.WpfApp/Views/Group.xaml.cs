@@ -29,24 +29,6 @@ public partial class Group : Window
         selectedView.SortDescriptions.Add(new SortDescription(nameof(PermissionDto.Label), ListSortDirection.Ascending));
         GroupNameBox.Focus();
     }
-    
-    private void GroupNameBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            GroupLabelBox.Focus();
-            e.Handled = true;
-        }
-    }
-    private void GroupLabelBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            AllPermissionsListBox.Focus();
-            e.Handled = true;
-        }
-    }
-    
     private void AllPermissionsListBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Left)
@@ -162,21 +144,19 @@ public partial class Group : Window
         {
             this.Close();
         }
-        if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift))
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
         {
-            ClickSaveGroup(sender, e);
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
         }
     }
 
     private async void ClickSaveGroup(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveGroup();
-        GroupNameBox.Text = "";
-        GroupLabelBox.Text = "";
-        
-        _viewModel.SelectedPermissions.Clear();
-        _viewModel.AllPermissions.Clear();
-        await _viewModel.LoadPermissionsAsync();
+        Save();
     }
     
     private void GroupDataGrid_Loaded(object sender, RoutedEventArgs e)
@@ -207,6 +187,25 @@ public partial class Group : Window
             new DataGridTextColumn { Header = "نام گروه", Binding = new Binding("Label"), Width = new DataGridLength(7, DataGridLengthUnitType.Star) }
         );
     }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
 
-
+    private async void ClearForm()
+    {
+        _viewModel.GroupName = "";
+        _viewModel.GroupLabel = "";
+        
+        _viewModel.SelectedPermissions.Clear();
+        _viewModel.AllPermissions.Clear();
+        await _viewModel.LoadPermissionsAsync();
+        _viewModel.Clear();
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveGroup();
+        ClearForm();
+    }
 }

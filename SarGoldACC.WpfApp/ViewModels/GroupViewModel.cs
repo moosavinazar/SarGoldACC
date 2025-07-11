@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Auth;
@@ -25,20 +27,70 @@ public class GroupViewModel : ViewModelBase
     
     public bool CanAccessGroupCreateOrEdit => _authorizationService.HasPermission("Group.Create") ||
                                             _authorizationService.HasPermission("Group.Edit");
-
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public string GroupName
     {
         get => _groupName;
-        set => SetProperty(ref _groupName, value);
+        set
+        {
+            if (_groupName != value)
+            {
+                _groupName = value;
+                OnPropertyChanged(nameof(GroupName));
+                ValidateAll();
+            }
+        }
     }
-
     public string GroupLabel
     {
         get => _groupLabel;
-        set => SetProperty(ref _groupLabel, value);
+        set
+        {
+            if (_groupLabel != value)
+            {
+                _groupLabel = value;
+                OnPropertyChanged(nameof(GroupLabel));
+                ValidateAll();
+            }
+        }
     }
     public ObservableCollection<PermissionDto> AllPermissions { get; }
-    public ObservableCollection<PermissionDto> SelectedPermissions { get; }
+    private ObservableCollection<PermissionDto> _selectedPermissions;
+    public ObservableCollection<PermissionDto> SelectedPermissions
+    {
+        get => _selectedPermissions;
+        set
+        {
+            if (_selectedPermissions != null)
+                _selectedPermissions.CollectionChanged -= SelectedPermissions_CollectionChanged;
+
+            _selectedPermissions = value;
+
+            if (_selectedPermissions != null)
+                _selectedPermissions.CollectionChanged += SelectedPermissions_CollectionChanged;
+
+            OnPropertyChanged(nameof(SelectedPermissions));
+            ValidateAll();
+        }
+    }
+
+    private void SelectedPermissions_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        ValidateAll();
+    }
+    
     private ObservableCollection<GroupDto> _allGroups = new();
     public ObservableCollection<GroupDto> AllGroups
     {
@@ -57,7 +109,7 @@ public class GroupViewModel : ViewModelBase
         AllPermissions = new ObservableCollection<PermissionDto>();
         SelectedPermissions = new ObservableCollection<PermissionDto>();
         AllGroups = new ObservableCollection<GroupDto>();
-
+        SelectedPermissions.CollectionChanged += (s, e) => ValidateAll();
         SaveCommand = new AsyncRelayCommand(async () => await SaveGroup());
 
         // بارگذاری تنظیمات و داده‌ها
@@ -168,5 +220,42 @@ public class GroupViewModel : ViewModelBase
     public async Task DeleteAsync(long groupId)
     {
         await _groupService.DeleteAsync(groupId);
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(GroupName))
+            {
+                if (string.IsNullOrWhiteSpace(GroupName) || !Regex.IsMatch(GroupName, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(GroupLabel))
+            {
+                if (string.IsNullOrWhiteSpace(GroupLabel) || !Regex.IsMatch(GroupLabel, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(SelectedPermissions))
+            {
+                if (SelectedPermissions == null || SelectedPermissions.Count == 0)
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(GroupName),
+        nameof(GroupLabel),
+        nameof(SelectedPermissions)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingGroupId = null;
     }
 }

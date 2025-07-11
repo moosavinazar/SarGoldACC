@@ -33,6 +33,14 @@ public partial class Currency : Window
         {
             this.Close();
         }
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
+        {
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
+        }
     }
     
     private async void ClickSaveCurrency(object sender, RoutedEventArgs e)

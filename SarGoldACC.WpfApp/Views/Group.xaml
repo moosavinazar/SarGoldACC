@@ -30,42 +30,34 @@
         
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-
-            <!-- نام گروه -->
-            <TextBlock Text="نام گروه"
-                       Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,0,5,0"/>
-            <TextBox x:Name="GroupNameBox" 
-                     Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Grid.Column="1"
-                     KeyDown="GroupNameBox_KeyDown"
-                     Margin="0 0 10 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding GroupName}"/>
-
-            <!-- برچسب گروه -->
-            <TextBlock Grid.Column="2"
-                       Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                       Text="برچسب گروه"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="10,0,5,0"/>
-            <TextBox x:Name="GroupLabelBox" 
-                     Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                     Grid.Column="3"
-                     KeyDown="GroupLabelBox_KeyDown"
-                     Margin="0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding GroupLabel}"/>
+            <controls:TextBoxValidate 
+                Visibility="{Binding CanAccessCurrencyCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="GroupNameBox" 
+                Grid.Column="0"
+                Label="نام گروه"
+                ValidText="{Binding GroupName, Mode=TwoWay}"
+                ValidTextPattern="^.+$"
+                ValidTextFinalPattern="^.+$"
+                NotValidTextMessage="نام گروه الزامی است"
+                AllowNullText="False"
+                InputLanguage="English"/>
+            <controls:TextBoxValidate 
+                Visibility="{Binding CanAccessCurrencyCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="GroupLabelBox" 
+                Grid.Column="1"
+                Label="برچسب گروه"
+                ValidText="{Binding GroupLabel, Mode=TwoWay}"
+                ValidTextPattern="^.+$"
+                ValidTextFinalPattern="^.+$"
+                NotValidTextMessage="برچسب گروه الزامی است"
+                AllowNullText="False"
+                InputLanguage="Persian"/>
         </Grid>
-        
         
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
@@ -92,7 +84,9 @@
                          MouseMove="ListBox_MouseMove"
                          Drop="AllPermissionsListBox_Drop"
                          AllowDrop="True"
-                         SelectionMode="Extended"/>
+                         SelectionMode="Extended"
+                         MaxHeight="300"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"/>
 
                 <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="10"
                             Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
@@ -113,18 +107,27 @@
                          MouseMove="ListBox_MouseMove"
                          Drop="SelectedPermissionsListBox_Drop"
                          AllowDrop="True"
-                         SelectionMode="Extended"/>
+                         SelectionMode="Extended"
+                         MaxHeight="300"
+                         ScrollViewer.VerticalScrollBarVisibility="Auto"/>
             </Grid>
             
             <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
                         Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
-                <!-- دکمه ذخیره -->
                 <Button x:Name="SaveButton"
+                        IsEnabled="{Binding CanSave}"
                         Content="ذخیره"
+                        ToolTip="Shift+Enter"
                         Style="{StaticResource SuccessBtn}"
                         HorizontalAlignment="Center"
-                        Margin="10,10"
                         Click="ClickSaveGroup"
+                        Padding="10,5"/>
+                <Button x:Name="ClearButton"
+                        Content="جدید"
+                        ToolTip="F5"
+                        Style="{StaticResource PrimaryBtn}"
+                        HorizontalAlignment="Center"
+                        Click="ClickClearForm"
                         Padding="10,5"/>
             </StackPanel>
             

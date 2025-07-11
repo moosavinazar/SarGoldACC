@@ -37,70 +37,58 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="نام"
-                           Visibility="{Binding CanAccessBoxCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox Grid.Column="1" 
-                         x:Name="NameBox" 
-                         Visibility="{Binding CanAccessBoxCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         GotFocus="NameBox_GotFocus"
-                         Loaded="BranchNameBox_Loaded"
-                         PreviewTextInput="NameBox_PreviewTextInput"
-                         Margin="10,10"
-                         Style="{StaticResource ValidatedTextBoxStyle}"
-                         Text="{Binding Name, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"/>
-                <TextBlock Text="شعبه"
-                           Visibility="{Binding CanAccessBoxCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="5,10,5,0"/>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessBoxCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="NameBox" 
+                    Grid.Column="0"
+                    Label="نام"
+                    ValidText="{Binding Name, Mode=TwoWay}"
+                    ValidTextPattern="^.+$"
+                    ValidTextFinalPattern="^.+$"
+                    NotValidTextMessage="نام جعبه الزامی است"
+                    AllowNullText="False"
+                    InputLanguage="Persian"/>
                 <controls:ComboBoxSelector 
                     x:Name="BranchSelectorControl" 
-                    Grid.Column="3"
+                    Grid.Column="1"
+                    Visibility="{Binding CanAccessBankCreateOrEdit, 
+                    Converter={StaticResource BoolToVisibilityConverter}}"
+                    LostFocus="BranchSelectorControl_LostFocus"
+                    Label="شعبه"
                     ItemsSource="{Binding Branches}"
                     SelectedValue="{Binding BranchId, Mode=TwoWay}"
                     DisplayMemberPath="Name"
                     SelectedValuePath="Id"
                     CanAccessAddButton="{Binding CanAccessBranchButton}"
-                    AddWindowType="{x:Type views:Branch}"
-                    Margin="5,10,5,5"/>
+                    AddWindowType="{x:Type views:Branch}"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="وزن"
-                           Visibility="{Binding CanAccessBoxCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="WeightBox" 
-                         Visibility="{Binding CanAccessBoxCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Weight}"/>
+                <controls:TextBoxWeight
+                    Visibility="{Binding CanAccessBoxCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="WeightBox" 
+                    Grid.Column="0"
+                    Label="وزن"
+                    ValidText="{Binding Weight, Mode=TwoWay}"/>
                 <TextBlock Text="نوع"
-                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
+                           Visibility="{Binding CanAccessBoxCreateOrEdit, 
+                           Converter={StaticResource BoolToVisibilityConverter}}"
+                           Grid.Column="1"
                            FontWeight="Bold"
                            VerticalAlignment="Center"
                            Margin="5,10,5,0"/>
-                <ComboBox x:Name="TypeComboBox" Grid.Column="3"
+                <ComboBox x:Name="TypeComboBox" Grid.Column="2"
+                          Visibility="{Binding CanAccessBoxCreateOrEdit, 
+                           Converter={StaticResource BoolToVisibilityConverter}}"
                           ItemsSource="{Binding BoxTypes}"
                           DisplayMemberPath="Name"
                           SelectedValuePath="Id"
@@ -111,10 +99,19 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
                     Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
             <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanSave}"
                     Content="ذخیره"
+                    ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
                     Click="ClickSave"
+                    Padding="10,5"/>
+            <Button x:Name="ClearButton"
+                    Content="جدید"
+                    ToolTip="F5"
+                    Style="{StaticResource PrimaryBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickClearForm"
                     Padding="10,5"/>
         </StackPanel>
         <controls:CustomizableDataGrid Grid.Row="3" x:Name="DataGrid"

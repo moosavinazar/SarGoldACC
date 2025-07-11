@@ -15,8 +15,6 @@ namespace SarGoldACC.WpfApp.Views;
 
 public partial class Box : Window
 {
-    [DllImport("user32.dll")]
-    static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
     private readonly BoxViewModel _viewModel;
     private readonly IAuthorizationService _authorizationService;
     private readonly IServiceProvider _serviceProvider;
@@ -35,6 +33,14 @@ public partial class Box : Window
         {
             this.Close();
         }
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
+        {
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
+        }
     }
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
@@ -45,49 +51,7 @@ public partial class Box : Window
 
     private async void ClickSave(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveAsync();
-        NameBox.Text = "";
-        WeightBox.Text = "";
-    }
-    private void NameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(NameBox);
-        NameBox.SelectAll();
-        // تنظیم زبان فارسی
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-    }
-    
-    private void BranchNameBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        DependencyPropertyDescriptor
-            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
-            .AddValueChanged(NameBox, (s, args) =>
-            {
-                var tb = s as TextBox;
-                if (Validation.GetHasError(tb))
-                {
-                    ToolTip tt = new ToolTip
-                    {
-                        Content = Validation.GetErrors(tb)[0].ErrorContent,
-                        IsOpen = true,
-                        PlacementTarget = tb,
-                        StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
-                    };
-                    tb.ToolTip = tt;
-                }
-                else
-                {
-                    if (tb.ToolTip is ToolTip ttip)
-                        ttip.IsOpen = false;
-                }
-            });
-    }
-    
-    private void NameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^.+$");
+        Save();
     }
     private void DataGrid_Loaded(object sender, RoutedEventArgs e)
     {
@@ -118,5 +82,29 @@ public partial class Box : Window
             new DataGridTextColumn { Header = "نوع", Binding = new Binding("Type"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "شعبه", Binding = new Binding("BranchName"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
+    }
+    private void BranchSelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.BranchId == 0)
+        {
+            _viewModel.BranchId = 1;
+        }
+    }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
+    private void ClearForm()
+    {
+        _viewModel.Name = "";
+        _viewModel.BranchId = 1;
+        _viewModel.Weight = 0;
+        _viewModel.Type = 0;
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveAsync();
+        ClearForm();
     }
 }

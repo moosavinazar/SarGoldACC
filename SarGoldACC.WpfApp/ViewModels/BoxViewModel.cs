@@ -10,7 +10,7 @@ using SarGoldACC.WpfApp.Helpers;
 
 namespace SarGoldACC.WpfApp.ViewModels;
 
-public class BoxViewModel : ViewModelBase, IDataErrorInfo
+public class BoxViewModel : ViewModelBase
 {
     private readonly IAuthorizationService _authorizationService;
     private readonly IBoxService _boxService;
@@ -27,7 +27,15 @@ public class BoxViewModel : ViewModelBase, IDataErrorInfo
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
     private double _weight;
     public double Weight
@@ -39,7 +47,15 @@ public class BoxViewModel : ViewModelBase, IDataErrorInfo
     public BoxType Type
     {
         get => _type;
-        set => SetProperty(ref _type, value);
+        set
+        {
+            if (_type != value)
+            {
+                _type = value;
+                OnPropertyChanged(nameof(Type));
+                ValidateAll();
+            }
+        }
     }
     public ObservableCollection<BoxTypeEnumItem> BoxTypes { get; set; }
     private ObservableCollection<BranchDto> _allBranches = new();
@@ -91,21 +107,17 @@ public class BoxViewModel : ViewModelBase, IDataErrorInfo
                                              _authorizationService.HasPermission("Box.Edit");
     public bool CanAccessBranchButton => _authorizationService.HasPermission("Branch.Create") ||
                                          _authorizationService.HasPermission("Branch.Edit");
-    // IDataErrorInfo
-    public string Error => null;
-    public string this[string columnName]
+    private bool _canSave;
+    public bool CanSave
     {
-        get
+        get => _canSave;
+        set
         {
-            if (columnName == nameof(Name))
+            if (_canSave != value)
             {
-                if (string.IsNullOrWhiteSpace(Name))
-                    return "نام جعبه الزامی است.";
-
-                if (!Regex.IsMatch(Name, @"^.+$"))
-                    return "نام جعبه الزامی است";
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
             }
-            return null;
         }
     }
     public BoxViewModel(IAuthorizationService authorizationService, 
@@ -125,6 +137,7 @@ public class BoxViewModel : ViewModelBase, IDataErrorInfo
                     Name = e.ToString()
                 })
         );
+        BranchId = 1;
         // بارگذاری تنظیمات و داده‌ها
         Task.Run(async () =>
         {
@@ -222,5 +235,30 @@ public class BoxViewModel : ViewModelBase, IDataErrorInfo
 
             FilteredBranches = new ObservableCollection<BranchDto>(filtered);
         }
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+                if (Type is not (BoxType.Coin or BoxType.Made or BoxType.Melted or BoxType.Misc))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
     }
 }

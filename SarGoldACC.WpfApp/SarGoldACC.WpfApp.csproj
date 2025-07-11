@@ -29,8 +29,6 @@
 
     <ItemGroup>
       <Folder Include="Navigation\" />
-      <Folder Include="Views\BaseForm\" />
-      <Folder Include="Views\OperationsForm\" />
     </ItemGroup>
 
   <ItemGroup>

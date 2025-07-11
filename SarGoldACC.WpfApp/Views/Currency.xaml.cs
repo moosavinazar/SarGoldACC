@@ -35,11 +35,9 @@ public partial class Currency : Window
         }
     }
     
-    private async void ClickSaveCity(object sender, RoutedEventArgs e)
+    private async void ClickSaveCurrency(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveCurrency();
-        NameBox.Text = "";
-        LabelBox.Text = "";
+        Save();
     }
     
     private void CurrencyDataGrid_Loaded(object sender, RoutedEventArgs e)
@@ -69,5 +67,22 @@ public partial class Currency : Window
             new DataGridTextColumn { Header = "نام", Binding = new Binding("Name"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "عنوان", Binding = new Binding("Label"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
+    }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
+
+    private void ClearForm()
+    {
+        _viewModel.Name = "";
+        _viewModel.Label = "";
+        _viewModel.Clear();
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveCurrency();
+        ClearForm();
     }
 }

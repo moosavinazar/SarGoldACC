@@ -261,4 +261,8 @@ public class BoxViewModel : ViewModelBase
         bool hasError = _validatedProperties.Any(p => this[p]);
         CanSave = !hasError;
     }
+    public void Clear()
+    {
+        _editingId = null;
+    }
 }

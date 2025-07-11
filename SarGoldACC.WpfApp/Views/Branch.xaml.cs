@@ -14,8 +14,6 @@ namespace SarGoldACC.WpfApp.Views;
 
 public partial class Branch : Window
 {
-    [DllImport("user32.dll")]
-    static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
     private readonly BranchViewModel _viewModel;
     private readonly IAuthorizationService _authorizationService;
     
@@ -26,33 +24,24 @@ public partial class Branch : Window
         _authorizationService = authorizationService;
         DataContext = _viewModel;
     }
-
-    private async void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-        
-    }
-
     private void BranchWindow_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Escape)
         {
             this.Close();
         }
-    }
-    
-    private void BranchNameBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
         {
-            SaveButton.Focus();
-            e.Handled = true;
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
         }
     }
-
     private async void ClickSaveBranch(object sender, RoutedEventArgs e)
     {
-        await _viewModel.SaveBranch();
-        BranchNameBox.Text = "";
+        Save();
     }
     private void ClickClearForm(object sender, RoutedEventArgs e)
     {
@@ -60,55 +49,9 @@ public partial class Branch : Window
     }
     private void ClearForm()
     {
-        BranchNameBox.Text = "";
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-        
-        // فوکوس را از فرم بگیر و بازگردان
-        WindowFocusHelper.SimulateFocusLossAndRestore(this);
-
+        _viewModel.BranchName = "";
         BranchNameBox.Focus();
         _viewModel.Clear();
-    }
-    private void BranchNameBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(BranchNameBox);
-        BranchNameBox.SelectAll();
-        // تنظیم زبان فارسی
-        LoadKeyboardLayout("00000429", 1); // 00000429 = Persian
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("fa-IR");
-    }
-    
-    private void BranchNameBox_Loaded(object sender, RoutedEventArgs e)
-    {
-        DependencyPropertyDescriptor
-            .FromProperty(Validation.HasErrorProperty, typeof(TextBox))
-            .AddValueChanged(BranchNameBox, (s, args) =>
-            {
-                var tb = s as TextBox;
-                if (Validation.GetHasError(tb))
-                {
-                    ToolTip tt = new ToolTip
-                    {
-                        Content = Validation.GetErrors(tb)[0].ErrorContent,
-                        IsOpen = true,
-                        PlacementTarget = tb,
-                        StaysOpen = true,
-                        Placement = System.Windows.Controls.Primitives.PlacementMode.Right
-                    };
-                    tb.ToolTip = tt;
-                }
-                else
-                {
-                    if (tb.ToolTip is ToolTip ttip)
-                        ttip.IsOpen = false;
-                }
-            });
-    }
-    
-    private void BranchNameBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^.+$");
     }
     private void BranchDataGrid_Loaded(object sender, RoutedEventArgs e)
     {
@@ -136,5 +79,11 @@ public partial class Branch : Window
             new DataGridTextColumn { Header = "شناسه", Binding = new Binding("Id"), Width = new DataGridLength(1, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "شعبه", Binding = new Binding("Name"), Width = new DataGridLength(5, DataGridLengthUnitType.Star) }
         );
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveBranch();
+        ClearForm();
     }
 }

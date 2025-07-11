@@ -94,6 +94,7 @@ public partial class Bank : Window
         _viewModel.RiyalBed = 0;
         _viewModel.RiyalBes = 0;
         _viewModel.Description = "";
+        _viewModel.Clear();
     }
     private async void Save()
     {

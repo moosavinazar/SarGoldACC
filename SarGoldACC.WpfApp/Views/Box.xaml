@@ -55,7 +55,7 @@
                 <controls:ComboBoxSelector 
                     x:Name="BranchSelectorControl" 
                     Grid.Column="1"
-                    Visibility="{Binding CanAccessBankCreateOrEdit, 
+                    Visibility="{Binding CanAccessBoxCreateOrEdit, 
                     Converter={StaticResource BoolToVisibilityConverter}}"
                     LostFocus="BranchSelectorControl_LostFocus"
                     Label="شعبه"
@@ -97,7 +97,7 @@
             </Grid>
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
-                    Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
+                    Visibility="{Binding CanAccessBoxCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
             <Button x:Name="SaveButton"
                     IsEnabled="{Binding CanSave}"
                     Content="ذخیره"

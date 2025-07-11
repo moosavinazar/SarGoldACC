@@ -100,6 +100,7 @@ public partial class Box : Window
         _viewModel.BranchId = 1;
         _viewModel.Weight = 0;
         _viewModel.Type = 0;
+        _viewModel.Clear();
     }
     private async void Save()
     {

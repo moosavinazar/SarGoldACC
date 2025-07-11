@@ -82,4 +82,11 @@ public partial class PayCoin : Window
         this.DialogResult = true;
         this.Close();
     }
+    private void CoinCategorySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.CoinCategoryId == 0)
+        {
+            _viewModel.CoinCategoryId = 1;
+        }
+    }
 }

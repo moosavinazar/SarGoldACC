@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs.Box;
 using SarGoldACC.Core.DTOs.CoinCategory;
 using SarGoldACC.Core.Services.Interfaces;
@@ -14,7 +15,20 @@ public class CoinViewModel : ViewModelBase
     public ObservableCollection<CoinCategoryDto> CoinCategories { get; }
     public long BoxId { get; set; }
     public ObservableCollection<BoxDto> Boxes { get; }
-    public string Name { get; set; }
+    private string _name;
+    public string Name
+    {
+        get => _name;
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
+    }
     public int Ayar { get; set; }
     public double Weight { get; set; }
     public double? Weight750 { get; set; }
@@ -31,6 +45,19 @@ public class CoinViewModel : ViewModelBase
                                       _authorizationService.HasPermission("Box.Create") ||
                                       _authorizationService.HasPermission("Box.Edit") ||
                                       _authorizationService.HasPermission("Box.Delete");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
 
     public CoinViewModel(ICoinCategoryService coinCategoryService, 
         IBoxService boxService, IAuthorizationService authorizationService)
@@ -40,7 +67,8 @@ public class CoinViewModel : ViewModelBase
         _authorizationService = authorizationService;
         CoinCategories = new ObservableCollection<CoinCategoryDto>();
         Boxes = new ObservableCollection<BoxDto>();
-        
+        BoxId = 1;
+        CoinCategoryId = 1;
         Task.Run(async () =>
         {
             await LoadCoinCategoriesAsync();
@@ -71,5 +99,27 @@ public class CoinViewModel : ViewModelBase
         {
             Boxes.Add(b);
         }
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name)
+        
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
     }
 }

@@ -120,7 +120,24 @@ public class CustomerService : ICustomerService
         await _customerRepository.UpdateAsync(customer);
         if (customerUpdate.PhotoBytes != null)
         {
-            await File.WriteAllBytesAsync(customerUpdate.Photo, customerUpdate.PhotoBytes);
+            if (customerUpdate.Photo != null)
+            {
+                await File.WriteAllBytesAsync(customerUpdate.Photo, customerUpdate.PhotoBytes);
+            }
+            else
+            {
+                var setting = await _settingService.GetSetting();
+                if (!Directory.Exists(setting.CustomerImageUrl))
+                    Directory.CreateDirectory(setting.CustomerImageUrl);
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(customerUpdate.PhotoFileName);
+                string filePath = Path.Combine(setting.CustomerImageUrl, uniqueFileName);
+
+                await File.WriteAllBytesAsync(filePath, customerUpdate.PhotoBytes);
+
+                // ذخیره مسیر در مدل EF برای ذخیره در DB
+                customer.Photo = filePath;
+            }
+            
         }
         return new ResultDto
         {

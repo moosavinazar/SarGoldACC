@@ -1,4 +1,7 @@
 ﻿using System.Collections.ObjectModel;
+using System.IO;
+using System.Text.RegularExpressions;
+using System.Windows.Media.Imaging;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.City;
 using SarGoldACC.Core.DTOs.Laboratory;
@@ -26,6 +29,18 @@ public class LaboratoryViewModel : ViewModelBase
     private string _description;
     private long _branchId;
     private long _cityId;
+    private BitmapImage? _photoPreview;
+    public byte[] PhotoBytes { get; set; }
+    public string PhotoFileName { get; set; }
+    public BitmapImage PhotoPreview
+    {
+        get => _photoPreview;
+        set
+        {
+            _photoPreview = value;
+            OnPropertyChanged(nameof(PhotoPreview));
+        }
+    }
     private ObservableCollection<LaboratoryDto> _allLaboratories = new();
     public ObservableCollection<CityDto> Cities { get; }
     public bool CanAccessLaboratoryView => _authorizationService.HasPermission("Laboratory.View");
@@ -35,6 +50,23 @@ public class LaboratoryViewModel : ViewModelBase
     
     public bool CanAccessLaboratoryCreateOrEdit => _authorizationService.HasPermission("Laboratory.Create") ||
                                                  _authorizationService.HasPermission("Laboratory.Edit");
+    public bool CanAccessCityButton => _authorizationService.HasPermission("City.View") ||
+                                       _authorizationService.HasPermission("City.Create") ||
+                                       _authorizationService.HasPermission("City.Edit") ||
+                                       _authorizationService.HasPermission("City.Delete");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public LaboratoryViewModel(
         IAuthorizationService authorizationService, 
         ILaboratoryService laboratoryService,
@@ -44,7 +76,7 @@ public class LaboratoryViewModel : ViewModelBase
         _laboratoryService = laboratoryService;
         _cityService = cityService;
         Cities = new ObservableCollection<CityDto>();
-        
+        CityId = 1;
         Task.Run(async () =>
         {
             await LoadCitiesAsync();
@@ -54,12 +86,28 @@ public class LaboratoryViewModel : ViewModelBase
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
     public string Phone
     {
         get => _phone;
-        set => SetProperty(ref _phone, value);
+        set
+        {
+            if (_phone != value)
+            {
+                _phone = value;
+                OnPropertyChanged(nameof(Phone));
+                ValidateAll();
+            }
+        }
     }
     public string CellPhone
     {
@@ -154,7 +202,9 @@ public class LaboratoryViewModel : ViewModelBase
                 Phone = Phone,
                 Photo = Photo,
                 Description = Description,
-                CityId = CityId
+                CityId = CityId,
+                PhotoBytes = PhotoBytes,
+                PhotoFileName = PhotoFileName
             };
             
             result = await _laboratoryService.UpdateAsync(dto);
@@ -182,7 +232,9 @@ public class LaboratoryViewModel : ViewModelBase
                 WeightBes = WeightBes,
                 RiyalBed = RiyalBed,
                 RiyalBes = RiyalBes,
-                CityId = CityId
+                CityId = CityId,
+                PhotoBytes = PhotoBytes,
+                PhotoFileName = PhotoFileName
             };
             result = await _laboratoryService.AddAsync(laboratoryDto);
             if (result.Success)
@@ -207,10 +259,58 @@ public class LaboratoryViewModel : ViewModelBase
         IVRPhone = laboratoryDto.IVRPhone;
         Photo = laboratoryDto.Photo;
         Description = laboratoryDto.Description;
+        CityId = laboratoryDto.CityId;
+        // بارگذاری تصویر
+        if (!string.IsNullOrEmpty(Photo) && File.Exists(Photo))
+        {
+            var bitmap = new BitmapImage();
+            bitmap.BeginInit();
+            bitmap.CacheOption = BitmapCacheOption.OnLoad;
+            bitmap.UriSource = new Uri(Photo, UriKind.Absolute);
+            bitmap.EndInit();
+            bitmap.Freeze();
+
+            PhotoPreview = bitmap;
+        }
+        else
+        {
+            PhotoPreview = null;
+        }
     }
     
     public async Task DeleteAsync(long userId)
     {
         await _laboratoryService.DeleteAsync(userId);
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Phone))
+            {
+                if (string.IsNullOrWhiteSpace(Phone) || !Regex.IsMatch(Phone, @"^(\d+)$"))
+                    return true;
+            }
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(Phone)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingLaboratoryId = null;
     }
 }

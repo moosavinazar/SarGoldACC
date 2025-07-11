@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
         Title="ری گیری" 
         Height="600" 
@@ -26,184 +27,187 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Row="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="نام"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="NameBox" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Name}"/>
-                <TextBlock Text="شهر"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="5,10,5,0"/>
-                <ComboBox x:Name="CityComboBox" Grid.Column="3"
-                          Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                          ItemsSource="{Binding Cities}"
-                          DisplayMemberPath="Name"
-                          SelectedValuePath="Id"
-                          SelectedValue="{Binding CityId, Mode=TwoWay}"
-                          Margin="0,0,0,0">
-                </ComboBox>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="NameBox" 
+                        Grid.Column="0"
+                        Label="نام"
+                        ValidText="{Binding Name, Mode=TwoWay}"
+                        ValidTextPattern="^.+$"
+                        ValidTextFinalPattern="^.+$"
+                        NotValidTextMessage="نام مشتری الزامی است"
+                        AllowNullText="False"
+                        InputLanguage="Persian"/>
+                    <controls:ComboBoxSelector 
+                        x:Name="CityComboBox" 
+                        Grid.Column="2"
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        LostFocus="CitySelectorControl_LostFocus"
+                        Label="شهر"
+                        ItemsSource="{Binding Cities}"
+                        SelectedValue="{Binding CityId, Mode=TwoWay}"
+                        DisplayMemberPath="Name"
+                        SelectedValuePath="Id"
+                        CanAccessAddButton="{Binding CanAccessCityButton}"
+                        AddWindowType="{x:Type views:City}"/>
+                </Grid>
+                <Grid Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                            Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="Phone" 
+                        Grid.Column="0"
+                        Label="تلفن"
+                        ValidText="{Binding Phone, Mode=TwoWay}"
+                        ValidTextPattern="^[0-9]+$"
+                        ValidTextFinalPattern="^(\d+)$"
+                        NotValidTextMessage="شماره تلفن اجباری است"
+                        AllowNullText="False"
+                        InputLanguage="English"/>
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                            Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="CellPhone" 
+                        Grid.Column="1"
+                        Label="موبایل"
+                        TextLength="11"
+                        ValidText="{Binding CellPhone, Mode=TwoWay}"
+                        ValidTextPattern="^[0-9]+$"
+                        ValidTextFinalPattern="^|(09\d{9})$"
+                        NotValidTextMessage="شماره موبایل باید با 09 شروع شود و 11 رقم باشد"
+                        AllowNullText="True"
+                        InputLanguage="English"/>
+                    <controls:TextBoxValidate 
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                            Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="IVRPhone" 
+                        Grid.Column="2"
+                        Label="تلفن گویا"
+                        ValidText="{Binding IVRPhone, Mode=TwoWay}"
+                        ValidTextPattern="^[0-9]+$"
+                        ValidTextFinalPattern="^|(\d+)$"
+                        NotValidTextMessage="شماره تلفن گویا اختیاری است"
+                        AllowNullText="True"
+                        InputLanguage="English"/>
+                </Grid>
+                <Grid Grid.Row="2">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:TextBoxWeight
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="WeightBed" 
+                        Grid.Column="0"
+                        Label="بدهکاری طلا"
+                        ValidText="{Binding WeightBed, Mode=TwoWay}"/>
+                    <controls:TextBoxRiyal
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="RiyalBed" 
+                        Grid.Column="1"
+                        Label="بدهکاری ریال"
+                        ValidText="{Binding RiyalBed, Mode=TwoWay}"/>
+                </Grid>
+                <Grid Grid.Row="3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+                    <controls:TextBoxWeight
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="WeightBes" 
+                        Grid.Column="0"
+                        Label="بستانکاری طلا"
+                        ValidText="{Binding WeightBes, Mode=TwoWay}"/>
+                    <controls:TextBoxRiyal
+                        Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                        x:Name="RiyalBes" 
+                        Grid.Column="1"
+                        Label="بستانکاری ریال"
+                        ValidText="{Binding RiyalBes, Mode=TwoWay}"/>
+                </Grid>
             </Grid>
-            <Grid Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="تلفن"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="Phone" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Phone}"/>
-                <TextBlock Text="موبایل"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="CellPhone" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding CellPhone}"/>
-                <TextBlock Text="تلفن گویا"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="IVRPhone" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="5"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding IVRPhone}"/>
-            </Grid>
-            <Grid Grid.Row="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="بدهکاری طلا"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="WeightBed" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding WeightBed}"/>
-                <TextBlock Text="بستانکاری طلا"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="WeightBes" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding WeightBes}"/>
-                <TextBlock Text="بدهکاری ریال"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalBed" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="5"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalBed}"/>
-                <TextBlock Text="بستانکاری ریال"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="6"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalBes" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="7"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalBes}"/>
-            </Grid>
-            <Grid Grid.Row="5">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="توضیحات"
-                           Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="Description" 
-                         Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Description}"/>
+            <Grid Grid.Column="1">
+                <StackPanel Margin="10" HorizontalAlignment="Center" VerticalAlignment="Top">
+                    <Image x:Name="LaboratoryImagePreview"
+                           Width="150" Height="100"
+                           Stretch="Uniform"
+                           Margin="0,0,0,10"
+                           Source="{Binding PhotoPreview, Mode=OneWay}" />
+                    <Button Content="انتخاب عکس"
+                            Click="ChoosePhotoButton_Click"
+                            Style="{StaticResource PrimaryBtn}" />
+                </StackPanel>
             </Grid>
         </Grid>
-        <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <controls:TextBoxValidate 
+                Visibility="{Binding CanAccessLaboratoryCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                x:Name="Description" 
+                Grid.Column="0"
+                Label="توضیحات"
+                ValidText="{Binding Description, Mode=TwoWay}"
+                ValidTextPattern="^*$"
+                ValidTextFinalPattern="^*$"
+                NotValidTextMessage="توضیحات اختیاری است"
+                AllowNullText="True"
+                InputLanguage="Persian"/>
+        </Grid>
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" 
                     Visibility="{Binding CanAccessLaboratoryCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
             <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanSave}"
                     Content="ذخیره"
+                    ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
                     Click="ClickSaveLaboratory"
                     Padding="10,5"/>
+            <Button x:Name="ClearButton"
+                    Content="جدید"
+                    ToolTip="F5"
+                    Style="{StaticResource PrimaryBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickClearForm"
+                    Padding="10,5"/>
         </StackPanel>
-        <controls:CustomizableDataGrid Grid.Row="2" x:Name="LaboratoryDataGrid"
+        <controls:CustomizableDataGrid Grid.Row="3" x:Name="LaboratoryDataGrid"
                                        ItemsSource="{Binding AllLaboratories}"
                                        Loaded="LaboratoryDataGrid_Loaded"
                                        Visibility="{Binding CanAccessLaboratoryView, Converter={StaticResource BoolToVisibilityConverter}}"/>

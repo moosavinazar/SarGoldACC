@@ -19,6 +19,7 @@ public class LaboratoryService : ILaboratoryService
     private readonly IAuthorizationService _authorizationService;
     private readonly ICounterpartyService _counterpartyService;
     private readonly IDocumentService _documentService;
+    private readonly ISettingService _settingService;
 
     public LaboratoryService(
         ILaboratoryRepository laboratoryRepository, 
@@ -26,7 +27,8 @@ public class LaboratoryService : ILaboratoryService
         AppDbContext appDbContext,
         IAuthorizationService authorizationService,
         ICounterpartyService counterpartyService,
-        IDocumentService documentService)
+        IDocumentService documentService,
+        ISettingService settingService)
     {
         _laboratoryRepository = laboratoryRepository;
         _mapper = mapper;
@@ -34,6 +36,7 @@ public class LaboratoryService : ILaboratoryService
         _authorizationService = authorizationService;
         _counterpartyService = counterpartyService;
         _documentService = documentService;
+        _settingService = settingService;
     }
 
     public async Task<LaboratoryDto> GetByIdAsync(long id)
@@ -74,6 +77,19 @@ public class LaboratoryService : ILaboratoryService
                 RiyalBed = laboratoryCreate.RiyalBed ?? 0,
                 RiyalBes = laboratoryCreate.RiyalBes ?? 0
             };
+            if (laboratoryCreate.PhotoBytes != null)
+            {
+                var setting = await _settingService.GetSetting();
+                if (!Directory.Exists(setting.CustomerImageUrl))
+                    Directory.CreateDirectory(setting.CustomerImageUrl);
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(laboratoryCreate.PhotoFileName);
+                string filePath = Path.Combine(setting.CustomerImageUrl, uniqueFileName);
+
+                await File.WriteAllBytesAsync(filePath, laboratoryCreate.PhotoBytes);
+
+                // ذخیره مسیر در مدل EF برای ذخیره در DB
+                laboratory.Photo = filePath;
+            }
             await _documentService.AddCounterpartyOpeningEntry(counterpartyOpeningEntry);
             await transaction.CommitAsync();
             return new ResultDto
@@ -102,6 +118,27 @@ public class LaboratoryService : ILaboratoryService
 
         _mapper.Map(laboratoryUpdate, laboratory);
         await _laboratoryRepository.UpdateAsync(laboratory);
+        if (laboratoryUpdate.PhotoBytes != null)
+        {
+            if (laboratoryUpdate.Photo != null)
+            {
+                await File.WriteAllBytesAsync(laboratoryUpdate.Photo, laboratoryUpdate.PhotoBytes);
+            }
+            else
+            {
+                var setting = await _settingService.GetSetting();
+                if (!Directory.Exists(setting.CustomerImageUrl))
+                    Directory.CreateDirectory(setting.CustomerImageUrl);
+                string uniqueFileName = Guid.NewGuid().ToString() + Path.GetExtension(laboratoryUpdate.PhotoFileName);
+                string filePath = Path.Combine(setting.CustomerImageUrl, uniqueFileName);
+
+                await File.WriteAllBytesAsync(filePath, laboratoryUpdate.PhotoBytes);
+
+                // ذخیره مسیر در مدل EF برای ذخیره در DB
+                laboratory.Photo = filePath;
+            }
+            
+        }
         return new ResultDto
         {
             Success = true,

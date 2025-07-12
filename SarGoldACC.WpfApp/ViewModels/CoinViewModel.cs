@@ -32,18 +32,40 @@ public class CoinViewModel : ViewModelBase
             {
                 _coinCategoryId = value;
                 OnPropertyChanged(nameof(CoinCategoryId));
-                Name = "پرداخت سکه - " + _coinCategoryService.GetByIdAsync(CoinCategoryId);
+                _ = UpdateNameAsync(); // بدون await چون setter نمی‌تونه async باشه
                 ValidateAll();
             }
         }
     }
-    public ObservableCollection<CoinCategoryDto> CoinCategories { get; }
+    private async Task UpdateNameAsync()
+    {
+        var category = await _coinCategoryService.GetByIdAsync(CoinCategoryId);
+        Name = "پرداخت سکه - " + category?.Name;
+        Ayar = category?.Ayar ?? 0;
+        Weight = category?.Weight * Count ?? 0;
+        Weight = Math.Round(Weight, 3);
+        Weight750 = category?.Weight750 * Count ?? 0;
+        Weight750 = Math.Round(Weight750, 3);
+    }
+
+    private ObservableCollection<CoinCategoryDto> _coinCategories;
+    public ObservableCollection<CoinCategoryDto> CoinCategories
+    {
+        get => _coinCategories;
+        set => SetProperty(ref _coinCategories, value);
+    }
     public long BoxId
     {
         get => _boxId;
         set => SetProperty(ref _boxId, value);
     }
-    public ObservableCollection<BoxDto> Boxes { get; }
+
+    private ObservableCollection<BoxDto> _boxes;
+    public ObservableCollection<BoxDto> Boxes
+    {
+        get => _boxes;
+        set => SetProperty(ref _boxes, value);
+    }
     public string Name
     {
         get => _name;
@@ -60,7 +82,16 @@ public class CoinViewModel : ViewModelBase
     public int Count
     {
         get => _count;
-        set => SetProperty(ref _count, value);
+        set
+        {
+            if (_count != value)
+            {
+                _count = value;
+                OnPropertyChanged(nameof(Count));
+                _ = UpdateNameAsync();
+                ValidateAll();
+            }
+        }
     }
     public int Ayar
     {
@@ -125,16 +156,19 @@ public class CoinViewModel : ViewModelBase
         Boxes = new ObservableCollection<BoxDto>();
         BoxId = 1;
         CoinCategoryId = 1;
-        Task.Run(async () =>
-        {
-            await LoadCoinCategoriesAsync();
-            await LoadBoxesAsync();
-        }).GetAwaiter().GetResult();
+        Count = 1;
+    }
+    public async Task InitializeAsync()
+    {
+        await LoadCoinCategoriesAsync();
+        await LoadBoxesAsync();
     }
     public async Task ReloadAllAsync()
     {
         await LoadCoinCategoriesAsync();
         await LoadBoxesAsync();
+        BoxId = 1;
+        CoinCategoryId = 1;
     }
     
     private async Task LoadCoinCategoriesAsync()

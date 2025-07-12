@@ -211,17 +211,24 @@ public partial class Document : Window
         }
     }
     
-    private void ClickPayCoin(object sender, RoutedEventArgs e)
+    private async void ClickPayCoin(object sender, RoutedEventArgs e)
     {
         var payCoinWindow = _serviceProvider.GetRequiredService<PayCoin>();
         payCoinWindow.Owner = this;
 
+        if (payCoinWindow.DataContext is CoinViewModel vm)
+        {
+            await vm.InitializeAsync(); // مقداردهی async قبل از نمایش پنجره
+        }
+
         bool? result = payCoinWindow.ShowDialog();
+
         if (result == true && payCoinWindow.ResultItem != null)
         {
             _viewModel.DocumentItems.Add(payCoinWindow.ResultItem);
         }
     }
+
 
     private async void ClickSaveDocument(object sender, RoutedEventArgs e)
     {

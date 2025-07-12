@@ -42,7 +42,6 @@ public partial class PayCoin : Window
             _isFirstActivation = false;
             return; // بار اول هنگام Load انجام شده است
         }
-
         await ReloadListsAsync();
     }
     private async Task ReloadListsAsync()
@@ -89,6 +88,13 @@ public partial class PayCoin : Window
         if (_viewModel.CoinCategoryId == 0)
         {
             _viewModel.CoinCategoryId = 1;
+        }
+    }
+    private void BoxSelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.BoxId == 0)
+        {
+            _viewModel.BoxId = 1;
         }
     }
 }

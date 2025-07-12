@@ -24,6 +24,8 @@ public partial class PayCoin : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        CoinCategoryComboBox.ServiceProvider = _serviceProvider;
+        BoxComboBox.ServiceProvider = _serviceProvider;
     }
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {

@@ -11,11 +11,39 @@ public class CoinViewModel : ViewModelBase
     private readonly ICoinCategoryService _coinCategoryService;
     private readonly IBoxService _boxService;
     private readonly IAuthorizationService _authorizationService;
-    public long CoinCategoryId { get; set; }
-    public ObservableCollection<CoinCategoryDto> CoinCategories { get; }
-    public long BoxId { get; set; }
-    public ObservableCollection<BoxDto> Boxes { get; }
+    
+    private long _coinCategoryId;
+    private long _boxId;
     private string _name;
+    private int _count;
+    private int _ayar;
+    private double _weight;
+    private double _weight750;
+    private long _ojratR;
+    private int _ojratP;
+    private string _description;
+    
+    public long CoinCategoryId
+    {
+        get => _coinCategoryId;
+        set
+        {
+            if (_coinCategoryId != value)
+            {
+                _coinCategoryId = value;
+                OnPropertyChanged(nameof(CoinCategoryId));
+                Name = "پرداخت سکه - " + _coinCategoryService.GetByIdAsync(CoinCategoryId);
+                ValidateAll();
+            }
+        }
+    }
+    public ObservableCollection<CoinCategoryDto> CoinCategories { get; }
+    public long BoxId
+    {
+        get => _boxId;
+        set => SetProperty(ref _boxId, value);
+    }
+    public ObservableCollection<BoxDto> Boxes { get; }
     public string Name
     {
         get => _name;
@@ -29,13 +57,41 @@ public class CoinViewModel : ViewModelBase
             }
         }
     }
-    public int Ayar { get; set; }
-    public double Weight { get; set; }
-    public double? Weight750 { get; set; }
-    public long? OjratR { get; set; }
-    public double? OjratP { get; set; }
-    
-    public string Description { get; set; }
+    public int Count
+    {
+        get => _count;
+        set => SetProperty(ref _count, value);
+    }
+    public int Ayar
+    {
+        get => _ayar;
+        set => SetProperty(ref _ayar, value);
+    }
+    public double Weight
+    {
+        get => _weight;
+        set => SetProperty(ref _weight, value);
+    }
+    public double Weight750
+    {
+        get => _weight750;
+        set => SetProperty(ref _weight750, value);
+    }
+    public long OjratR
+    {
+        get => _ojratR;
+        set => SetProperty(ref _ojratR, value);
+    }
+    public int OjratP
+    {
+        get => _ojratP;
+        set => SetProperty(ref _ojratP, value);
+    }
+    public string Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
+    }
     
     public bool CanAccessCoinCategoryButton => _authorizationService.HasPermission("CoinCategory.View") ||
                                              _authorizationService.HasPermission("CoinCategory.Create") ||

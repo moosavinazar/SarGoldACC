@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:helpers="clr-namespace:SarGoldACC.WpfApp.Helpers"
         mc:Ignorable="d"
         Title="کاربر" 
@@ -39,80 +40,71 @@
             
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                
-                <TextBlock Text="نام"
-                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="NameBox" 
-                         Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         KeyDown="NameBox_KeyDown"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Name}"/>
-                <TextBlock Text="موبایل"
-                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="5,0,5,0"/>
-                <TextBox x:Name="PhoneNumberBox" 
-                         Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         KeyDown="PhoneNumberBox_KeyDown"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding PhoneNumber}"/>
-                <TextBlock Text="شعبه"
-                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="5,10,5,0"/>
-                <ComboBox x:Name="BranchComboBox" Grid.Column="5"
-                          Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                          ItemsSource="{Binding Branches}"
-                          DisplayMemberPath="Name"
-                          SelectedValuePath="Id"
-                          SelectedValue="{Binding SelectedBranchId, Mode=TwoWay}"
-                          Margin="0,0,0,0">
-                </ComboBox>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessUserCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="NameBox" 
+                    Grid.Column="0"
+                    Label="نام"
+                    ValidText="{Binding Name, Mode=TwoWay}"
+                    ValidTextPattern="^.+$"
+                    ValidTextFinalPattern="^.+$"
+                    NotValidTextMessage="نام الزامی است"
+                    AllowNullText="False"
+                    InputLanguage="Persian"/>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessUserCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="PhoneNumberBox" 
+                    Grid.Column="1"
+                    Label="موبایل"
+                    TextLength="11"
+                    ValidText="{Binding PhoneNumber, Mode=TwoWay}"
+                    ValidTextPattern="^[0-9]+$"
+                    ValidTextFinalPattern="^09\d{9}$"
+                    NotValidTextMessage="شماره موبایل باید با 09 شروع شود و 11 رقم باشد"
+                    AllowNullText="False"
+                    InputLanguage="English"/>
+                <controls:ComboBoxSelector 
+                    x:Name="BranchSelectorControl" 
+                    Grid.Column="2"
+                    Visibility="{Binding CanAccessUserCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    LostFocus="BranchSelectorControl_LostFocus"
+                    Label="شعبه"
+                    ItemsSource="{Binding Branches}"
+                    SelectedValue="{Binding SelectedBranchId, Mode=TwoWay}"
+                    DisplayMemberPath="Name"
+                    SelectedValuePath="Id"
+                    CanAccessAddButton="{Binding CanAccessBranchButton}"
+                    AddWindowType="{x:Type views:Branch}"/>
             </Grid>
             
             <Grid Grid.Row="1" x:Name="UserPass">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-
-                <TextBlock Text="نام کاربری"
-                           Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,10,5,0"/>
-                <TextBox x:Name="UserNameBox" 
-                         Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         KeyDown="UserNameBox_KeyDown"
-                         Margin="0 10 10 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding UserName}"/>
-
-                <TextBlock Grid.Column="2"
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessUserCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="UserNameBox" 
+                    Grid.Column="0"
+                    Label="نام کاربری"
+                    ValidText="{Binding UserName, Mode=TwoWay}"
+                    ValidTextPattern="^.+$"
+                    ValidTextFinalPattern="^.+$"
+                    NotValidTextMessage="نام کاربری الزامی است"
+                    AllowNullText="False"
+                    InputLanguage="Persian"/>
+                <TextBlock Grid.Column="1"
                            Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                            Text="رمز عبور"
                            FontWeight="Bold"
@@ -120,14 +112,13 @@
                            Margin="10,10,5,0"/>
                 <PasswordBox x:Name="PasswordBox" 
                              Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="3"
-                             KeyDown="PasswordBox_KeyDown"
+                             Grid.Column="2"
                              Margin="0 10 0 0"
                              Style="{StaticResource InputPasswordBox}"
                              helpers:PasswordBoxHelper.BoundPassword="{Binding Password, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                              helpers:PasswordBoxHelper.BindPassword="True"/>
                 
-                <TextBlock Grid.Column="4"
+                <TextBlock Grid.Column="3"
                            Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
                            Text="تکرار رمز عبور"
                            FontWeight="Bold"
@@ -135,8 +126,7 @@
                            Margin="10,10,5,0"/>
                 <PasswordBox x:Name="ConfirmPasswordBox" 
                              Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                             Grid.Column="5"
-                             KeyDown="PasswordConfirmBox_KeyDown"
+                             Grid.Column="4"
                              Margin="0 10 0 0"
                              Style="{StaticResource InputPasswordBox}"
                              helpers:PasswordBoxHelper.BoundPassword="{Binding ConfirmPassword, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
@@ -187,10 +177,19 @@
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center" 
                     Visibility="{Binding CanAccessGroupCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
             <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanSave}"
                     Content="ذخیره"
+                    ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
-                    Click="ClickSaveGroup"
+                    Click="ClickSaveUser"
+                    Padding="10,5"/>
+            <Button x:Name="ClearButton"
+                    Content="جدید"
+                    ToolTip="F5"
+                    Style="{StaticResource PrimaryBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickClearForm"
                     Padding="10,5"/>
         </StackPanel>
         

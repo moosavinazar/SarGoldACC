@@ -1,4 +1,6 @@
 ﻿using System.Collections.ObjectModel;
+using System.Collections.Specialized;
+using System.Text.RegularExpressions;
 using System.Windows.Input;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Auth.Group;
@@ -24,11 +26,19 @@ public class UserViewModel : ViewModelBase
     private string _phoneNumber;
     private long _branchId;
     private long? _editingUserId = null;
-    
+
     public string UserName
     {
         get => _userName;
-        set => SetProperty(ref _userName, value);
+        set
+        {
+            if (_userName != value)
+            {
+                _userName = value;
+                OnPropertyChanged(nameof(UserName));
+                ValidateAll();
+            }
+        }
     }
     
     public string Password
@@ -52,13 +62,29 @@ public class UserViewModel : ViewModelBase
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
     
     public string PhoneNumber
     {
         get => _phoneNumber;
-        set => SetProperty(ref _phoneNumber, value);
+        set
+        {
+            if (_phoneNumber != value)
+            {
+                _phoneNumber = value;
+                OnPropertyChanged(nameof(PhoneNumber));
+                ValidateAll();
+            }
+        }
     }
     
     public long BranchId
@@ -68,7 +94,29 @@ public class UserViewModel : ViewModelBase
     }
     
     public ObservableCollection<GroupDto> AllGroups { get; }
-    public ObservableCollection<GroupDto> SelectedGroups { get; }
+    private ObservableCollection<GroupDto> _selectedGroups;
+    public ObservableCollection<GroupDto> SelectedGroups
+    {
+        get => _selectedGroups;
+        set
+        {
+            if (_selectedGroups != null)
+                _selectedGroups.CollectionChanged -= SelectedGroups_CollectionChanged;
+
+            _selectedGroups = value;
+
+            if (_selectedGroups != null)
+                _selectedGroups.CollectionChanged += SelectedGroups_CollectionChanged;
+
+            OnPropertyChanged(nameof(_selectedGroups));
+            ValidateAll();
+        }
+    }
+
+    private void SelectedGroups_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+    {
+        ValidateAll();
+    }
     public ObservableCollection<BranchDto> Branches { get; }
     
     private ObservableCollection<UserDto> _allUsers = new();
@@ -87,7 +135,21 @@ public class UserViewModel : ViewModelBase
     
     public bool CanAccessUserCreateOrEdit => _authorizationService.HasPermission("User.Create") ||
                                               _authorizationService.HasPermission("User.Edit");
-
+    public bool CanAccessBranchButton => _authorizationService.HasPermission("Branch.Create") ||
+                                         _authorizationService.HasPermission("Branch.Edit");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public UserViewModel(IGroupService groupService, IBranchService branchService,
         IAuthorizationService authorizationService, IUserService userService)
     {
@@ -265,5 +327,48 @@ public class UserViewModel : ViewModelBase
     public async Task DeleteAsync(long userId)
     {
         await _userService.DeleteAsync(userId);
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(UserName))
+            {
+                if (string.IsNullOrWhiteSpace(UserName) || !Regex.IsMatch(UserName, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(PhoneNumber))
+            {
+                if (string.IsNullOrWhiteSpace(PhoneNumber) || !Regex.IsMatch(PhoneNumber, @"^09\d{9}$"))
+                    return true;
+            }
+            if (columnName == nameof(SelectedGroups))
+            {
+                if (SelectedGroups == null || SelectedGroups.Count == 0)
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(UserName),
+        nameof(PhoneNumber),
+        nameof(SelectedGroups)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingUserId = null;
     }
 }

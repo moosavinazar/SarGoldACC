@@ -17,8 +17,9 @@ public partial class User : Window
     private readonly UserViewModel _viewModel;
     private readonly IAuthorizationService _authorizationService;
     private Point _dragStartPoint;
+    private readonly IServiceProvider _serviceProvider;
     
-    public User(UserViewModel viewModel, IAuthorizationService authorizationService)
+    public User(UserViewModel viewModel, IAuthorizationService authorizationService, IServiceProvider serviceProvider)
     {
         InitializeComponent();
         _viewModel = viewModel;
@@ -39,53 +40,15 @@ public partial class User : Window
         {
             this.Close();
         }
-    }
-    
-    private void UserNameBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
+        else if (e.Key == Key.Enter && Keyboard.Modifiers.HasFlag(ModifierKeys.Shift) && SaveButton.IsEnabled)
         {
-            PasswordBox.Focus();
-            e.Handled = true;
+            Save();
+        }
+        else if (e.Key == Key.F5)
+        {
+            ClearForm();
         }
     }
-    
-    private void PasswordBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            ConfirmPasswordBox.Focus();
-            e.Handled = true;
-        }
-    }
-    
-    private void PasswordConfirmBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            NameBox.Focus();
-            e.Handled = true;
-        }
-    }
-    
-    private void NameBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            PhoneNumberBox.Focus();
-            e.Handled = true;
-        }
-    }
-    
-    private void PhoneNumberBox_KeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Enter)
-        {
-            AllGroupsListBox.Focus();
-            e.Handled = true;
-        }
-    }
-
     private void AllGroupsListBox_KeyDown(object sender, KeyEventArgs e)
     {
         if (e.Key == Key.Left)
@@ -191,26 +154,17 @@ public partial class User : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        BranchSelectorControl.ServiceProvider = _serviceProvider;
     }
     
-    private async void ClickSaveGroup(object sender, RoutedEventArgs e)
+    private async void ClickSaveUser(object sender, RoutedEventArgs e)
     {
         if (PasswordBox.Password != ConfirmPasswordBox.Password)
         {
             MessageBoxHelper.ShowError("رمز عبور با تکرار آن مطابقت ندارد");
             return;
         }
-        await _viewModel.SaveUser();
-        UserNameBox.Text = "";
-        PasswordBox.Password = "";
-        ConfirmPasswordBox.Password = "";
-        NameBox.Text = "";
-        PhoneNumberBox.Text = "";
-        _viewModel.SelectedBranchId = _authorizationService.GetCurrentUser().BranchId;
-        
-        _viewModel.SelectedGroups.Clear();
-        _viewModel.AllGroups.Clear();
-        await _viewModel.LoadGroupsAsync();
+        Save();
     }
 
     private void UserDataGrid_Loaded(object sender, RoutedEventArgs e)
@@ -242,5 +196,36 @@ public partial class User : Window
             new DataGridTextColumn { Header = "شماره تماس", Binding = new Binding("PhoneNumber"), Width = new DataGridLength(7, DataGridLengthUnitType.Star) },
             new DataGridTextColumn { Header = "شعبه", Binding = new Binding("BranchName"), Width = new DataGridLength(3, DataGridLengthUnitType.Star) }
         );
+    }
+    private void BranchSelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.BranchId == 0)
+        {
+            _viewModel.BranchId = 1;
+        }
+    }
+    private void ClickClearForm(object sender, RoutedEventArgs e)
+    {
+        ClearForm();
+    }
+
+    private async void ClearForm()
+    {
+        _viewModel.UserName = "";
+        PasswordBox.Password = "";
+        ConfirmPasswordBox.Password = "";
+        _viewModel.Name = "";
+        _viewModel.PhoneNumber = "";
+        _viewModel.SelectedBranchId = _authorizationService.GetCurrentUser().BranchId;
+        _viewModel.SelectedGroups.Clear();
+        _viewModel.AllGroups.Clear();
+        await _viewModel.LoadGroupsAsync();
+        _viewModel.Clear();
+    }
+    private async void Save()
+    {
+        if (!_viewModel.CanSave) return;
+        await _viewModel.SaveUser();
+        ClearForm();
     }
 }

@@ -6,6 +6,7 @@
         xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
         Title="پوز بانک" 
         Height="600" 
@@ -37,110 +38,102 @@
             </Grid.RowDefinitions>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="نام پوز"
-                           Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="NameBox" 
-                         Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Name}"/>
-                <TextBlock Text="کد پوز"
-                           Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,0,5,0"/>
-                <TextBox x:Name="CodeBox" 
-                         Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         Margin="0 0 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Code}"/>
-                <TextBlock Text="بانک"
-                           Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="4"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="5,10,5,0"/>
-                <ComboBox x:Name="BankComboBox" Grid.Column="5"
-                          Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                          ItemsSource="{Binding Banks}"
-                          DisplayMemberPath="Name"
-                          SelectedValuePath="Id"
-                          SelectedValue="{Binding BankId, Mode=TwoWay}"
-                          Margin="0,0,0,0">
-                </ComboBox>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessPosCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="NameBox" 
+                    Grid.Column="0"
+                    Label="نام پوز"
+                    ValidText="{Binding Name, Mode=TwoWay}"
+                    ValidTextPattern="^.+$"
+                    ValidTextFinalPattern="^.+$"
+                    NotValidTextMessage="نام پوز الزامی است"
+                    AllowNullText="False"
+                    InputLanguage="Persian"/>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessPosCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="CodeBox" 
+                    Grid.Column="1"
+                    Label="کد پوز"
+                    ValidText="{Binding Code, Mode=TwoWay}"
+                    ValidTextPattern="^.+$"
+                    ValidTextFinalPattern="^.+$"
+                    NotValidTextMessage="کد پوز الزامی است"
+                    AllowNullText="False"
+                    InputLanguage="English"/>
+                <controls:ComboBoxSelector 
+                    x:Name="BankComboBox" 
+                    Grid.Column="2"
+                    Visibility="{Binding CanAccessPosCreateOrEdit, 
+                    Converter={StaticResource BoolToVisibilityConverter}}"
+                    LostFocus="BankSelectorControl_LostFocus"
+                    Label="بانک"
+                    ItemsSource="{Binding Banks}"
+                    SelectedValue="{Binding BankId, Mode=TwoWay}"
+                    DisplayMemberPath="Name"
+                    SelectedValuePath="Id"
+                    CanAccessAddButton="{Binding CanAccessBankButton}"
+                    AddWindowType="{x:Type views:Bank}"/>
             </Grid>
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="بدهکاری ریال"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalBed" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalBed}"/>
-                <TextBlock Text="بستانکاری ریال"
-                           Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="2"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="RiyalBes" 
-                         Visibility="{Binding CanAccessCustomerCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="3"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding RiyalBes}"/>
+                <controls:TextBoxRiyal
+                    Visibility="{Binding CanAccessPosCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="RiyalBed" 
+                    Grid.Column="0"
+                    Label="بدهکاری ریال"
+                    ValidText="{Binding RiyalBed, Mode=TwoWay}"/>
+                <controls:TextBoxRiyal
+                    Visibility="{Binding CanAccessPosCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="RiyalBes" 
+                    Grid.Column="1"
+                    Label="بستانکاری ریال"
+                    ValidText="{Binding RiyalBes, Mode=TwoWay}"/>
             </Grid>
             <Grid Grid.Row="2">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="توضیحات"
-                           Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                           Grid.Column="0"
-                           FontWeight="Bold"
-                           VerticalAlignment="Center"
-                           Margin="0,5,5,0"/>
-                <TextBox x:Name="Description" 
-                         Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}"
-                         Grid.Column="1"
-                         Margin="0 5 0 0"
-                         Style="{StaticResource InputTextBox}"
-                         Text="{Binding Description}"/>
+                <controls:TextBoxValidate 
+                    Visibility="{Binding CanAccessBankCreateOrEdit, 
+                        Converter={StaticResource BoolToVisibilityConverter}}"
+                    x:Name="Description" 
+                    Grid.Column="0"
+                    Label="توضیحات"
+                    ValidText="{Binding Description, Mode=TwoWay}"
+                    ValidTextPattern="^*$"
+                    ValidTextFinalPattern="^*$"
+                    NotValidTextMessage="توضیحات اختیاری است"
+                    AllowNullText="True"
+                    InputLanguage="Persian"/>
             </Grid>
         </Grid>
         <StackPanel Grid.Row="1" Orientation="Horizontal" HorizontalAlignment="Center" 
                     Visibility="{Binding CanAccessPosCreateOrEdit, Converter={StaticResource BoolToVisibilityConverter}}">
             <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanSave}"
                     Content="ذخیره"
+                    ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
                     Click="ClickSavePos"
+                    Padding="10,5"/>
+            <Button x:Name="ClearButton"
+                    Content="جدید"
+                    ToolTip="F5"
+                    Style="{StaticResource PrimaryBtn}"
+                    HorizontalAlignment="Center"
+                    Click="ClickClearForm"
                     Padding="10,5"/>
         </StackPanel>
         <controls:CustomizableDataGrid Grid.Row="2" x:Name="PosDataGrid"

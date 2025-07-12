@@ -1,4 +1,5 @@
 ﻿using System.Collections.ObjectModel;
+using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Bank;
 using SarGoldACC.Core.DTOs.Pos;
@@ -33,6 +34,21 @@ public class PosViewModel : ViewModelBase
     public bool CanAccessPosCreateOrEdit => _authorizationService.HasPermission("Pos.Create") ||
                                                  _authorizationService.HasPermission("Pos.Edit");
     
+    public bool CanAccessBankButton => _authorizationService.HasPermission("Bank.Create") ||
+                                       _authorizationService.HasPermission("Bank.Edit");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public PosViewModel(
         IAuthorizationService authorizationService, 
         IPosService posService,
@@ -53,13 +69,28 @@ public class PosViewModel : ViewModelBase
     public string Name
     {
         get => _name;
-        set => SetProperty(ref _name, value);
+        set
+        {
+            if (_name != value)
+            {
+                _name = value;
+                OnPropertyChanged(nameof(Name));
+                ValidateAll();
+            }
+        }
     }
-    
     public string Code
     {
         get => _code;
-        set => SetProperty(ref _code, value);
+        set
+        {
+            if (_code != value)
+            {
+                _code = value;
+                OnPropertyChanged(nameof(Code));
+                ValidateAll();
+            }
+        }
     }
     
     public double WeightBed
@@ -191,5 +222,36 @@ public class PosViewModel : ViewModelBase
         {
             Banks.Add(b);
         }
+    }
+    public bool this[string columnName]
+    {
+        get
+        {
+            if (columnName == nameof(Name))
+            {
+                if (string.IsNullOrWhiteSpace(Name) || !Regex.IsMatch(Name, @"^.+$"))
+                    return true;
+            }
+            if (columnName == nameof(Code))
+            {
+                if (string.IsNullOrWhiteSpace(Code) || !Regex.IsMatch(Code, @"^.+$"))
+                    return true;
+            }
+            return false;
+        }
+    }
+    private readonly string[] _validatedProperties = new[]
+    {
+        nameof(Name),
+        nameof(Code)
+    };
+    private void ValidateAll()
+    {
+        bool hasError = _validatedProperties.Any(p => this[p]);
+        CanSave = !hasError;
+    }
+    public void Clear()
+    {
+        _editingPosId = null;
     }
 }

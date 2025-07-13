@@ -72,7 +72,7 @@
                     Converter={StaticResource BoolToVisibilityConverter}}"
                     LostFocus="CurrencySelectorControl_LostFocus"
                     Label="واحد پول"
-                    ItemsSource="{Binding Currencies}"
+                    ItemsSource="{Binding Currencies, Mode=TwoWay}"
                     SelectedValue="{Binding CurrencyId, Mode=TwoWay}"
                     DisplayMemberPath="Label"
                     SelectedValuePath="Id"

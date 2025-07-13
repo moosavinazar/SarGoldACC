@@ -76,7 +76,7 @@
                         Converter={StaticResource BoolToVisibilityConverter}}"
                     LostFocus="BranchSelectorControl_LostFocus"
                     Label="شعبه"
-                    ItemsSource="{Binding Branches}"
+                    ItemsSource="{Binding Branches, Mode=TwoWay}"
                     SelectedValue="{Binding SelectedBranchId, Mode=TwoWay}"
                     DisplayMemberPath="Name"
                     SelectedValuePath="Id"

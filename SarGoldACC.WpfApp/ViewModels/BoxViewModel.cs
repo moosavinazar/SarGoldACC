@@ -66,31 +66,6 @@ public class BoxViewModel : ViewModelBase
         {
             _allBranches = value;
             OnPropertyChanged();
-            FilterBranches();
-        }
-    }
-    private ObservableCollection<BranchDto> _filteredBranches;
-    public ObservableCollection<BranchDto> FilteredBranches
-    {
-        get => _filteredBranches;
-        set
-        {
-            _filteredBranches = value;
-            OnPropertyChanged();
-        }
-    }
-    private string _searchText;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (_searchText != value)
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                FilterBranches();
-            }
         }
     }
     private ObservableCollection<BoxDto> _allBoxes = new();
@@ -219,22 +194,6 @@ public class BoxViewModel : ViewModelBase
         Name = box.Name;
         Weight = box.Weight;
         Type = box.Type;
-    }
-    private void FilterBranches()
-    {
-        if (string.IsNullOrWhiteSpace(SearchText))
-        {
-            BranchId = 0;
-            FilteredBranches = new ObservableCollection<BranchDto>(Branches);
-        }
-        else
-        {
-            var filtered = Branches
-                .Where(c => c.Name != null && c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            FilteredBranches = new ObservableCollection<BranchDto>(filtered);
-        }
     }
     public bool this[string columnName]
     {

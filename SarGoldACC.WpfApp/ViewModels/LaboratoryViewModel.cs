@@ -42,7 +42,12 @@ public class LaboratoryViewModel : ViewModelBase
         }
     }
     private ObservableCollection<LaboratoryDto> _allLaboratories = new();
-    public ObservableCollection<CityDto> Cities { get; }
+    private ObservableCollection<CityDto> _cities;
+    public ObservableCollection<CityDto> Cities
+    {
+        get => _cities;
+        set => SetProperty(ref _cities, value);
+    }
     public bool CanAccessLaboratoryView => _authorizationService.HasPermission("Laboratory.View");
     public bool CanAccessLaboratoryCreate => _authorizationService.HasPermission("Laboratory.Create");
     public bool CanAccessLaboratoryEdit => _authorizationService.HasPermission("Laboratory.Edit");

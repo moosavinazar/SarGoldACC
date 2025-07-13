@@ -117,7 +117,13 @@ public class UserViewModel : ViewModelBase
     {
         ValidateAll();
     }
-    public ObservableCollection<BranchDto> Branches { get; }
+
+    private ObservableCollection<BranchDto> _branches;
+    public ObservableCollection<BranchDto> Branches
+    {
+        get => _branches;
+        set => SetProperty(ref _branches, value);
+    }
     
     private ObservableCollection<UserDto> _allUsers = new();
     public ObservableCollection<UserDto> AllUsers

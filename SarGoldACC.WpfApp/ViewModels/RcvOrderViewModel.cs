@@ -21,37 +21,6 @@ public class RcvOrderViewModel : ViewModelBase
         {
             _counterparties = value;
             OnPropertyChanged();
-            FilterCounterparties();
-        }
-    }
-    private string _searchText;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (_searchText != value)
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                FilterCounterparties();
-            }
-        }
-    }
-    private void FilterCounterparties()
-    {
-        if (string.IsNullOrWhiteSpace(SearchText))
-        {
-            CounterpartyId = 0;
-            FilteredCounterparties = new ObservableCollection<CounterpartyDto>(Counterparties);
-        }
-        else
-        {
-            var filtered = Counterparties
-                .Where(c => c.Name != null && c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            FilteredCounterparties = new ObservableCollection<CounterpartyDto>(filtered);
         }
     }
     private string _userImagePath = "pack://application:,,,/Resources/Icons/UserLarge.png";
@@ -62,16 +31,6 @@ public class RcvOrderViewModel : ViewModelBase
         {
             _userImagePath = value;
             OnPropertyChanged(nameof(UserImagePath));
-        }
-    }
-    private ObservableCollection<CounterpartyDto> _filteredCounterparties;
-    public ObservableCollection<CounterpartyDto> FilteredCounterparties
-    {
-        get => _filteredCounterparties;
-        set
-        {
-            _filteredCounterparties = value;
-            OnPropertyChanged();
         }
     }
     public bool IsCounterpartySelected => CounterpartyId != 0;
@@ -110,7 +69,6 @@ public class RcvOrderViewModel : ViewModelBase
     public async Task ReloadAllAsync()
     {
         await LoadCounterpartiesAsync();
-        FilterCounterparties();
     }
     private async Task LoadCounterpartiesAsync()
     {

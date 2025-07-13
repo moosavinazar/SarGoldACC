@@ -24,7 +24,12 @@ public class PosViewModel : ViewModelBase
     private long _riyalBes;
     private long _bankId;
     private ObservableCollection<PosDto> _allPoses = new();
-    public ObservableCollection<BankDto> Banks { get; }
+    private ObservableCollection<BankDto> _banks;
+    public ObservableCollection<BankDto> Banks
+    {
+        get => _banks;
+        set => SetProperty(ref _banks, value);
+    }
     
     public bool CanAccessPosView => _authorizationService.HasPermission("Pos.View");
     public bool CanAccessPosCreate => _authorizationService.HasPermission("Pos.Create");

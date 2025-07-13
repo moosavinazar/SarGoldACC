@@ -29,7 +29,12 @@ public class BankViewModel : ViewModelBase
     private long _branchId;
     private long _currencyId;
     private ObservableCollection<BankDto> _allBanks = new();
-    public ObservableCollection<CurrencyDto> Currencies { get; }
+    private ObservableCollection<CurrencyDto> _currencies;
+    public ObservableCollection<CurrencyDto> Currencies
+    {
+        get => _currencies;
+        set => SetProperty(ref _currencies, value);
+    }
     public bool CanAccessBankView => _authorizationService.HasPermission("Bank.View");
     public bool CanAccessBankCreate => _authorizationService.HasPermission("Bank.Create");
     public bool CanAccessBankEdit => _authorizationService.HasPermission("Bank.Edit");

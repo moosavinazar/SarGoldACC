@@ -48,7 +48,7 @@
             <controls:ComboBoxSelector 
                 x:Name="CounterpartySelectorControl" 
                 Grid.Column="1"
-                ItemsSource="{Binding Counterparties}"
+                ItemsSource="{Binding Counterparties, Mode=TwoWay}"
                 SelectedValue="{Binding CounterpartyId, Mode=TwoWay}"
                 DisplayMemberPath="Name"
                 SelectedValuePath="Id"

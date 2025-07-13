@@ -25,7 +25,12 @@ public class CashViewModel : ViewModelBase
     private long _branchId;
     private long _currencyId;
     private ObservableCollection<CashDto> _allCash = new();
-    public ObservableCollection<CurrencyDto> Currencies { get; }
+    private ObservableCollection<CurrencyDto> _currencies;
+    public ObservableCollection<CurrencyDto> Currencies
+    {
+        get => _currencies;
+        set => SetProperty(ref _currencies, value);
+    }
     public bool CanAccessCashView => _authorizationService.HasPermission("Cash.View");
     public bool CanAccessCashCreate => _authorizationService.HasPermission("Cash.Create");
     public bool CanAccessCashEdit => _authorizationService.HasPermission("Cash.Edit");

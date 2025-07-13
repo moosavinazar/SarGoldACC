@@ -67,7 +67,7 @@
                         Converter={StaticResource BoolToVisibilityConverter}}"
                         LostFocus="CitySelectorControl_LostFocus"
                         Label="شهر"
-                        ItemsSource="{Binding Cities}"
+                        ItemsSource="{Binding Cities, Mode=TwoWay}"
                         SelectedValue="{Binding CityId, Mode=TwoWay}"
                         DisplayMemberPath="Name"
                         SelectedValuePath="Id"

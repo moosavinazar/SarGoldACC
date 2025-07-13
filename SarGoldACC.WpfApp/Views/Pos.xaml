@@ -73,7 +73,7 @@
                     Converter={StaticResource BoolToVisibilityConverter}}"
                     LostFocus="BankSelectorControl_LostFocus"
                     Label="بانک"
-                    ItemsSource="{Binding Banks}"
+                    ItemsSource="{Binding Banks, Mode=TwoWay}"
                     SelectedValue="{Binding BankId, Mode=TwoWay}"
                     DisplayMemberPath="Name"
                     SelectedValuePath="Id"

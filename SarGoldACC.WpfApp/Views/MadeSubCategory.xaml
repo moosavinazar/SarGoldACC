@@ -53,7 +53,7 @@
                         Converter={StaticResource BoolToVisibilityConverter}}"
                 LostFocus="MadeSubCategorySelectorControl_LostFocus"
                 Label="دسته بندی اصلی"
-                ItemsSource="{Binding MadeCategories}"
+                ItemsSource="{Binding MadeCategories, Mode=TwoWay}"
                 SelectedValue="{Binding MadeCategoryId, Mode=TwoWay}"
                 DisplayMemberPath="Name"
                 SelectedValuePath="Id"

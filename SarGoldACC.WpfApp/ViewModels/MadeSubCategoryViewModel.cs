@@ -37,7 +37,12 @@ public class MadeSubCategoryViewModel : ViewModelBase
     }
     
     public long MadeCategoryId { get; set; }
-    public ObservableCollection<MadeCategoryDto> MadeCategories { get; }
+    private ObservableCollection<MadeCategoryDto> _madeCategories;
+    public ObservableCollection<MadeCategoryDto> MadeCategories
+    {
+        get => _madeCategories;
+        set => SetProperty(ref _madeCategories, value);
+    }
     
     public bool CanAccessMadeSubCategoryView => _authorizationService.HasPermission("MadeSubCategory.View");
     public bool CanAccessMadeSubCategoryCreate => _authorizationService.HasPermission("MadeSubCategory.Create");

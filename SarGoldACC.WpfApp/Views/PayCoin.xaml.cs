@@ -68,15 +68,18 @@ public partial class PayCoin : Window
         ResultItem = new DocumentItemDto
         {
             WeightBed = (DataContext as CoinViewModel).Weight,
+            Weight = (DataContext as CoinViewModel).Weight,
             Weight750 = (DataContext as CoinViewModel).Weight750,
             Ayar = (DataContext as CoinViewModel).Ayar,
+            Count = (DataContext as CoinViewModel).Count,
             Name = (DataContext as CoinViewModel).Name,
             OjratR = (DataContext as CoinViewModel).OjratR,
             OjratP = (DataContext as CoinViewModel).OjratP,
             CoinCategoryId = (DataContext as CoinViewModel).CoinCategoryId,
             BoxId = (DataContext as CoinViewModel).BoxId,
             Description = (DataContext as CoinViewModel).Description,
-            Type = DocumentItemType.COIN
+            Type = DocumentItemType.COIN,
+            TypeTitle = "پرداخت سکه"
             // مقداردهی بقیه فیلدهای لازم
         };
 

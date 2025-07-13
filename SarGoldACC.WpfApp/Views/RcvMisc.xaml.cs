@@ -144,7 +144,7 @@ public partial class RcvMisc : Window
         if (_viewModel.Ayar == 0) _viewModel.Ayar = 750; // جلوگیری از تقسیم بر صفر
 
         _viewModel.Weight750 = (_viewModel.Weight * _viewModel.Ayar) / 750;
-        Weight750.Text = _viewModel.Weight750?.ToString("0.###");
+        Weight750.Text = _viewModel.Weight750.ToString("0.###");
     }
     private void Weight_PreviewTextInput(object sender, TextCompositionEventArgs e)
     {

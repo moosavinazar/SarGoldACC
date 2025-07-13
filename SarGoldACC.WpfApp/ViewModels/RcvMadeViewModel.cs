@@ -17,7 +17,7 @@ public class RcvMadeViewModel : ViewModelBase
     public string Name { get; set; }
     public int Ayar { get; set; }
     public double Weight { get; set; }
-    public double? Weight750 { get; set; }
+    public double Weight750 { get; set; }
     public string Barcode { get; set; }
     public string Photo { get; set; }
     public long? OjratR { get; set; }

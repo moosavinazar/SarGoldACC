@@ -289,25 +289,83 @@
                           IsReadOnly="True"
                           SelectionMode="Single"
                           IsEnabled="{Binding IsCounterpartySelected}"
+                          Width="660"
+                          HorizontalScrollBarVisibility="Auto"
+                          VerticalScrollBarVisibility="Auto"
                           Margin="0,10,0,0">
                     <DataGrid.Columns>
-                        <DataGridTextColumn Header="شناسه طرف حساب" Binding="{Binding CounterpartySideTwoId}"/>
-                        <DataGridTextColumn Header="نوع" Binding="{Binding Type}"/>
-                        <DataGridTextColumn Header="شرح" Binding="{Binding Description}"/>
-                        <DataGridTextColumn Header="وزن بدهکار" Binding="{Binding WeightBed}"/>
-                        <DataGridTextColumn Header="وزن بستانکار" Binding="{Binding WeightBes}"/>
-                        <DataGridTextColumn Header="وزن 750" Binding="{Binding Weight750}"/>
-                        <DataGridTextColumn Header="ریال بدهکار" Binding="{Binding RiyalBed}"/>
-                        <DataGridTextColumn Header="ریال بستانکار" Binding="{Binding RiyalBes}"/>
-                        <DataGridTextColumn Header="عیار" Binding="{Binding Ayar}"/>
-                        <DataGridTextColumn Header="شرطی" Binding="{Binding Certain}"/>
-                        <DataGridTextColumn Header="انگ" Binding="{Binding Ang}"/>
-                        <DataGridTextColumn Header="عنوان" Binding="{Binding Name}"/>
-                        <DataGridTextColumn Header="بارکد" Binding="{Binding Barcode}"/>
-                        <DataGridTextColumn Header="اجرت ریالی" Binding="{Binding OjratR}"/>
-                        <DataGridTextColumn Header="درصد اجرت" Binding="{Binding OjratP}"/>
-                        <DataGridTextColumn Header="شناسه کارگاه" Binding="{Binding LaboratoryId}"/>
-                        <DataGridTextColumn Header="شناسه جعبه" Binding="{Binding BoxId}"/>
+                        <DataGridTextColumn Header="نوع" 
+                                            Binding="{Binding Type}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="شرح" 
+                                            Binding="{Binding Name}"/>
+                        <DataGridTextColumn Header="نوع" 
+                                            Binding="{Binding TypeTitle}"/>
+                        <DataGridTextColumn Header="توضیحات" 
+                                            Binding="{Binding Description}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="تعداد" 
+                                            Binding="{Binding Count}"/>
+                        <DataGridTextColumn Header="وزن بدهکار" 
+                                            Binding="{Binding WeightBed}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="وزن بستانکار" Binding="{Binding WeightBes}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="وزن" 
+                                            Binding="{Binding Weight}"/>
+                        <DataGridTextColumn Header="وزن 750" 
+                                            Binding="{Binding Weight750}"/>
+                        <DataGridTextColumn Header="ریال بدهکار"
+                                            Binding="{Binding RiyalBed}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="ریال بستانکار" 
+                                            Binding="{Binding RiyalBes}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="ریال" 
+                                            Binding="{Binding Riyal}"/>
+                        <DataGridTextColumn Header="عیار" 
+                                            Binding="{Binding Ayar}"/>
+                        <DataGridTemplateColumn Header="شرطی">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock FontSize="16" HorizontalAlignment="Center">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="✗"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Certain}" Value="True">
+                                                        <Setter Property="Text" Value="✓"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                        <DataGridTextColumn Header="انگ" 
+                                            Binding="{Binding Ang}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="بارکد" 
+                                            Binding="{Binding Barcode}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="اجرت ریالی" 
+                                            Binding="{Binding OjratR}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="درصد اجرت" 
+                                            Binding="{Binding OjratP}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="شناسه کارگاه" 
+                                            Binding="{Binding LaboratoryId}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="شناسه جعبه" 
+                                            Binding="{Binding BoxId}"
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="شناسه طرف حساب" 
+                                            Binding="{Binding CounterpartySideTwoId}" 
+                                            Visibility="Hidden"/>
+                        <DataGridTextColumn Header="نام طرف حساب" 
+                                            Binding="{Binding CounterpartySideTwoName}"/>
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>

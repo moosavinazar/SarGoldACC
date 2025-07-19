@@ -23,7 +23,7 @@ public class CoinViewModel : ViewModelBase
     private int _ojratP;
     private string _description;
     
-    public long CoinCategoryId
+    public long PayCoinCategoryId
     {
         get => _coinCategoryId;
         set
@@ -31,23 +31,47 @@ public class CoinViewModel : ViewModelBase
             if (_coinCategoryId != value)
             {
                 _coinCategoryId = value;
-                OnPropertyChanged(nameof(CoinCategoryId));
-                _ = UpdateNameAsync(); // بدون await چون setter نمی‌تونه async باشه
+                OnPropertyChanged(nameof(PayCoinCategoryId));
+                _ = UpdatePayNameAsync(); // بدون await چون setter نمی‌تونه async باشه
                 ValidateAll();
             }
         }
     }
-    private async Task UpdateNameAsync()
+    public long RcvCoinCategoryId
     {
-        var category = await _coinCategoryService.GetByIdAsync(CoinCategoryId);
-        Name = "پرداخت سکه - " + category?.Name;
+        get => _coinCategoryId;
+        set
+        {
+            if (_coinCategoryId != value)
+            {
+                _coinCategoryId = value;
+                OnPropertyChanged(nameof(RcvCoinCategoryId));
+                _ = UpdateRcvNameAsync(); // بدون await چون setter نمی‌تونه async باشه
+                ValidateAll();
+            }
+        }
+    }
+    private async Task UpdateValueAsync()
+    {
+        var category = await _coinCategoryService.GetByIdAsync(PayCoinCategoryId);
         Ayar = category?.Ayar ?? 0;
         Weight = category?.Weight * Count ?? 0;
         Weight = Math.Round(Weight, 3);
         Weight750 = category?.Weight750 * Count ?? 0;
         Weight750 = Math.Round(Weight750, 3);
     }
-
+    private async Task UpdatePayNameAsync()
+    {
+        var category = await _coinCategoryService.GetByIdAsync(PayCoinCategoryId);
+        Name = "پرداخت سکه - " + category?.Name;
+        await UpdateValueAsync();
+    }
+    private async Task UpdateRcvNameAsync()
+    {
+        var category = await _coinCategoryService.GetByIdAsync(RcvCoinCategoryId);
+        Name = "دریافت سکه - " + category?.Name;
+        await UpdateValueAsync();
+    }
     private ObservableCollection<CoinCategoryDto> _coinCategories;
     public ObservableCollection<CoinCategoryDto> CoinCategories
     {
@@ -88,7 +112,7 @@ public class CoinViewModel : ViewModelBase
             {
                 _count = value;
                 OnPropertyChanged(nameof(Count));
-                _ = UpdateNameAsync();
+                _ = UpdateValueAsync();
                 ValidateAll();
             }
         }
@@ -154,21 +178,27 @@ public class CoinViewModel : ViewModelBase
         _authorizationService = authorizationService;
         CoinCategories = new ObservableCollection<CoinCategoryDto>();
         Boxes = new ObservableCollection<BoxDto>();
-        BoxId = 1;
-        CoinCategoryId = 1;
-        Count = 1;
     }
     public async Task InitializeAsync()
     {
         await LoadCoinCategoriesAsync();
         await LoadBoxesAsync();
     }
-    public async Task ReloadAllAsync()
+    public async Task ReloadAllRcvAsync()
     {
         await LoadCoinCategoriesAsync();
         await LoadBoxesAsync();
         BoxId = 1;
-        CoinCategoryId = 1;
+        Count = 1;
+        RcvCoinCategoryId = 1;
+    }
+    public async Task ReloadAllPayAsync()
+    {
+        await LoadCoinCategoriesAsync();
+        await LoadBoxesAsync();
+        BoxId = 1;
+        Count = 1;
+        PayCoinCategoryId = 1;
     }
     
     private async Task LoadCoinCategoriesAsync()

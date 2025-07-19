@@ -3,12 +3,13 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
+        xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         mc:Ignorable="d"
-        Title="پرداخت سکه" 
-        Height="420" 
-        Width="300"
+        Title="دریافت سکه" 
+        Height="290" 
+        Width="400"
         KeyDown="Window_KeyDown"
         Focusable="True"
         Loaded="Window_Loaded"
@@ -30,171 +31,134 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="عنوان"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="Name" 
-                     Grid.Column="1"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Name}"/>
+            <controls:ComboBoxSelector 
+                x:Name="CoinCategoryComboBox" 
+                Grid.Column="0"
+                LostFocus="CoinCategorySelectorControl_LostFocus"
+                Label="دسته بندی"
+                ItemsSource="{Binding CoinCategories, Mode=TwoWay}"
+                SelectedValue="{Binding RcvCoinCategoryId, Mode=TwoWay}"
+                DisplayMemberPath="Name"
+                SelectedValuePath="Id"
+                CanAccessAddButton="{Binding CanAccessCoinCategoryButton}"
+                AddWindowType="{x:Type views:CoinCategory}"/>
+            <controls:ComboBoxSelector 
+                x:Name="BoxComboBox" 
+                Grid.Column="1"
+                LostFocus="BoxSelectorControl_LostFocus"
+                Label="جعبه"
+                ItemsSource="{Binding Boxes, Mode=TwoWay}"
+                SelectedValue="{Binding BoxId, Mode=TwoWay}"
+                DisplayMemberPath="Name"
+                SelectedValuePath="Id"
+                CanAccessAddButton="{Binding CanAccessBoxButton}"
+                AddWindowType="{x:Type views:Box}"/>
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="عیار"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="Ayar" 
-                     Grid.Column="1"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Ayar}"/>
+            <controls:TextBoxValidate 
+                x:Name="Name" 
+                Grid.Column="0"
+                Label="عنوان"
+                ValidText="{Binding Name, Mode=TwoWay}"
+                ValidTextPattern="^.+$"
+                ValidTextFinalPattern="^.+$"
+                NotValidTextMessage="عنوان الزامی است"
+                AllowNullText="False"
+                InputLanguage="Persian"/>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="دسته بندی"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="5,10,5,0"/>
-            <ComboBox x:Name="CoinCategoryComboBox" Grid.Column="1"
-                      ItemsSource="{Binding CoinCategories}"
-                      DisplayMemberPath="Name"
-                      SelectedValuePath="Id"
-                      SelectedValue="{Binding CoinCategoryId, Mode=TwoWay}"
-                      Margin="0,5,0,0"/>
-            <Button Grid.Column="2" x:Name="AddLaboratoryButton"
-                    Visibility="{Binding CanAccessCoinCategoryButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                    Content="+"
-                    Style="{StaticResource SuccessBtn}"
-                    HorizontalAlignment="Center"
-                    Click="ClickAddCoinCategory"
-                    Padding="10,5"/>
+            <controls:TextBoxValidate 
+                x:Name="Count" 
+                Grid.Column="0"
+                Label="تعداد"
+                ValidText="{Binding Count, Mode=TwoWay}"
+                ValidTextPattern="^[0-9]+$"
+                ValidTextFinalPattern="^|(\d)$"
+                NotValidTextMessage="تعداد اختیاری است"
+                AllowNullText="True"
+                InputLanguage="English"/>
+            <controls:TextBoxValidate 
+                x:Name="Ayar" 
+                Grid.Column="1"
+                Label="عیار"
+                ValidText="{Binding Ayar, Mode=TwoWay}"
+                ValidTextPattern="^[0-9]+$"
+                ValidTextFinalPattern="^|(\d{3})$"
+                TextLength="3"
+                NotValidTextMessage="عیار الزامی است"
+                AllowNullText="True"
+                InputLanguage="English"/>
+            <controls:TextBoxWeight
+                x:Name="Weight" 
+                Grid.Column="2"
+                Ayar="{Binding Ayar, Mode=TwoWay}"
+                Weight750="{Binding Weight750, Mode=TwoWay}"
+                Label="وزن"
+                ValidText="{Binding Weight, Mode=TwoWay}"/>
+            <controls:TextBoxWeight
+                IsEnabled="False"
+                x:Name="Weight750" 
+                Grid.Column="3"
+                Label="750"
+                ValidText="{Binding Weight750, Mode=TwoWay}"/>
         </Grid>
         <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="وزن"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="Weight" 
-                     Grid.Column="1"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Weight}"/>
-            <TextBlock Text="750"
-                       Grid.Column="2"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="Weight750" 
-                     Grid.Column="3"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Weight750}"/>
+            <controls:TextBoxRiyal
+                x:Name="OjratR" 
+                Grid.Column="0"
+                Label="اجرت ریال"
+                ValidText="{Binding OjratR, Mode=TwoWay}"/>
+            <controls:TextBoxValidate 
+                x:Name="OjratP" 
+                Grid.Column="1"
+                Label="درصد اجرت"
+                ValidText="{Binding OjratP, Mode=TwoWay}"
+                ValidTextPattern="^[0-9]+$"
+                ValidTextFinalPattern="^|(\d{3})$"
+                TextLength="3"
+                NotValidTextMessage="درصد اجرت اختیاری است"
+                AllowNullText="True"
+                InputLanguage="English"/>
         </Grid>
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="اجرت ریالی"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="OjratR" 
-                     Grid.Column="1"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding OjratR}"/>
+            <controls:TextBoxValidate 
+                x:Name="Description" 
+                Grid.Column="0"
+                Label="توضیحات"
+                ValidText="{Binding Description, Mode=TwoWay}"
+                ValidTextPattern="^*$"
+                ValidTextFinalPattern="^*$"
+                NotValidTextMessage="توضیحات اختیاری است"
+                AllowNullText="True"
+                InputLanguage="Persian"/>
         </Grid>
-        <Grid Grid.Row="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="درصد اجرت"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="OjratP" 
-                     Grid.Column="1"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding OjratP}"/>
-        </Grid>
-        <Grid Grid.Row="6">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="جعبه"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="5,10,5,0"/>
-            <ComboBox x:Name="BoxComboBox" Grid.Column="1"
-                      Visibility="{Binding CanAccessBoxButton, Converter={StaticResource BoolToVisibilityConverter}}"
-                      ItemsSource="{Binding Boxes}"
-                      DisplayMemberPath="Name"
-                      SelectedValuePath="Id"
-                      SelectedValue="{Binding BoxId, Mode=TwoWay}"
-                      Margin="0,5,0,0"/>
-            <Button Grid.Column="2" x:Name="AddBoxButton"
-                    Content="+"
-                    Style="{StaticResource SuccessBtn}"
-                    HorizontalAlignment="Center"
-                    Click="ClickAddBox"
-                    Padding="10,5"/>
-        </Grid>
-        <Grid Grid.Row="7">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="توضیحات"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="Description" 
-                     Grid.Column="1"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Description}"/>
-        </Grid>
-        <StackPanel Grid.Row="8" Orientation="Horizontal" HorizontalAlignment="Center" >
+        <StackPanel Grid.Row="5" Orientation="Horizontal" HorizontalAlignment="Center" >
             <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanSave}"
                     Content="ذخیره"
+                    ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
                     Click="ClickSave"

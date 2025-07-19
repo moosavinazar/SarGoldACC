@@ -3,8 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
-        xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
@@ -20,9 +18,6 @@
         WindowStyle="SingleBorderWindow"
         WindowStartupLocation="CenterScreen"
         Background="Plum">
-    <Window.Resources>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-    </Window.Resources>
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -44,7 +39,7 @@
                 LostFocus="CoinCategorySelectorControl_LostFocus"
                 Label="دسته بندی"
                 ItemsSource="{Binding CoinCategories, Mode=TwoWay}"
-                SelectedValue="{Binding CoinCategoryId, Mode=TwoWay}"
+                SelectedValue="{Binding PayCoinCategoryId, Mode=TwoWay}"
                 DisplayMemberPath="Name"
                 SelectedValuePath="Id"
                 CanAccessAddButton="{Binding CanAccessCoinCategoryButton}"

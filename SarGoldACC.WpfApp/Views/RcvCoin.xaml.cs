@@ -24,6 +24,9 @@ public partial class RcvCoin : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        CoinCategoryComboBox.ServiceProvider = _serviceProvider;
+        BoxComboBox.ServiceProvider = _serviceProvider;
+        await ReloadListsAsync();
     }
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
@@ -40,46 +43,46 @@ public partial class RcvCoin : Window
             _isFirstActivation = false;
             return; // بار اول هنگام Load انجام شده است
         }
-
         await ReloadListsAsync();
     }
     private async Task ReloadListsAsync()
     {
-        await _viewModel.ReloadAllAsync();
+        await _viewModel.ReloadAllRcvAsync();
     }
-    
-    private async void ClickAddCoinCategory(object sender, RoutedEventArgs e)
-    {
-        var coinCategoryWindow = _serviceProvider.GetRequiredService<CoinCategory>();
-        coinCategoryWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        coinCategoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-    
-    private async void ClickAddBox(object sender, RoutedEventArgs e)
-    {
-        var boxWindow = _serviceProvider.GetRequiredService<Box>();
-        boxWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        boxWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-
     private void ClickSave(object sender, RoutedEventArgs e)
     {
         ResultItem = new DocumentItemDto
         {
             WeightBes = (DataContext as CoinViewModel).Weight,
+            Weight = (DataContext as CoinViewModel).Weight,
             Weight750 = (DataContext as CoinViewModel).Weight750,
             Ayar = (DataContext as CoinViewModel).Ayar,
+            Count = (DataContext as CoinViewModel).Count,
             Name = (DataContext as CoinViewModel).Name,
             OjratR = (DataContext as CoinViewModel).OjratR,
             OjratP = (DataContext as CoinViewModel).OjratP,
-            CoinCategoryId = (DataContext as CoinViewModel).CoinCategoryId,
+            CoinCategoryId = (DataContext as CoinViewModel).RcvCoinCategoryId,
             BoxId = (DataContext as CoinViewModel).BoxId,
             Description = (DataContext as CoinViewModel).Description,
-            Type = DocumentItemType.COIN
+            Type = DocumentItemType.COIN,
+            TypeTitle = "دریافت سکه"
             // مقداردهی بقیه فیلدهای لازم
         };
-
         this.DialogResult = true;
         this.Close();
+    }
+    private void CoinCategorySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.RcvCoinCategoryId == 0)
+        {
+            _viewModel.RcvCoinCategoryId = 1;
+        }
+    }
+    private void BoxSelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.BoxId == 0)
+        {
+            _viewModel.BoxId = 1;
+        }
     }
 }

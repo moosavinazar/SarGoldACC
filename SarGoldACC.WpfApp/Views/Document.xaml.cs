@@ -199,10 +199,15 @@ public partial class Document : Window
         }
     }
     
-    private void ClickRcvCoin(object sender, RoutedEventArgs e)
+    private async void ClickRcvCoin(object sender, RoutedEventArgs e)
     {
         var rcvCoinWindow = _serviceProvider.GetRequiredService<RcvCoin>();
         rcvCoinWindow.Owner = this;
+        
+        if (rcvCoinWindow.DataContext is CoinViewModel vm)
+        {
+            await vm.InitializeAsync(); // مقداردهی async قبل از نمایش پنجره
+        }
 
         bool? result = rcvCoinWindow.ShowDialog();
         if (result == true && rcvCoinWindow.ResultItem != null)

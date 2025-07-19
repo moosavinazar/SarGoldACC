@@ -26,6 +26,7 @@ public partial class PayCoin : Window
         Keyboard.Focus(this);
         CoinCategoryComboBox.ServiceProvider = _serviceProvider;
         BoxComboBox.ServiceProvider = _serviceProvider;
+        await ReloadListsAsync();
     }
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
@@ -46,23 +47,8 @@ public partial class PayCoin : Window
     }
     private async Task ReloadListsAsync()
     {
-        await _viewModel.ReloadAllAsync();
+        await _viewModel.ReloadAllPayAsync();
     }
-    
-    private async void ClickAddCoinCategory(object sender, RoutedEventArgs e)
-    {
-        var coinCategoryWindow = _serviceProvider.GetRequiredService<CoinCategory>();
-        coinCategoryWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        coinCategoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-    
-    private async void ClickAddBox(object sender, RoutedEventArgs e)
-    {
-        var boxWindow = _serviceProvider.GetRequiredService<Box>();
-        boxWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        boxWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-
     private void ClickSave(object sender, RoutedEventArgs e)
     {
         ResultItem = new DocumentItemDto
@@ -75,22 +61,21 @@ public partial class PayCoin : Window
             Name = (DataContext as CoinViewModel).Name,
             OjratR = (DataContext as CoinViewModel).OjratR,
             OjratP = (DataContext as CoinViewModel).OjratP,
-            CoinCategoryId = (DataContext as CoinViewModel).CoinCategoryId,
+            CoinCategoryId = (DataContext as CoinViewModel).PayCoinCategoryId,
             BoxId = (DataContext as CoinViewModel).BoxId,
             Description = (DataContext as CoinViewModel).Description,
             Type = DocumentItemType.COIN,
             TypeTitle = "پرداخت سکه"
             // مقداردهی بقیه فیلدهای لازم
         };
-
         this.DialogResult = true;
         this.Close();
     }
     private void CoinCategorySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
     {
-        if (_viewModel.CoinCategoryId == 0)
+        if (_viewModel.PayCoinCategoryId == 0)
         {
-            _viewModel.CoinCategoryId = 1;
+            _viewModel.PayCoinCategoryId = 1;
         }
     }
     private void BoxSelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)

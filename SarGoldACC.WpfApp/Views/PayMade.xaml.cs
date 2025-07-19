@@ -43,6 +43,7 @@ public partial class PayMade : Window
             {
                 MadeId = item.Id,
                 WeightBed = item.Weight,
+                Weight = item.Weight,
                 Weight750 = item.Weight750,
                 Name = item.Name,
                 Ayar = item.Ayar,
@@ -53,7 +54,8 @@ public partial class PayMade : Window
                 MadeSubCategoryId = item.MadeCategoryId,
                 BoxId = item.BoxId,
                 Description = _viewModel.Description,
-                Type = DocumentItemType.MADE
+                Type = DocumentItemType.MADE,
+                TypeTitle = "پرداخت ساخته"
                 // سایر فیلدهای مورد نیاز را هم اضافه کن
             });
         }

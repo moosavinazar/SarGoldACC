@@ -172,15 +172,20 @@ public partial class Document : Window
         }
     }
     
-    private void ClickRcvMade(object sender, RoutedEventArgs e)
+    private async void ClickRcvMade(object sender, RoutedEventArgs e)
     {
-        var rcvMiscWindow = _serviceProvider.GetRequiredService<RcvMade>();
-        rcvMiscWindow.Owner = this;
-
-        bool? result = rcvMiscWindow.ShowDialog();
-        if (result == true && rcvMiscWindow.ResultItem != null)
+        var rcvMadeWindow = _serviceProvider.GetRequiredService<RcvMade>();
+        rcvMadeWindow.Owner = this;
+        
+        if (rcvMadeWindow.DataContext is RcvMadeViewModel vm)
         {
-            _viewModel.DocumentItems.Add(rcvMiscWindow.ResultItem);
+            await vm.InitializeAsync(); // مقداردهی async قبل از نمایش پنجره
+        }
+
+        bool? result = rcvMadeWindow.ShowDialog();
+        if (result == true && rcvMadeWindow.ResultItem != null)
+        {
+            _viewModel.DocumentItems.Add(rcvMadeWindow.ResultItem);
         }
     }
     

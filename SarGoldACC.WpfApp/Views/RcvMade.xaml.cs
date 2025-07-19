@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using System.IO;
+using System.Windows;
 using System.Windows.Input;
+using System.Windows.Media.Imaging;
 using Microsoft.Extensions.DependencyInjection;
 using SarGoldACC.Core.DTOs.Document;
 using SarGoldACC.Core.Enums;
@@ -24,6 +26,9 @@ public partial class RcvMade : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        MadeSubCategoryComboBox.ServiceProvider = _serviceProvider;
+        BoxComboBox.ServiceProvider = _serviceProvider;
+        await ReloadListsAsync();
     }
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
@@ -47,26 +52,12 @@ public partial class RcvMade : Window
     {
         await _viewModel.ReloadAllAsync();
     }
-    
-    private async void ClickAddMadeSubCategory(object sender, RoutedEventArgs e)
-    {
-        var madeSubCategoryWindow = _serviceProvider.GetRequiredService<MadeSubCategory>();
-        madeSubCategoryWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        madeSubCategoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-    
-    private async void ClickAddBox(object sender, RoutedEventArgs e)
-    {
-        var boxWindow = _serviceProvider.GetRequiredService<Box>();
-        boxWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        boxWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-
     private void ClickSave(object sender, RoutedEventArgs e)
     {
         ResultItem = new DocumentItemDto
         {
             WeightBes = (DataContext as RcvMadeViewModel).Weight,
+            Weight = (DataContext as RcvMadeViewModel).Weight,
             Weight750 = (DataContext as RcvMadeViewModel).Weight750,
             Ayar = (DataContext as RcvMadeViewModel).Ayar,
             Barcode = (DataContext as RcvMadeViewModel).Barcode,
@@ -77,11 +68,50 @@ public partial class RcvMade : Window
             MadeSubCategoryId = (DataContext as RcvMadeViewModel).MadeSubCategoryId,
             BoxId = (DataContext as RcvMadeViewModel).BoxId,
             Description = (DataContext as RcvMadeViewModel).Description,
-            Type = DocumentItemType.MADE
+            Type = DocumentItemType.MADE,
+            TypeTitle = "دریافت ساخته"
             // مقداردهی بقیه فیلدهای لازم
         };
 
         this.DialogResult = true;
         this.Close();
+    }
+    private void MadeSubCategorySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.MadeSubCategoryId == 0)
+        {
+            _viewModel.MadeSubCategoryId = 1;
+        }
+    }
+    private void BoxSelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.BoxId == 0)
+        {
+            _viewModel.BoxId = 1;
+        }
+    }
+    private void ChoosePhotoButton_Click(object sender, RoutedEventArgs e)
+    {
+        var openFileDialog = new Microsoft.Win32.OpenFileDialog
+        {
+            Filter = "Image files (*.jpg;*.jpeg;*.png)|*.jpg;*.jpeg;*.png"
+        };
+
+        if (openFileDialog.ShowDialog() == true)
+        {
+            string selectedFilePath = openFileDialog.FileName;
+
+            // بارگذاری تصویر برای پیش‌نمایش
+            var bitmap = new BitmapImage(new Uri(selectedFilePath));
+            RcvMadeViewModel vm = (RcvMadeViewModel)this.DataContext;
+            vm.PhotoPreview = bitmap;
+
+            // خواندن فایل به صورت byte[]
+            byte[] fileBytes = File.ReadAllBytes(selectedFilePath);
+
+            // ذخیره در ViewModel
+            vm.PhotoBytes = fileBytes;
+            vm.PhotoFileName = Path.GetFileName(selectedFilePath);
+        }
     }
 }

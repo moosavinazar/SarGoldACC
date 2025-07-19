@@ -3,9 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
+        xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         mc:Ignorable="d"
-        Title="پرداخت آبشده" 
+        Title="پرداخت ساخته" 
         Height="250" 
         Width="700"
         KeyDown="Window_KeyDown"
@@ -16,7 +16,7 @@
         ResizeMode="NoResize"
         WindowStyle="SingleBorderWindow"
         WindowStartupLocation="CenterScreen"
-        Background="Aqua">
+        Background="Plum">
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -53,19 +53,18 @@
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="توضیحات"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="Description" 
-                     Grid.Column="1"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Description}"/>
+            <controls:TextBoxValidate 
+                x:Name="Description" 
+                Grid.Column="0"
+                Label="توضیحات"
+                ValidText="{Binding Description, Mode=TwoWay}"
+                ValidTextPattern="^*$"
+                ValidTextFinalPattern="^*$"
+                NotValidTextMessage="توضیحات اختیاری است"
+                AllowNullText="True"
+                InputLanguage="Persian"/>
         </Grid>
         <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="SaveButton"

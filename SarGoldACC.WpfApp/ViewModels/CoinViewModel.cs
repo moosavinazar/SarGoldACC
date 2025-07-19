@@ -235,7 +235,6 @@ public class CoinViewModel : ViewModelBase
     private readonly string[] _validatedProperties = new[]
     {
         nameof(Name)
-        
     };
     private void ValidateAll()
     {

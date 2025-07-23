@@ -9,8 +9,8 @@
         xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
         Title="حواله پرداخت" 
-        Height="250" 
-        Width="300"
+        Height="230" 
+        Width="400"
         KeyDown="RcvOrderWindow_KeyDown"
         Focusable="True"
         Loaded="Window_Loaded"
@@ -19,7 +19,7 @@
         ResizeMode="NoResize"
         WindowStyle="SingleBorderWindow"
         WindowStartupLocation="CenterScreen"
-        Background="Plum">
+        Background="Aqua">
     
     <Window.Resources>
         <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
@@ -35,27 +35,21 @@
         </Grid.RowDefinitions>
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="مشتری"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="5,10,5,0"/>
             <controls:ComboBoxSelector 
-                x:Name="CounterpartySelectorControl" 
-                Grid.Column="1"
+                x:Name="CounterpartyComboBox" 
+                Grid.Column="0"
+                Label="مشتری"
                 ItemsSource="{Binding Counterparties, Mode=TwoWay}"
                 SelectedValue="{Binding CounterpartyId, Mode=TwoWay}"
                 DisplayMemberPath="Name"
                 SelectedValuePath="Id"
                 CanAccessAddButton="{Binding CanAccessCustomerButton}"
                 AddWindowType="{x:Type views:Customer}"
-                Margin="0,10,5,10"/>
-            <Grid Grid.Column="3">
+                Padding="0 10 10 10"/>
+            <Grid Grid.Column="1">
                 <Ellipse Width="60" Height="60" Stroke="#000000" StrokeThickness="2" />
                 <Ellipse Width="60" Height="60">
                     <Ellipse.Fill>
@@ -66,61 +60,40 @@
         </Grid>
         <Grid Grid.Row="1">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="بستانکاری طلا"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="WeightBes" 
-                     Grid.Column="1"
-                     GotFocus="WeightBesBox_GotFocus"
-                     LostFocus="WeightBesBox_LostFocus"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource ValidatedTextBoxStyle}"
-                     Text="{Binding WeightBes, UpdateSourceTrigger=LostFocus, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                     PreviewTextInput="Weight_PreviewTextInput"/>
+            <controls:TextBoxWeight
+                x:Name="WeightBed" 
+                Grid.Column="0"
+                Label="بستانکاری طلا"
+                ValidText="{Binding WeightBes, Mode=TwoWay}"/>
+            <controls:TextBoxRiyal
+                x:Name="RiyalBed" 
+                Grid.Column="1"
+                Label="بستانکاری ریال"
+                ValidText="{Binding RiyalBes, Mode=TwoWay}"/>
         </Grid>
         <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <TextBlock Text="بستانکاری ریال"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="RiyalBes" 
-                     Grid.Column="1"
-                     GotFocus="RiyalBesBox_GotFocus"
-                     LostFocus="RiyalBesBox_LostFocus"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource ValidatedTextBoxStyle}"
-                     Text="{Binding RiyalBes, UpdateSourceTrigger=PropertyChanged, ValidatesOnDataErrors=True, NotifyOnValidationError=True}"
-                     PreviewTextInput="Riyal_PreviewTextInput"/>
-        </Grid>
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-            <TextBlock Text="توضیحات"
-                       Grid.Column="0"
-                       FontWeight="Bold"
-                       VerticalAlignment="Center"
-                       Margin="0,5,5,0"/>
-            <TextBox x:Name="Description" 
-                     Grid.Column="1"
-                     Margin="0 5 0 0"
-                     Style="{StaticResource InputTextBox}"
-                     Text="{Binding Description}"/>
+            <controls:TextBoxValidate 
+                x:Name="Description" 
+                Grid.Column="0"
+                Label="توضیحات"
+                ValidText="{Binding Description, Mode=TwoWay}"
+                ValidTextPattern="^*$"
+                ValidTextFinalPattern="^*$"
+                NotValidTextMessage="توضیحات اختیاری است"
+                AllowNullText="True"
+                InputLanguage="Persian"/>
         </Grid>
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="SaveButton"
+                    IsEnabled="{Binding CanSave}"
                     Content="ذخیره"
+                    ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"
                     HorizontalAlignment="Center"
                     Click="ClickSaveRcvOrder"

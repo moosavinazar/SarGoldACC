@@ -13,8 +13,6 @@ namespace SarGoldACC.WpfApp.Views;
 
 public partial class PayOrder : Window
 {
-    [DllImport("user32.dll")]
-    static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
     private readonly PayOrderViewModel _viewModel;
     private readonly IServiceProvider _serviceProvider;
     public DocumentItemDto ResultItem { get; private set; }
@@ -32,27 +30,7 @@ public partial class PayOrder : Window
         Keyboard.Focus(this);
         _viewModel.SideOneCounterPartyId = SideOneCounterpartyId;
         await _viewModel.ReloadAllAsync();
-    }
-    private void CounterpartyComboBox_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        var comboBox = sender as ComboBox;
-        if (comboBox != null)
-        {
-            comboBox.IsDropDownOpen = true;
-        }
-    }
-    private void CounterpartyComboBox_PreviewKeyDown(object sender, KeyEventArgs e)
-    {
-        if (e.Key == Key.Insert)
-        {
-            OpenAddCustomerWindow();
-        }
-    }
-    private async void OpenAddCustomerWindow()
-    {
-        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
-        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
+        CounterpartyComboBox.ServiceProvider = _serviceProvider;
     }
     private void PayOrderWindow_KeyDown(object sender, KeyEventArgs e)
     {
@@ -76,66 +54,21 @@ public partial class PayOrder : Window
     {
         await _viewModel.ReloadAllAsync();
     }
-    private async void ClickAddCustomer(object sender, RoutedEventArgs e)
-    {
-        var customerWindow = _serviceProvider.GetRequiredService<Customer>();
-        customerWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        customerWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-
     private void ClickSavePayOrder(object sender, RoutedEventArgs e)
     {
         ResultItem = new DocumentItemDto
         {
             CounterpartySideTwoId = (int)(DataContext as PayOrderViewModel).CounterpartyId,
             WeightBed = (DataContext as PayOrderViewModel).WeightBed,
+            Weight = (DataContext as PayOrderViewModel).WeightBed,
             RiyalBed = (DataContext as PayOrderViewModel).RiyalBed,
             Description = (DataContext as PayOrderViewModel).Description,
-            Type = DocumentItemType.ORDER
+            Type = DocumentItemType.ORDER,
+            TypeTitle = "حواله پرداخت"
             // مقداردهی بقیه فیلدهای لازم
         };
 
         this.DialogResult = true;
         this.Close();
-    }
-    private void RiyalBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(RiyalBed);
-        RiyalBed.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void RiyalBedBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (RiyalBed.Text == "")
-        {
-            _viewModel.RiyalBed = 0;
-            RiyalBed.Text = "0";
-        }
-    }
-    private void Riyal_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^(0|\d)$");
-    }
-    private void WeightBedBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(WeightBed);
-        WeightBed.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void WeightBedBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (WeightBed.Text == "")
-        {
-            _viewModel.WeightBed = 0;
-            WeightBed.Text = "0";
-        }
-    }
-    private void Weight_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
     }
 }

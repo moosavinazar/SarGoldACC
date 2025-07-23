@@ -27,7 +27,6 @@ public class DocumentViewModel : ViewModelBase
         {
             _counterparties = value;
             OnPropertyChanged();
-            FilterCounterparties();
         }
     }
     private ObservableCollection<CounterpartyDto> _filteredCounterparties;
@@ -98,21 +97,6 @@ public class DocumentViewModel : ViewModelBase
         UserImagePath = counterparty.Customer?.Photo ?? "pack://application:,,,/Resources/Icons/UserLarge.png";
         OnPropertyChanged(nameof(IsCounterpartySelected));
     }
-    private string _searchText;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (_searchText != value)
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                FilterCounterparties();
-            }
-        }
-    }
-    
     public bool CanAccessCustomerButton => _authorizationService.HasPermission("Customer.View") ||
                                            _authorizationService.HasPermission("Customer.Create") ||
                                            _authorizationService.HasPermission("Customer.Edit") ||
@@ -195,23 +179,4 @@ public class DocumentViewModel : ViewModelBase
         var counterparties = await _counterpartyService.GetAllAsync();
         Counterparties = new ObservableCollection<CounterpartyDto>(counterparties); // باعث اجرای FilterCounterparties میشه
     }
-
-    
-    private void FilterCounterparties()
-    {
-        if (string.IsNullOrWhiteSpace(SearchText))
-        {
-            CounterpartyId = 0;
-            FilteredCounterparties = new ObservableCollection<CounterpartyDto>(Counterparties);
-        }
-        else
-        {
-            var filtered = Counterparties
-                .Where(c => c.Name != null && c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            FilteredCounterparties = new ObservableCollection<CounterpartyDto>(filtered);
-        }
-    }
-    
 }

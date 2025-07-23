@@ -13,8 +13,6 @@ namespace SarGoldACC.WpfApp.Views;
 
 public partial class RcvOrder : Window
 {
-    [DllImport("user32.dll")]
-    static extern long LoadKeyboardLayout(string pwszKLID, uint Flags);
     private readonly RcvOrderViewModel _viewModel;
     private readonly IServiceProvider _serviceProvider;
     public DocumentItemDto ResultItem { get; private set; }
@@ -32,7 +30,7 @@ public partial class RcvOrder : Window
         Keyboard.Focus(this);
         _viewModel.SideOneCounterPartyId = SideOneCounterpartyId;
         await _viewModel.ReloadAllAsync();
-        CounterpartySelectorControl.ServiceProvider = _serviceProvider;
+        CounterpartyComboBox.ServiceProvider = _serviceProvider;
     }
     private void RcvOrderWindow_KeyDown(object sender, KeyEventArgs e)
     {
@@ -62,53 +60,15 @@ public partial class RcvOrder : Window
         {
             CounterpartySideTwoId = (int)(DataContext as RcvOrderViewModel).CounterpartyId,
             WeightBes = (DataContext as RcvOrderViewModel).WeightBes,
+            Weight = (DataContext as RcvOrderViewModel).WeightBes,
             RiyalBes = (DataContext as RcvOrderViewModel).RiyalBes,
             Description = (DataContext as RcvOrderViewModel).Description,
-            Type = DocumentItemType.ORDER
+            Type = DocumentItemType.ORDER,
+            TypeTitle = "حواله دریافت"
             // مقداردهی بقیه فیلدهای لازم
         };
 
         this.DialogResult = true;
         this.Close();
-    }
-    private void WeightBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(WeightBes);
-        WeightBes.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void WeightBesBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (WeightBes.Text == "")
-        {
-            _viewModel.WeightBes = 0;
-            WeightBes.Text = "0";
-        }
-    }
-    private void Weight_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^(\d+)?(\.\d{0,3})?$");
-    }
-    private void RiyalBesBox_GotFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        Keyboard.Focus(RiyalBes);
-        RiyalBes.SelectAll();
-        // تنظیم زبان انگلیسی
-        LoadKeyboardLayout("00000409", 1); // 00000409 = English (United States)
-        InputLanguageManager.Current.CurrentInputLanguage = new CultureInfo("en-US");
-    }
-    private void RiyalBesBox_LostFocus(object sender, RoutedEventArgs routedEventArgs)
-    {
-        if (RiyalBes.Text == "")
-        {
-            _viewModel.RiyalBes = 0;
-            RiyalBes.Text = "0";
-        }
-    }
-    private void Riyal_PreviewTextInput(object sender, TextCompositionEventArgs e)
-    {
-        e.Handled = !Regex.IsMatch(e.Text, @"^(0|\d)$");
     }
 }

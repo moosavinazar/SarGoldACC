@@ -9,10 +9,30 @@ public class RcvOrderViewModel : ViewModelBase
 {
     private readonly ICounterpartyService _counterpartyService;
     private readonly IAuthorizationService _authorizationService;
-    public long SideOneCounterPartyId { get; set; }
-    public double WeightBes { get; set; }
-    public long RiyalBes { get; set; }
-    public string Description { get; set; }
+    private long _sideOneCounterPartyId;
+    public long SideOneCounterPartyId
+    {
+        get => _sideOneCounterPartyId;
+        set => SetProperty(ref _sideOneCounterPartyId, value);
+    }
+    private double _weightBes;
+    public double WeightBes
+    {
+        get => _weightBes;
+        set => SetProperty(ref _weightBes, value);
+    }
+    private long _riyalBes;
+    public long RiyalBes
+    {
+        get => _riyalBes;
+        set => SetProperty(ref _riyalBes, value);
+    }
+    private string _description;
+    public string Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
+    }
     private  ObservableCollection<CounterpartyDto> _counterparties;
     public ObservableCollection<CounterpartyDto> Counterparties
     {
@@ -60,6 +80,19 @@ public class RcvOrderViewModel : ViewModelBase
                                            _authorizationService.HasPermission("Customer.Create") ||
                                            _authorizationService.HasPermission("Customer.Edit") ||
                                            _authorizationService.HasPermission("Customer.Delete");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public RcvOrderViewModel(ICounterpartyService counterpartyService, IAuthorizationService authorizationService)
     {
         _counterpartyService = counterpartyService;

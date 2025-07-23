@@ -9,10 +9,30 @@ public class PayOrderViewModel : ViewModelBase
 {
     private readonly ICounterpartyService _counterpartyService;
     private readonly IAuthorizationService _authorizationService;
-    public long SideOneCounterPartyId { get; set; }
-    public double WeightBed { get; set; }
-    public long RiyalBed { get; set; }
-    public string Description { get; set; }
+    private long _sideOneCounterPartyId;
+    public long SideOneCounterPartyId
+    {
+        get => _sideOneCounterPartyId;
+        set => SetProperty(ref _sideOneCounterPartyId, value);
+    }
+    private double _weightBed;
+    public double WeightBed
+    {
+        get => _weightBed;
+        set => SetProperty(ref _weightBed, value);
+    }
+    private long _riyalBed;
+    public long RiyalBed
+    {
+        get => _riyalBed;
+        set => SetProperty(ref _riyalBed, value);
+    }
+    private string _description;
+    public string Description
+    {
+        get => _description;
+        set => SetProperty(ref _description, value);
+    }
     private  ObservableCollection<CounterpartyDto> _counterparties;
     public ObservableCollection<CounterpartyDto> Counterparties
     {
@@ -21,37 +41,6 @@ public class PayOrderViewModel : ViewModelBase
         {
             _counterparties = value;
             OnPropertyChanged();
-            FilterCounterparties();
-        }
-    }
-    private string _searchText;
-    public string SearchText
-    {
-        get => _searchText;
-        set
-        {
-            if (_searchText != value)
-            {
-                _searchText = value;
-                OnPropertyChanged();
-                FilterCounterparties();
-            }
-        }
-    }
-    private void FilterCounterparties()
-    {
-        if (string.IsNullOrWhiteSpace(SearchText))
-        {
-            CounterpartyId = 0;
-            FilteredCounterparties = new ObservableCollection<CounterpartyDto>(Counterparties);
-        }
-        else
-        {
-            var filtered = Counterparties
-                .Where(c => c.Name != null && c.Name.Contains(SearchText, StringComparison.OrdinalIgnoreCase))
-                .ToList();
-
-            FilteredCounterparties = new ObservableCollection<CounterpartyDto>(filtered);
         }
     }
     private string _userImagePath = "pack://application:,,,/Resources/Icons/UserLarge.png";
@@ -62,16 +51,6 @@ public class PayOrderViewModel : ViewModelBase
         {
             _userImagePath = value;
             OnPropertyChanged(nameof(UserImagePath));
-        }
-    }
-    private ObservableCollection<CounterpartyDto> _filteredCounterparties;
-    public ObservableCollection<CounterpartyDto> FilteredCounterparties
-    {
-        get => _filteredCounterparties;
-        set
-        {
-            _filteredCounterparties = value;
-            OnPropertyChanged();
         }
     }
     public bool IsCounterpartySelected => CounterpartyId != 0;
@@ -101,6 +80,19 @@ public class PayOrderViewModel : ViewModelBase
                                            _authorizationService.HasPermission("Customer.Create") ||
                                            _authorizationService.HasPermission("Customer.Edit") ||
                                            _authorizationService.HasPermission("Customer.Delete");
+    private bool _canSave;
+    public bool CanSave
+    {
+        get => _canSave;
+        set
+        {
+            if (_canSave != value)
+            {
+                _canSave = value;
+                OnPropertyChanged(nameof(CanSave));
+            }
+        }
+    }
     public PayOrderViewModel(ICounterpartyService counterpartyService, IAuthorizationService authorizationService)
     {
         _counterpartyService = counterpartyService;
@@ -110,7 +102,6 @@ public class PayOrderViewModel : ViewModelBase
     public async Task ReloadAllAsync()
     {
         await LoadCounterpatiesAsync();
-        FilterCounterparties();
     }
     private async Task LoadCounterpatiesAsync()
     {

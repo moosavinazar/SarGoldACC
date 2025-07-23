@@ -3,6 +3,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Media.Imaging;
 using SarGoldACC.Core.DTOs.Box;
 using SarGoldACC.Core.DTOs.MadeCategory;
+using SarGoldACC.Core.Enums;
 using SarGoldACC.Core.Services.Interfaces;
 
 namespace SarGoldACC.WpfApp.ViewModels;
@@ -28,7 +29,16 @@ public class RcvMadeViewModel : ViewModelBase
     public ObservableCollection<MadeSubCategoryDto> MadeSubCategories
     {
         get => _madeSubCategories;
-        set => SetProperty(ref _madeSubCategories, value);
+        set
+        {
+            if (_madeSubCategories != value)
+            {
+                _madeSubCategories = value;
+                OnPropertyChanged(nameof(MadeSubCategories));
+                _ = UpdateNameAsync(); // بدون await چون setter نمی‌تونه async باشه
+                ValidateAll();
+            }
+        }
     }
     private ObservableCollection<BoxDto> _boxes;
     public ObservableCollection<BoxDto> Boxes
@@ -168,7 +178,7 @@ public class RcvMadeViewModel : ViewModelBase
     private async Task LoadBoxesAsync()
     {
         Boxes.Clear();
-        var boxes = await _boxService.GetAllAsync();
+        var boxes = await _boxService.GetAllByTypeAsync(BoxType.Made);
         foreach (var b in boxes)
         {
             Boxes.Add(b);
@@ -194,5 +204,12 @@ public class RcvMadeViewModel : ViewModelBase
     {
         bool hasError = _validatedProperties.Any(p => this[p]);
         CanSave = !hasError;
+    }
+    private async Task UpdateNameAsync()
+    {
+        var madeSubCategory = await _madeSubCategoryService.GetByIdAsync(MadeSubCategoryId);
+        Console.WriteLine("TEST");
+        Console.WriteLine(madeSubCategory.Name);
+        Name = "دریافت ساخته - " + madeSubCategory?.Name;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using SarGoldACC.Core.DTOs;
 using SarGoldACC.Core.DTOs.Box;
+using SarGoldACC.Core.Enums;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Repositories.Interfaces;
 using SarGoldACC.Core.Services.Interfaces;
@@ -27,6 +28,12 @@ public class BoxService : IBoxService
     public async Task<List<BoxDto>> GetAllAsync()
     {
         var cities = await _boxRepository.GetAllAsync();
+        return _mapper.Map<List<BoxDto>>(cities);
+    }
+    
+    public async Task<List<BoxDto>> GetAllByTypeAsync(BoxType type)
+    {
+        var cities = await _boxRepository.GetAllByTypeAsync(type);
         return _mapper.Map<List<BoxDto>>(cities);
     }
 

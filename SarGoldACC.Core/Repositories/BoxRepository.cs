@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SarGoldACC.Core.Data;
+using SarGoldACC.Core.Enums;
 using SarGoldACC.Core.Models;
 using SarGoldACC.Core.Repositories.Interfaces;
 
@@ -22,6 +23,12 @@ public class BoxRepository : IBoxRepository
     public async Task<List<Box>> GetAllAsync()
     {
         return await _context.Boxes.ToListAsync();
+    }
+    public async Task<List<Box>> GetAllByTypeAsync(BoxType type)
+    {
+        return await _context.Boxes
+            .Where(b => b.Type == type)
+            .ToListAsync();
     }
     
     public async Task AddAsync(Box box)

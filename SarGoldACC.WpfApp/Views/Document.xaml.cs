@@ -121,10 +121,15 @@ public partial class Document : Window
         }
     }
     
-    private void ClickRcvMelted(object sender, RoutedEventArgs e)
+    private async void ClickRcvMelted(object sender, RoutedEventArgs e)
     {
         var rcvMeltedWindow = _serviceProvider.GetRequiredService<RcvMelted>();
         rcvMeltedWindow.Owner = this;
+        
+        if (rcvMeltedWindow.DataContext is RcvMeltedViewModel vm)
+        {
+            await vm.InitializeAsync(); // مقداردهی async قبل از نمایش پنجره
+        }
 
         bool? result = rcvMeltedWindow.ShowDialog();
         if (result == true && rcvMeltedWindow.ResultItem != null)
@@ -148,10 +153,15 @@ public partial class Document : Window
         }
     }
 
-    private void ClickRcvMisc(object sender, RoutedEventArgs e)
+    private async void ClickRcvMisc(object sender, RoutedEventArgs e)
     {
         var rcvMiscWindow = _serviceProvider.GetRequiredService<RcvMisc>();
         rcvMiscWindow.Owner = this;
+        
+        if (rcvMiscWindow.DataContext is MiscViewModel vm)
+        {
+            await vm.InitializeAsync(); // مقداردهی async قبل از نمایش پنجره
+        }
 
         bool? result = rcvMiscWindow.ShowDialog();
         if (result == true && rcvMiscWindow.ResultItem != null)
@@ -160,10 +170,15 @@ public partial class Document : Window
         }
     }
 
-    private void ClickPayMisc(object sender, RoutedEventArgs e)
+    private async void ClickPayMisc(object sender, RoutedEventArgs e)
     {
         var payMiscWindow = _serviceProvider.GetRequiredService<PayMisc>();
         payMiscWindow.Owner = this;
+        
+        if (payMiscWindow.DataContext is MiscViewModel vm)
+        {
+            await vm.InitializeAsync(); // مقداردهی async قبل از نمایش پنجره
+        }
 
         bool? result = payMiscWindow.ShowDialog();
         if (result == true && payMiscWindow.ResultItem != null)

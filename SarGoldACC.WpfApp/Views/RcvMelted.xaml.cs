@@ -24,6 +24,9 @@ public partial class RcvMelted : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         Keyboard.Focus(this);
+        LaboratoryComboBox.ServiceProvider = _serviceProvider;
+        BoxComboBox.ServiceProvider = _serviceProvider;
+        await ReloadListsAsync();
     }
     private void Window_KeyDown(object sender, KeyEventArgs e)
     {
@@ -47,26 +50,12 @@ public partial class RcvMelted : Window
     {
         await _viewModel.ReloadAllAsync();
     }
-    
-    private async void ClickAddLaboratory(object sender, RoutedEventArgs e)
-    {
-        var laboratoryWindow = _serviceProvider.GetRequiredService<Laboratory>();
-        laboratoryWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        laboratoryWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-    
-    private async void ClickAddBox(object sender, RoutedEventArgs e)
-    {
-        var boxWindow = _serviceProvider.GetRequiredService<Box>();
-        boxWindow.Owner = this; // اختیاریه: مشخص می‌کنه پنجره اصلی کیه
-        boxWindow.ShowDialog(); // برای مودال بودن، یا از Show() برای غیرمودال
-    }
-
     private void ClickSave(object sender, RoutedEventArgs e)
     {
         ResultItem = new DocumentItemDto
         {
             WeightBes = (DataContext as RcvMeltedViewModel).Weight,
+            Weight = (DataContext as RcvMeltedViewModel).Weight,
             Weight750 = (DataContext as RcvMeltedViewModel).Weight750,
             Ayar = (DataContext as RcvMeltedViewModel).Ayar,
             Certain = (DataContext as RcvMeltedViewModel).Certain,
@@ -74,11 +63,26 @@ public partial class RcvMelted : Window
             LaboratoryId = (DataContext as RcvMeltedViewModel).LaboratoryId,
             BoxId = (DataContext as RcvMeltedViewModel).BoxId,
             Description = (DataContext as RcvMeltedViewModel).Description,
-            Type = DocumentItemType.MELTED
+            Type = DocumentItemType.MELTED,
+            TypeTitle = "دریافت آبشده"
             // مقداردهی بقیه فیلدهای لازم
         };
 
         this.DialogResult = true;
         this.Close();
+    }
+    private void LaboratorySelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.LaboratoryId == 0)
+        {
+            _viewModel.LaboratoryId = 1;
+        }
+    }
+    private void BoxSelectorControl_LostFocus(object sender, RoutedEventArgs routedEventArgs)
+    {
+        if (_viewModel.BoxId == 0)
+        {
+            _viewModel.BoxId = 1;
+        }
     }
 }

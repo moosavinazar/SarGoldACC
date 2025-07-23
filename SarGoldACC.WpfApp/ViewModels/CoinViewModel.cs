@@ -2,6 +2,7 @@
 using System.Text.RegularExpressions;
 using SarGoldACC.Core.DTOs.Box;
 using SarGoldACC.Core.DTOs.CoinCategory;
+using SarGoldACC.Core.Enums;
 using SarGoldACC.Core.Services.Interfaces;
 
 namespace SarGoldACC.WpfApp.ViewModels;
@@ -214,7 +215,7 @@ public class CoinViewModel : ViewModelBase
     private async Task LoadBoxesAsync()
     {
         Boxes.Clear();
-        var boxes = await _boxService.GetAllAsync();
+        var boxes = await _boxService.GetAllByTypeAsync(BoxType.Coin);
         foreach (var b in boxes)
         {
             Boxes.Add(b);

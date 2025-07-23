@@ -43,6 +43,7 @@ public partial class PayMelted : Window
             {
                 SubMeltedId = item.Id,
                 WeightBed = item.Weight,
+                Weight = item.Weight,
                 Weight750 = item.Weight750,
                 Ang = item.Ang,
                 Ayar = item.Ayar,
@@ -50,7 +51,8 @@ public partial class PayMelted : Window
                 LaboratoryId = item.LaboratoryId,
                 BoxId = item.BoxId,
                 Description = _viewModel.Description,
-                Type = DocumentItemType.MELTED
+                Type = DocumentItemType.MELTED,
+                TypeTitle = "پرداخت آبشده"
                 // سایر فیلدهای مورد نیاز را هم اضافه کن
             });
         }

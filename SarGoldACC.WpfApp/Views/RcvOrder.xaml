@@ -3,12 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-        xmlns:local="clr-namespace:SarGoldACC.WpfApp.Views"
-        xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         xmlns:controls="clr-namespace:SarGoldACC.WpfApp.Control"
         xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         mc:Ignorable="d"
-        Title="حواله پرداخت" 
+        Title="دریافت حواله" 
         Height="230" 
         Width="400"
         KeyDown="RcvOrderWindow_KeyDown"
@@ -20,10 +18,6 @@
         WindowStyle="SingleBorderWindow"
         WindowStartupLocation="CenterScreen"
         Background="Aqua">
-    
-    <Window.Resources>
-        <converters:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
-    </Window.Resources>
     
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -91,7 +85,7 @@
         </Grid>
         <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="SaveButton"
-                    IsEnabled="{Binding CanSave}"
+                    IsEnabled="{Binding IsCounterpartySelected}"
                     Content="ذخیره"
                     ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"

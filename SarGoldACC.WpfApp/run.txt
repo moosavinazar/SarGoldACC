@@ -1,0 +1,2 @@
+﻿dotnet ef migrations add InitialCreate -s ../SarGoldACC.WpfApp
+dotnet ef database update -s ../SalGoldAcc.WpfApp 

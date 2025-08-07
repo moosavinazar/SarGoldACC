@@ -75,6 +75,7 @@ public class PayOrderViewModel : ViewModelBase
         //TODO
         UserImagePath = counterparty.Customer?.Photo ?? "pack://application:,,,/Resources/Icons/UserLarge.png";
         OnPropertyChanged(nameof(IsCounterpartySelected));
+        Description = "پرداخت حواله به " + counterparty.Name;
     }
     public bool CanAccessCustomerButton => _authorizationService.HasPermission("Customer.View") ||
                                            _authorizationService.HasPermission("Customer.Create") ||

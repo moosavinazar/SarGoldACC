@@ -75,24 +75,12 @@ public class RcvOrderViewModel : ViewModelBase
         //TODO
         UserImagePath = counterparty.Customer?.Photo ?? "pack://application:,,,/Resources/Icons/UserLarge.png";
         OnPropertyChanged(nameof(IsCounterpartySelected));
+        Description = "دریافت حواله از " + counterparty.Name;
     }
     public bool CanAccessCustomerButton => _authorizationService.HasPermission("Customer.View") ||
                                            _authorizationService.HasPermission("Customer.Create") ||
                                            _authorizationService.HasPermission("Customer.Edit") ||
                                            _authorizationService.HasPermission("Customer.Delete");
-    private bool _canSave;
-    public bool CanSave
-    {
-        get => _canSave;
-        set
-        {
-            if (_canSave != value)
-            {
-                _canSave = value;
-                OnPropertyChanged(nameof(CanSave));
-            }
-        }
-    }
     public RcvOrderViewModel(ICounterpartyService counterpartyService, IAuthorizationService authorizationService)
     {
         _counterpartyService = counterpartyService;

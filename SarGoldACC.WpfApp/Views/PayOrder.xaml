@@ -7,7 +7,7 @@
         xmlns:views="clr-namespace:SarGoldACC.WpfApp.Views"
         xmlns:converters="clr-namespace:SarGoldACC.WpfApp.Converter"
         mc:Ignorable="d"
-        Title="حواله پرداخت" 
+        Title="پرداخت حواله" 
         Height="230" 
         Width="400"
         KeyDown="PayOrderWindow_KeyDown"
@@ -89,7 +89,7 @@
         </Grid>
         <StackPanel Grid.Row="3" Orientation="Horizontal" HorizontalAlignment="Center">
             <Button x:Name="SaveButton"
-                    IsEnabled="{Binding CanSave}"
+                    IsEnabled="{Binding IsCounterpartySelected}"
                     Content="ذخیره"
                     ToolTip="Shift+Enter"
                     Style="{StaticResource SuccessBtn}"
